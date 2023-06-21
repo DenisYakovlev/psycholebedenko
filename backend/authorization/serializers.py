@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers, exceptions
@@ -6,6 +6,7 @@ from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from .utils import confirmTelegramHash, validateIMGURL
 from user.models import TelegramUser
+from rest_framework_simplejwt.serializers import TokenObtainSerializer
 
 
 class PasswordlessTokenObtainSerializer(serializers.Serializer):
@@ -16,7 +17,7 @@ class PasswordlessTokenObtainSerializer(serializers.Serializer):
     """
     
     # username field of TelegramUser model
-    username_field = 'username'
+    username_field = get_user_model().USERNAME_FIELD
     token_class = None
     
     def __init__(self, *args, **kwargs) -> None:
