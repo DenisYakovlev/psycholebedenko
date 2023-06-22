@@ -1,4 +1,6 @@
 import datetime
+import pytz
+from django.conf import settings
 from rest_framework import serializers
 from .models import Event, Participation
 
@@ -23,7 +25,8 @@ class EventListSerializer(serializers.ModelSerializer):
     
     def get_outdated(self, obj):
         # change to timestamp
-        return obj.appointed < datetime.date.today()
+        tz = pytz.timezone(settings.TIME_ZONE)
+        return obj.appointed < datetime.datetime.now(tz=tz)
     
     def get_participated(self, obj):
         try:

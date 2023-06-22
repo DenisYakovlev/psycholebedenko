@@ -9,7 +9,7 @@ class Event(models.Model):
     title = models.CharField(max_length=100, blank=False, null=False, unique=True)
     thumbnail_text = models.CharField(max_length=200, blank=True)
     main_text = models.CharField(max_length=1200, blank=True)
-    appointed = models.DateField(blank=False, null=False)
+    appointed = models.DateTimeField(blank=False, null=False)
     participants = models.ManyToManyField(TelegramUser, through="Participation")
 
     class Meta:

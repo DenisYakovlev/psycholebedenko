@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'user',
     'authorization',
     'event',
+    'appointment',
 ]
 
 AUTHENTICATION_BACKENDS = [
