@@ -21,4 +21,5 @@ urlpatterns = [
     path('auth/', include('authorization.urls')),
     path('user/', include('user.urls')),
     path('event/', include('event.urls')),
+    path('appointment/', include('appointment.urls')),
 ]
