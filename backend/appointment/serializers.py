@@ -1,37 +1,36 @@
 import datetime
 import pytz
+import uuid
 from django.conf import settings
 from rest_framework import serializers
 from .models import Appointment
-
-
+    
+    
 class AppointmentSerializer(serializers.ModelSerializer):
-    zoom_link = serializers.CharField(read_only=True)
-    
-    class Meta:
-        model = Appointment
-        fields = ['name', 'notes', 'user', 'appointed', 'zoom_link']
-        
-    
-    def generate_zoom_link(self, appointed):
-        random_link = 'https://docs.djangoproject.com/en/3.0/ref/models/fields/#django.db.models.Field.default'
-        return random_link
-    
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        data['zoom_link'] =  self.generate_zoom_link(data['appointed'])
-
-        return data
-    
-    
-class AppointmentListSerializer(serializers.ModelSerializer):
     outdated = serializers.SerializerMethodField('get_outdated')
     
     class Meta:
         model = Appointment
-        fields = ['name', 'notes', 'user', 'appointed', 'zoom_link', 'created_at', 'outdated'] 
+        fields = ['id', 'title', 'notes', 'user', 'date', 'zoom_link', 'status', 'created_at', 'outdated']
         
     def get_outdated(self, obj):
         # change to timestamp
+        if obj.date is None:
+            return None
+        
         tz = pytz.timezone(settings.TIME_ZONE)
-        return obj.appointed < datetime.datetime.now(tz=tz)
+        return obj.date < datetime.datetime.now(tz=tz)
+    
+    def validate(self, attrs):
+        try:
+            create_zoom_link = self.context['request'].data['create_zoom_link']
+        except KeyError:
+            create_zoom_link = False
+        
+    
+        if create_zoom_link:
+            random_link = 'https://docs.djangoproject.com/en/3.0/ref/models/fields/#django.db.models.Field.default'
+            attrs['zoom_link'] = random_link
+            
+        return super().validate(attrs)
+        

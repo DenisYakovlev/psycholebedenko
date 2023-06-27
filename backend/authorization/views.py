@@ -3,19 +3,23 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-from .serializers import AuthTelegramUserSerializer, PasswordlessTokenObtainPairSerializer
+from .serializers import AuthWebTelegramUserSerializer, PasswordlessTokenObtainPairSerializer
 from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
 
 
-class AuthTelegramUser(APIView):
+class AuthBotTelegramUser(APIView):
+    pass
+
+
+class AuthWebTelegramUser(APIView):
     permission_classes = []
     
     def HandleUserUpdate(self, request):
         user = TelegramUser.objects.get(id=request.data["id"])
         
         # validate user data and update it
-        serializer = AuthTelegramUserSerializer(user, data=request.data, partial=True)
+        serializer = AuthWebTelegramUserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             
@@ -34,7 +38,7 @@ class AuthTelegramUser(APIView):
         if TelegramUser.objects.filter(id=request.data['id']).exists():
             return self.HandleUserUpdate(request)
         
-        serializer = AuthTelegramUserSerializer(data=request.data)
+        serializer = AuthWebTelegramUserSerializer(data=request.data)
     
         # validate telegram user data
         if serializer.is_valid():

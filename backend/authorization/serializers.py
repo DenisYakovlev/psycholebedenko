@@ -66,7 +66,7 @@ class PasswordlessTokenObtainPairSerializer(PasswordlessTokenObtainSerializer):
         return data
     
     
-class AuthTelegramUserSerializer(serializers.ModelSerializer):
+class AuthWebTelegramUserSerializer(serializers.ModelSerializer):
     hash = serializers.CharField(write_only=True)
     
     class Meta:
