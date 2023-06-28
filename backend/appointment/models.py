@@ -22,7 +22,7 @@ class Appointment(models.Model):
     date = models.DateTimeField(blank=True, null=True)
     zoom_link = models.URLField(blank=True, null=True)
     status = models.TextField(choices=Status.choices, blank=True, null=True)
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         ordering = ['date']

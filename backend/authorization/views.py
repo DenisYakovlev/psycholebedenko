@@ -8,10 +8,6 @@ from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
 
 
-class AuthBotTelegramUser(APIView):
-    pass
-
-
 class AuthWebTelegramUser(APIView):
     permission_classes = []
     

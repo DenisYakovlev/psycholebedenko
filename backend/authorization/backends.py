@@ -1,4 +1,5 @@
 from django.contrib.auth.backends import ModelBackend
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth import get_user_model
 
 
