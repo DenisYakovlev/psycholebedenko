@@ -5,15 +5,18 @@ from user.models import TelegramUser
 
 
 class Event(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100, blank=False, null=False, unique=True)
-    thumbnail_text = models.CharField(max_length=200, blank=True)
-    main_text = models.CharField(max_length=1200, blank=True)
-    appointed = models.DateTimeField(blank=False, null=False)
+    title = models.CharField(max_length=512, blank=False, null=False, unique=True)
+    thumbnail_text = models.CharField(max_length=512, blank=True)
+    main_text = models.CharField(max_length=10000, blank=True)
+    date = models.DateTimeField(blank=True, null=True)
+    online = models.BooleanField(default=False)
+    zoom_link = models.URLField(blank=True, null=True) 
+    address = models.CharField(max_length=512, blank=True, null=True)
     participants = models.ManyToManyField(TelegramUser, through="Participation")
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['created']
+        ordering = ['date']
         
 
 class Participation(models.Model):

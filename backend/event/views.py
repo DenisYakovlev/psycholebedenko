@@ -9,6 +9,7 @@ from .serializers import EventSerializer, EventListSerializer, EventDetailSerial
 
 
 class EventList(APIView):
+    # add params validations
     permission_classes = []
     
     def get(self, request):
@@ -18,6 +19,7 @@ class EventList(APIView):
         return Response(serializer.data, status.HTTP_200_OK)
     
 class EventDetail(APIView):
+    # add params
     permission_classes = []
     
     def get(self, request, title):
@@ -31,7 +33,7 @@ class EventCreate(APIView):
     permission_classes = [IsAdminUser]
     
     def post(self, request):
-        serializer = EventSerializer(data=request.data)
+        serializer = EventSerializer(data=request.data, context={'request': request})
         
         if serializer.is_valid():
             serializer.save()
@@ -51,7 +53,8 @@ class EventManagement(APIView):
     
     def put(self, request, title):
         event = self.get_event(title)
-        serializer = EventListSerializer(instance=event, data=request.data, partial=True)
+        serializer = EventSerializer(instance=event, data=request.data, partial=True,
+                                         context = {"request": request})
         
         if serializer.is_valid():
             serializer.save()

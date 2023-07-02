@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
@@ -38,16 +39,42 @@ class TelegramUserManager(BaseUserManager):
         user.save()
         return user
 
+phone_regex = RegexValidator(regex=r"^\+?1?\d{9,15}$", message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
-class TelegramUser(AbstractUser):
+class TelegramUser(AbstractBaseUser, PermissionsMixin):
     id = models.CharField(max_length=128, blank=False, null=False, unique=True, primary_key=True)
     first_name = models.CharField(max_length=128, blank=True, null=True)
     last_name = models.CharField(max_length=128, blank=True, null=True)
     username = models.CharField(max_length=128, blank=True, null=True)
+    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True, null=True)
     photo_url = models.URLField(max_length=512, blank=True, null=True)
     auth_date = models.IntegerField(blank=True, null=True)
     
-    password = models.CharField(max_length=32, blank=True, null=True)
+    password = models.CharField(max_length=256, blank=True, null=True)
+
+    is_staff = models.BooleanField(
+        _("staff status"),
+        default=False,
+        help_text=_("Designates whether the user can log into this admin site."),
+    )
+    is_active = models.BooleanField(
+        _("active"),
+        default=True,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
+    is_superuser = models.BooleanField(
+        _("superuser status"),
+        default=False,
+        help_text=_(
+            "Designates that this user has all permissions without "
+            "explicitly assigning them."
+        ),
+    )
+
+    notifications_on = models.BooleanField(default=True)
     
     objects = TelegramUserManager()
     

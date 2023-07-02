@@ -47,4 +47,4 @@ class AuthWebTelegramUser(APIView):
             
             return Response(tokens_serializer.errors, status.HTTP_409_CONFLICT)
             
-        return Response(serializer.erroes, status.HTTP_409_CONFLICT)
+        return Response(serializer.errors, status.HTTP_409_CONFLICT)

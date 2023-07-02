@@ -11,7 +11,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Appointment
-        fields = ['id', 'title', 'notes', 'user', 'date', 'zoom_link', 'status', 'created_at', 'outdated']
+        fields = ['id', 'title', 'notes', 'user', 'date', 'online', 'zoom_link', 'address', 'status', 'created_at', 'outdated']
         
     def get_outdated(self, obj):
         # change to timestamp

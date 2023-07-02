@@ -73,3 +73,11 @@ class AppointmentDetail(APIView):
         
         appointment.delete()
         return Response({"msg": f"{title} deleted"}, status.HTTP_204_NO_CONTENT)
+    
+
+class StatusList(APIView):
+    permission_classes = []
+
+    def get(self, request):
+        status_list = Appointment.Status
+        return Response({*status_list.values}, status.HTTP_200_OK)
