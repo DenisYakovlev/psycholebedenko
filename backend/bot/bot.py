@@ -13,9 +13,9 @@ def start_message(message):
 def test_message(message):
 	bot.send_message(message.chat.id,'Test')
     
-@bot.message_handler()
-def greetings_message(id, name):
-    bot.send_message(id, f"Hello, {name}")
+# @bot.message_handler()
+# def greetings_message(id, name):
+#     bot.send_message(id, f"Hello, {name}")
     
     
     
