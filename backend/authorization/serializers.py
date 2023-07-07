@@ -1,11 +1,13 @@
+from urllib.parse import unquote 
+import json
 from django.contrib.auth import authenticate, get_user_model
 from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers, exceptions
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
-from .utils import confirmTelegramHash, validateIMGURL
+from .utils import confirmTelegramWidgetHash, confirmTelegramBotAppHash, validateIMGURL
 from user.models import TelegramUser
+from user.serializers import TelegramUserSerializer
 from rest_framework_simplejwt.serializers import TokenObtainSerializer
 
 
@@ -37,7 +39,7 @@ class PasswordlessTokenObtainSerializer(serializers.Serializer):
         self.user = authenticate(request=None, username=attrs[self.username_field])
 
         if not api_settings.USER_AUTHENTICATION_RULE(self.user):
-            raise exceptions.AuthenticationFailed(
+            raise serializers.ValidationError(
                 self.error_messages["no_active_account"],
                 "no_active_account",
             )
@@ -66,7 +68,7 @@ class PasswordlessTokenObtainPairSerializer(PasswordlessTokenObtainSerializer):
         return data
     
     
-class AuthWebTelegramUserSerializer(serializers.ModelSerializer):
+class AuthWidgetTelegramUserSerializer(serializers.ModelSerializer):
     hash = serializers.CharField(write_only=True)
     
     class Meta:
@@ -74,7 +76,7 @@ class AuthWebTelegramUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'username', 'photo_url', 'auth_date', 'hash']
         
     def validate(self, attrs):
-        hashIsValid = confirmTelegramHash(attrs, secret_key=settings.TELEGRAM_BOT_API_KEY)
+        hashIsValid = confirmTelegramWidgetHash(attrs, secret_key=settings.TELEGRAM_BOT_API_KEY)
         
         if hashIsValid == False:
             raise serializers.ValidationError({"hash": "Hash is not valid"})
@@ -88,3 +90,21 @@ class AuthWebTelegramUserSerializer(serializers.ModelSerializer):
     def create(self, data):
         data.pop("hash", None)
         return super().create(data)
+    
+
+class AuthBotAppTelegramUserSerializer(serializers.Serializer):
+    initData = serializers.CharField()
+
+    def validate(self, attrs):
+        hashIsValid = confirmTelegramBotAppHash(attrs['initData'], settings.TELEGRAM_BOT_API_KEY)
+
+        if hashIsValid == False:
+            raise serializers.ValidationError({"hash": "Hash is not valid"})
+        
+        # extract user from initData
+        quotedStr = unquote(attrs['initData'])
+        idx, jdx = quotedStr.find("{"), quotedStr.find("}")
+        user_data = json.loads(quotedStr[idx:jdx+1])
+        attrs["user"] = user_data
+        
+        return super().validate(attrs)

@@ -16,6 +16,13 @@ from event.models import Event, Participation
 from event.serializers import EventListSerializer, ParticipationSerializer
 
 
+@api_view(["POST"])
+@permission_classes([])
+def test(request): 
+    print(request.data)
+    return Response(request.data, status=status.HTTP_200_OK)
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def UserInfo(request):

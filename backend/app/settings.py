@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2o7u(pez&_#zqpr7+8c!ovlm-e)omru0x8)(e3gpj9%xv**)ny'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.getenv("DEBUG"))
 
 ALLOWED_HOSTS = ['*']
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     
     'rest_framework',
     'rest_framework_simplejwt',
+    'corsheaders',
     
     'user',
     'authorization',
@@ -84,12 +85,15 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'app.urls'
 
