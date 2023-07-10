@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "stopping docker-compose"
-docker-compose stop
+sudo docker-compose stop
