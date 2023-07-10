@@ -9,9 +9,9 @@ services:
     volumes:
       - .:/code
     ports:
-      - "8000:8000"
+      - "80:8000"
     environment:
-      - DEBUG=0
+      - DEBUG=1
       - TELEGRAM_BOT_API_KEY=6159160252:AAF1wkp3scOkCDnOoah8y_s9IcYIhWwxlUY
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
@@ -20,12 +20,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
-  bot:
-    build: ./backend
-    command: python manage.py runbot
-    depends_on:
-      - backend
 
   db:
     image: postgres:latest
