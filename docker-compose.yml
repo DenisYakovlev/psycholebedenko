@@ -20,6 +20,13 @@ services:
       db:
         condition: service_healthy
 
+  frontend:
+    build: ./frontend
+    command: >
+      sh -c "npx serve build"
+    ports:
+      - "81:3000"
+
   db:
     image: postgres:latest
     volumes:
