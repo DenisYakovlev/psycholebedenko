@@ -10,8 +10,13 @@ services:
       - .:/code
     ports:
       - "8000:8000"
-    env_file:
-      - ./backend/.env.prod
+    environment:
+      - DEBUG=0
+      - TELEGRAM_BOT_API_KEY=6159160252:AAF1wkp3scOkCDnOoah8y_s9IcYIhWwxlUY
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=db
     depends_on:
       db:
         condition: service_healthy
