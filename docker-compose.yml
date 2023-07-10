@@ -5,9 +5,8 @@ services:
     build: ./backend
     command: >
       sh -c "python manage.py migrate --run-syncdb &&
+      sudo nohup python manage.py runbot > bot_log.txt & &&
       python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - .:/code
     ports:
       - "80:8000"
     environment:
