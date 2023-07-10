@@ -48,6 +48,10 @@ class UserInfo(APIView):
 
 
 @api_view(["GET"])
+def rofl(request):
+    return Response({"roflan": "ebalo"}, status.HTTP_200_OK)
+
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def UserAppointments(request):
     try:
