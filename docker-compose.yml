@@ -23,12 +23,14 @@ services:
         condition: service_healthy
 
   frontend:
-    build: ./frontend
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
     command: >
-      sh -c "npm start"
+      sh -c "yes | npm start"
     volumes:
+      - /app/node_modules
       - ./frontend:/app
-      - /frontend/node_modules
     ports:
       - "81:3000"
     stdin_open: true
