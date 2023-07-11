@@ -23,7 +23,7 @@ services:
   frontend:
     build: ./frontend
     command: >
-      sh -c "npx serve build"
+      sh -c "npm start"
     ports:
       - "81:3000"
 
