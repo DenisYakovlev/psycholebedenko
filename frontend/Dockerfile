@@ -2,9 +2,9 @@ FROM node:latest
 
 WORKDIR /app
 
-COPY package.json ./
-COPY package-lock.json ./
-COPY ./ ./
-RUN npm i
+COPY package.json package.json
+COPY package-lock.json package-lock.json
 
-# CMD ["npm", "run", "build"]
+COPY . .
+
+RUN npm i
