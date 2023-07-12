@@ -10,7 +10,7 @@ services:
     volumes:
       - ./backend:/app
     ports:
-      - "8000:8000"
+      - "81:8000"
     environment:
       - DEBUG=1
       - TELEGRAM_BOT_API_KEY=6159160252:AAF1wkp3scOkCDnOoah8y_s9IcYIhWwxlUY
