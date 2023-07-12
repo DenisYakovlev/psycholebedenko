@@ -1,27 +1,19 @@
 import './App.css'
+import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from './pages/Home/Home';
+import Event from './pages/Event/Event'
+import Layout from './pages/Layout/Layout';
 
-function Home(){
-  return (
-    <h1>Testing frontend...😼🍇</h1>
-  )
-}
-
-function Event(){
-  return (
-    <h1>Event route...🐔🐗🐘</h1>
-  )
-}
-
-function App() {
+export default function App(){
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={Home}/>
-        <Route path="/event" element={null}/>
+        <Route path='/' element={<Layout />}>
+          <Route index element={<Home />}/>
+          <Route path="event" element={<Event />}/>
+        </Route>
       </Routes>
     </BrowserRouter>
-  );
-}
-
-export default App;
+  )
+};
