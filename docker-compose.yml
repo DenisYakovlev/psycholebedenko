@@ -41,17 +41,6 @@ services:
     stdin_open: true
     tty: true
 
-  nginx:
-    depends_on:
-      - frontend
-      - backend
-    restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ./nginx
-    ports:
-      - "3050:3050"
-
   db:
     image: postgres:latest
     volumes:
