@@ -1,9 +1,16 @@
-import { useContext } from 'react';
-import { UserContext } from '../../contexts';
-var stringMath = require('string-math');
+import Container from "react-bootstrap/Container"
+import Consulting from "./Consulting"
+import Events from "./Events"
+import About from "./About"
+import Contacts from "./Contacts"
 
 export default function Home(){
     return (
-        <h1>Testing frontend...😼🍇</h1>
+        <Container className="p-0">
+            <Consulting />
+            <Events />
+            <About />
+            <Contacts />
+        </Container>
     )
 }
