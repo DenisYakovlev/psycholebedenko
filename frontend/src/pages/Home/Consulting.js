@@ -7,7 +7,7 @@ export default function Consulting(){
         <Container id="consulting" style={{height: "100vh"}} className="p-0 d-flex justify-content-center align-items-center">
             <Row>
                 <Col className="fs-1">
-                    Consulting
+                    
                 </Col>
             </Row>
         </Container>
