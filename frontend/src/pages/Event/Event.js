@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap"
 
 export default function Event(){
-  return (
-    <Container>Event route...🐔🐗🐘</Container>
-  )
+    return (
+        <Container>Event route...🐔🐗🐘</Container>
+    )
 }
