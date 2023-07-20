@@ -16,7 +16,7 @@ export default function AuthWidget(){
         <Container fluid className='p-0 pt-2'>
             {user
                 ? <Image src={user.photo_url} roundedCircle />
-                : <TelegramLoginButton dataOnauth={handleAuthorization} buttonSize="small" usePic={false} botName="Psycholebedenko_bot" />}
+                : <TelegramLoginButton dataOnauth={handleAuthorization} buttonSize="small" usePic={false} botName="Psycholebedenko_dev_bot" />}
         </Container>
     )
 }
