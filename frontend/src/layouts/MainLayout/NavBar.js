@@ -7,19 +7,6 @@ import { Link } from "react-router-dom"
 import AuthWidget from "./AuthWidget"
 import "./styles.css"
 
-
-const styles = {
-    navbar: {
-        height: "6vh",
-        borderBottom: "solid 1px #ebebeb"
-    },
-    offcanvas: {
-        width: "100%",
-        height: "100vh"
-    },
-}
-
-
 export default function NavBar(){
     const [expanded, setExpanded] = useState(false)
 
@@ -54,8 +41,8 @@ export default function NavBar(){
     const handleLinkClick = e => setExpanded(false)
 
     return (
-        <Navbar sticky="top" expanded={expanded} expand="md" bg="white" data-bs-theme="light" style={styles.navbar}>
-            <Container fluid className="mx-md-3 mx-1">
+        <Navbar sticky="top" expanded={expanded} expand="md" bg="white" data-bs-theme="light">
+            <Container fluid className="mx-md-3">
                 <Navbar.Toggle 
                     style={{border: "none"}} 
                     className="p-0" 
@@ -63,7 +50,7 @@ export default function NavBar(){
                     onClick={e => setExpanded(!expanded)}
                 />
                 <Navbar.Brand as={Link} to="/" className="me-auto ps-2 fs-5">Psycholebedneko</Navbar.Brand>
-                <Navbar.Offcanvas style={styles.offcanvas} id="offcanvas" aria-labelledby="offcanvas-label" placement="top">
+                <Navbar.Offcanvas id="offcanvas" aria-labelledby="offcanvas-label" placement="top">
                     <Offcanvas.Header>
                         {/* default  header closeButton is not working because router Link doesn't close offcanvas */}
                         <button

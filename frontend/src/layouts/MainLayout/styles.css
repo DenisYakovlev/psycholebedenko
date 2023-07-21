@@ -7,3 +7,13 @@
     transform:translateY(0); 
     transition: all 0.3s ease-in-out;
 }
+
+.navbar{
+    height: 56px;
+    border-bottom: solid 1px #ebebeb;
+}
+
+#offcanvas{
+    width: 100%;
+    height: 100vh;
+}

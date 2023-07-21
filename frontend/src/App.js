@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { Home, Appointment, Event, Contacts } from './pages';
+import { Home, Appointment, Event, Contacts, User } from './pages';
 import { MainLayout } from './layouts';
 import { UserContext } from './contexts';
 
@@ -17,6 +17,7 @@ export default function App(){
             <Route path="appointment" element={<Appointment />}/>
             <Route path="event" element={<Event />}/>
             <Route path="contacts" element={<Contacts />}/>
+            <Route path="user" element={<User />}/>
           </Route>
         </Routes>
       </UserContext.Provider>
