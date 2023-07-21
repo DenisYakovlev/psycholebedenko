@@ -6,7 +6,7 @@ import Contacts from "./Contacts"
 
 export default function Home(){
     return (
-        <Container className="p-0">
+        <Container fluid className="p-0">
             <Consulting />
             <Events />
             <About />

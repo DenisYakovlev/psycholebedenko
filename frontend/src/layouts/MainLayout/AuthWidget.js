@@ -13,8 +13,6 @@ export default function AuthWidget(){
         console.log(response)
     }
 
-    console.log(process.env.REACT_APP_BOT_NAME)
-
     return (
         <Container fluid className='p-0'>
             {user ? 
@@ -25,7 +23,8 @@ export default function AuthWidget(){
                 <TelegramLoginButton 
                     className="d-flex mt-1" 
                     dataOnauth={handleAuthorization} 
-                    buttonSize="small" usePic={false} 
+                    buttonSize="medium" 
+                    usePic={false} 
                     botName={process.env.REACT_APP_BOT_NAME}
                 />
             }

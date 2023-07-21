@@ -6,7 +6,7 @@ import Footer from "./Footer";
 
 export default function MainLayout(){
     return (
-        <Container fluid="xl" className="p-0">
+        <Container style={{minWidth: "420px"}} fluid className="p-0">
             <NavBar />
             <Outlet />
             <Footer />
