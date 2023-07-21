@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 import AuthWidget from "./AuthWidget"
 import "./styles.css"
 
+
 export default function NavBar(){
     const [expanded, setExpanded] = useState(false)
 
@@ -49,7 +50,7 @@ export default function NavBar(){
                     aria-controls="offcanvas"
                     onClick={e => setExpanded(!expanded)}
                 />
-                <Navbar.Brand as={Link} to="/" className="me-auto ps-2 fs-5">Psycholebedneko</Navbar.Brand>
+                <Navbar.Brand as={Link} to="/" className="me-auto ps-2 fs-6">Psycholebedenko</Navbar.Brand>
                 <Navbar.Offcanvas id="offcanvas" aria-labelledby="offcanvas-label" placement="top">
                     <Offcanvas.Header>
                         {/* default  header closeButton is not working because router Link doesn't close offcanvas */}
@@ -71,7 +72,7 @@ export default function NavBar(){
                         <Nav.Link onClick={handleLinkClick} as={Link} to="/contacts">контакти</Nav.Link>
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>
-                <Nav className="ms-3">
+                <Nav className="ms-2">
                     <AuthWidget />
                 </Nav>
             </Container>
