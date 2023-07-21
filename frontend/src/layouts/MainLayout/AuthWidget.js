@@ -24,7 +24,7 @@ export default function AuthWidget(){
                     className="d-flex mt-1" 
                     dataOnauth={handleAuthorization} 
                     buttonSize="small" usePic={false} 
-                    botName="Psycholebedenko_bot" 
+                    botName={process.env.REACT_APP_BOT_NAME}
                 />
             }
         </Container>
