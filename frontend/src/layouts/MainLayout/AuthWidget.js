@@ -13,6 +13,8 @@ export default function AuthWidget(){
         console.log(response)
     }
 
+    console.log(process.env.REACT_APP_BOT_NAME)
+
     return (
         <Container fluid className='p-0'>
             {user ? 

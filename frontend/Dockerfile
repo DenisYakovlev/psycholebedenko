@@ -1,5 +1,9 @@
 FROM node:16-alpine 
 WORKDIR /app
 COPY . .
+
+ARG REACT_APP_BOT_NAME
+ENV REACT_APP_BOT_NAME $REACT_APP_BOT_NAME
+
 RUN npm ci
 RUN npm run build
