@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 
 export default function AuthWidget(){
     const {user, setUser} = useContext(UserContext)
-    
+
     const handleAuthorization = response => {
         console.log(response)
     }
@@ -24,7 +24,7 @@ export default function AuthWidget(){
                     className="d-flex mt-1" 
                     dataOnauth={handleAuthorization} 
                     buttonSize="small" usePic={false} 
-                    botName="Psycholebedenko_dev_bot" 
+                    botName="Psycholebedenko_bot" 
                 />
             }
         </Container>
