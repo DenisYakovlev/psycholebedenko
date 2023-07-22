@@ -1,0 +1,8 @@
+@media screen and (max-width: 768) {
+    .img-fluid{
+        position: absolute;
+        height: auto; 
+        width: 100%; 
+        min-width: 580px;
+    }
+}

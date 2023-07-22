@@ -21,9 +21,9 @@ export default function AuthWidget(){
                 </Link> 
                 : 
                 <TelegramLoginButton 
-                    className="d-flex mt-1" 
+                    className="mt-2" 
                     dataOnauth={handleAuthorization} 
-                    buttonSize="medium" 
+                    buttonSize="small" 
                     usePic={false} 
                     botName={process.env.REACT_APP_BOT_NAME}
                 />
