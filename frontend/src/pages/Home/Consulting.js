@@ -8,6 +8,7 @@ const styles={
     wrapper: {
         height: "100vh",
         backgroundImage: `linear-gradient(rgba(255, 255 ,255 , 0), rgba(0, 0, 0, 1)), url(${bgImage})`,
+        backgroundSize: "cover",
         backgroundPosition: "center"
     },
     text: {
@@ -30,8 +31,3 @@ export default function Consulting(){
         </Container>
     )
 }
-
-            // <Container className="d-flex text-light flex-column justify-content-center align-items-center p-0 pb-5">
-            //     <p style={{fontSize: "10rem"}} className="">Lead text #1</p>
-            //     <p style={{fontSize: "5rem"}} className="">Side text #1</p>
-            // </Container>
