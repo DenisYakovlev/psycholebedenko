@@ -21,7 +21,7 @@ export default function AuthWidget(){
                 </Link> 
                 : 
                 <TelegramLoginButton 
-                    className="mt-2" 
+                    className="mt-2"
                     dataOnauth={handleAuthorization} 
                     buttonSize="small" 
                     usePic={false} 
