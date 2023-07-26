@@ -46,11 +46,6 @@ class UserInfo(APIView):
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-
-@api_view(["GET"])
-def rofl(request):
-    return Response({"roflan": "ebalo"}, status.HTTP_200_OK)
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def UserAppointments(request):
@@ -73,7 +68,11 @@ def UserEvents(request):
     
     serializer = EventListSerializer(events, many=True, context={"request": request})
     return Response(serializer.data, status.HTTP_200_OK)
-        
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def UserPhoto(request):
+    return Response({"photo_url": request.user.photo_url}, status.HTTP_200_OK)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

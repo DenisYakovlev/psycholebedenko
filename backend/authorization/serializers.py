@@ -83,7 +83,8 @@ class AuthWidgetTelegramUserSerializer(serializers.ModelSerializer):
         
         imgIsValid = validateIMGURL(attrs['photo_url'])
         if imgIsValid == False:
-            attrs['photo_url'] = f'/user/photo'
+            # set default photo value stored on aws s3 bucket
+            attrs['photo_url'] = "https://psycholebedenko-backend.s3.amazonaws.com/user_photo.jpeg"
         
         return super().validate(attrs)
         

@@ -11,6 +11,7 @@ import "./styles.css"
 export default function NavBar(){
     const [expanded, setExpanded] = useState(false)
 
+    // navbar scroll animation 
     useEffect(() => {
         // need to refactor with usage of useCallback and useRef
         const handleNavbarScroll = () => {
@@ -36,13 +37,20 @@ export default function NavBar(){
 
         var prevScrollY = 0
         window.addEventListener("scroll", handleNavbarScroll)
-        return () => {window.removeEventListener("navbar-scroll", handleNavbarScroll)}
+        return () => {window.removeEventListener("scroll", handleNavbarScroll)}
+    }, [])
+
+    // smooth navbar scroll down on page load
+    useEffect(() =>{
+        const _navbar = document.querySelector(".navbar")
+        _navbar.classList.remove('scrolled-down');
+        _navbar.classList.add('scrolled-up');
     }, [])
 
     const handleLinkClick = e => setExpanded(false)
 
     return (
-        <Navbar sticky="top" expanded={expanded} expand="md" bg="white" data-bs-theme="light">
+        <Navbar className="scrolled-down" sticky="top" expanded={expanded} expand="md" bg="white" data-bs-theme="light">
             <Container fluid className="mx-md-3">
                 <Navbar.Toggle 
                     style={{border: "none"}} 
