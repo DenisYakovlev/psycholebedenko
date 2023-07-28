@@ -1,3 +1,4 @@
 import AppointmentForm from "./AppointmentForm";
+import EventCard from "./EventCard";
 
-export {AppointmentForm}
+export {AppointmentForm, EventCard}

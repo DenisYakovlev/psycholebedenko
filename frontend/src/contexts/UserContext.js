@@ -48,7 +48,7 @@ const UserContextProvider = ({children}) => {
         })
     }
 
-    // Authorized request. Check if token is validand; refresh it if needed. 
+    // Authorized request. Check if token is valid; refresh it if needed. 
     // Refresh token exceptions are handled in refreshToken function
     const authFetch = async (url, params) => {
         const _params = {

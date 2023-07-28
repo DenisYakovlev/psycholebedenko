@@ -1,8 +1,12 @@
+import datetime
+import pytz
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.views import APIView
 from django.http import Http404
+from django.conf import settings
 
 from .models import Event, Participation
 from .serializers import EventSerializer, EventListSerializer, EventDetailSerializer, ParticipationSerializer
@@ -10,9 +14,27 @@ from .serializers import EventSerializer, EventListSerializer, EventDetailSerial
 
 class EventList(APIView):
     permission_classes = []
+
+    def get_queryset(self):
+        status = self.request.query_params.get('status')
+
+        if not status:
+            return Event.objects.all()
+
+        tz = pytz.timezone(settings.TIME_ZONE)
+        current_time = datetime.datetime.now(tz=tz)
+
+        if status == "active":
+            return Event.objects.filter(date__gt=current_time)
+        elif status == "outdated":
+            return Event.objects.filter(date__lt=current_time)
+        else:
+            raise Http404
+            
     
     def get(self, request):
-        events = Event.objects.all()
+        events = self.get_queryset()
+        # events = Event.objects.all()
         serializer = EventListSerializer(events, many=True, context = {'request': request})
         
         return Response(serializer.data, status.HTTP_200_OK)
