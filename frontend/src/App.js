@@ -1,25 +1,13 @@
-import {useEffect, useState} from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Home, Appointment, Event, Contacts, User, Bot } from './pages';
 import { BotLayout, MainLayout } from './layouts';
-import { UserContext } from './contexts';
+import { UserContextProvider } from './contexts';
 
 export default function App(){
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('tokens')))
-
-  useEffect(() => {
-    const handleStorageUpdate = () =>{
-      setUser(JSON.parse(localStorage.getItem('tokens')) || [])   
-    }
-
-    window.addEventListener("storage", handleStorageUpdate)
-    return () => {window.removeEventListener("storage", handleStorageUpdate)}
-  }, [])
-
   return (
     <BrowserRouter>
-      <UserContext.Provider value={{user, setUser}}>
+      <UserContextProvider>
         <Routes>
           <Route path='/' element={<MainLayout />}>
             <Route index element={<Home />}/>
@@ -34,7 +22,7 @@ export default function App(){
             </Route>
           </Route>
         </Routes>
-      </UserContext.Provider>
+      </UserContextProvider>
     </BrowserRouter>
   )
 };

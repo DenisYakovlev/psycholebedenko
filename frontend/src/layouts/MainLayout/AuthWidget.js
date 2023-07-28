@@ -4,17 +4,16 @@ import Container from 'react-bootstrap/Container'
 import Image from "react-bootstrap/Image"
 import { UserContext } from '../../contexts'
 import { Link } from 'react-router-dom'
-import { authFetch } from '../../utils/AuthUtils'
+
 
 const backend_url = process.env.REACT_APP_BACKEND_URL
-const photo_url = `${backend_url}/user/photo`
 
 export default function AuthWidget(){
-    const {user, setUser} = useContext(UserContext)
+    const {user, setUser, authFetch} = useContext(UserContext)
     const [userPhoto, setUserPhoto] = useState("")
 
-    const handleAuthorization = response => {
-        fetch(`${backend_url}/auth/telegram/widget`, {
+    const handleAuthorization = async response => {
+        await fetch(`${backend_url}/auth/telegram/widget`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -31,11 +30,14 @@ export default function AuthWidget(){
 
     // set user photo
     useEffect(() => {
-        authFetch(`${photo_url}`, {
+        if(!user){
+            return
+        }
+
+        authFetch(`${backend_url}/user/photo`, {
             method: "GET"
-        })
-        .then(response => response.json())
-        .then(data => setUserPhoto(data.photo_url))
+        }).then(response => response.json())
+        .then(data => setUserPhoto(data?.photo_url))
         .catch(error => console.log(error))
     }, [user])
 
