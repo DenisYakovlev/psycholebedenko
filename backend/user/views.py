@@ -1,4 +1,5 @@
 import os
+import time
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -84,4 +85,9 @@ def SendDefaultUserPhoto(request):
             return HttpResponse(f.read(), content_type="image/jpeg")
     except IOError:
         return HttpResponse({"msg": "file not found"}, status=status.HTTP_404_NOT_FOUND)
-    
+
+@api_view(["GET"])
+@permission_classes([])
+def SendSlowPhoto(request):
+    time.sleep(5)
+    return Response({"photo": "https://psycholebedenko-backend.s3.amazonaws.com/user_photo.jpeg"}, status.HTTP_200_OK)

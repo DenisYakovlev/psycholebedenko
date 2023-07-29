@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom'
 
 const backend_url = process.env.REACT_APP_BACKEND_URL
 
+const userPhotoSize = "40px"
+
 export default function AuthWidget(){
     const {user, setUser, authFetch} = useContext(UserContext)
     const [userPhoto, setUserPhoto] = useState("")
@@ -36,17 +38,18 @@ export default function AuthWidget(){
 
         authFetch(`${backend_url}/user/photo`, {
             method: "GET"
-        }).then(response => response.json())
-        .then(data => setUserPhoto(data?.photo_url))
+        })
+        .then(response => response.json())
+        .then(data => setUserPhoto(data.photo_url))
         .catch(error => console.log(error))
     }, [user])
 
     return (
-        <Container fluid className='p-0'>
-            {user ? 
-                <Link to="/user">
-                    <Image className="lazy" src={userPhoto} roundedCircle height="40px"/>
-                </Link> 
+        <Container style={{width: {userPhotoSize}}} fluid className='p-0'>
+            {user ?
+                    <Link to="/user">
+                        <Image loading="lazy" src={userPhoto} roundedCircle height={userPhotoSize}/>
+                    </Link>
                 : 
                 <TelegramLoginButton 
                     className="mt-2"

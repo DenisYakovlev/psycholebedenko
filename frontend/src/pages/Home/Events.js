@@ -13,7 +13,7 @@ export default function Events(){
     const [events, setEvents] = useState([])
 
     useEffect(() => {
-        publicFetch(`${backend_url}/event?status=active`, {
+        publicFetch(`${backend_url}/event?status`, {
             method: "GET"
         })
         .then(response => response.json())
@@ -23,11 +23,11 @@ export default function Events(){
     }, [])
 
     return (
-        <Container id="events" className="p-0 h-100 positiion-relative">
-            <Row lg={4} sm={2} className="h-100 m-0 mt-5 p-0 gap-3 justify-content-center align-items-center">
+        <Container id="events" style={{minHeight: "100vh"}} className="m-0 p-0 positiion-relative" fluid>
+            <Row xl={1} lg={1} style={{minWidth: "380px"}} className="m-0 vw-100 px-0 py-5 gap-3">
                 {events.map((event, idx) => {
                     return(
-                        <Col key={idx} className="p-0">
+                        <Col key={idx} className="m-0 p-0 d-flex justify-content-center">
                             <EventCard event={event}/>
                         </Col>
                     )
