@@ -45,7 +45,7 @@ export default function AuthWidget(){
         <Container fluid className='p-0'>
             {user ? 
                 <Link to="/user">
-                    <Image src={userPhoto} roundedCircle height="40px"/>
+                    <Image className="lazy" src={userPhoto} roundedCircle height="40px"/>
                 </Link> 
                 : 
                 <TelegramLoginButton 

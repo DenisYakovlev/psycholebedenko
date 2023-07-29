@@ -9,17 +9,12 @@ import { EventCard } from "../../shared"
 const backend_url = process.env.REACT_APP_BACKEND_URL
 
 export default function Events(){
-    const {user} = useContext(UserContext)
+    const {publicFetch} = useContext(UserContext)
     const [events, setEvents] = useState([])
 
-    // works with both authorized and anonymous user
     useEffect(() => {
-        fetch(`${backend_url}/event?status`, {
-            method: "GET",
-            headers: {
-                "Content-type": "application/json",
-                "Authorization": user ? `Bearer ${user.access}` : ""
-            }
+        publicFetch(`${backend_url}/event?status=active`, {
+            method: "GET"
         })
         .then(response => response.json())
         .then(data => {

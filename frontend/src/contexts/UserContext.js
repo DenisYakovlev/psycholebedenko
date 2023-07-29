@@ -23,7 +23,7 @@ const UserContextProvider = ({children}) => {
 
     // refresh token
     const refreshToken = async () => {
-        const result = await fetch(`${backend_url}/auth/refresh`, {
+        return await fetch(`${backend_url}/auth/refresh`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -38,9 +38,12 @@ const UserContextProvider = ({children}) => {
             throw new Error("refresh Token error")
         })
         .then(data => {
+            // update user
             const _user = {...user, access: data.access}
             setUser({..._user})
             localStorage.setItem('tokens', JSON.stringify({..._user}))
+
+            return data.access
         })
         .catch(error => {
             localStorage.removeItem('tokens')
@@ -48,30 +51,58 @@ const UserContextProvider = ({children}) => {
         })
     }
 
-    // Authorized request. Check if token is valid; refresh it if needed. 
-    // Refresh token exceptions are handled in refreshToken function
-    const authFetch = async (url, params) => {
-        const _params = {
-            ...params,
-            headers: {
-                ...params.headers,
-                "Authorization": `Bearer ${user?.access}`
+    // Fetch with user Authorization token. If access token is expired,
+    // refreshToken() function will try to refresh access token.
+    // If refresh token is expired, it is considered that user is not
+    // authorized anymore and must login again for new tokens. 
+    // Refresh token errors are handled in refreshToken function.
+    const fetchWithCredentials = async (url, params) => {
+        const response = await fetch(url, params)
+
+        // handle token refresh
+        if(response.status == 401){
+            try{
+                const token = await refreshToken()
+
+                // resend request
+                params.headers = {
+                    ...params.headers,
+                    "Authorization": `Bearer ${token}`
+                }
+
+                return await fetch(url, params)
+            }
+            catch(error){
+                // user is sign out. Do something here
+                return null
             }
         }
 
-        return await fetch(url, _params).then(response => {
-            if(response.ok){
-                return response
-            }
-            else if(response.status == 401){
-                refreshToken()
-                return response
-            }
-        })
-    } 
+        return response
+    }
+
+    // Authorized request with user access token
+    const authFetch = async (url, params) => {
+        params.headers = {
+            ...params.headers,
+            "Authorization": `Bearer ${user?.access}`
+        }
+
+        return await fetchWithCredentials(url, params)
+    }
+
+    // Public request. User can be both authorized and not.
+    const publicFetch = async (url, params) => {
+        params.headers= {
+            ...params.headers,
+            "Authorization": user ? `Bearer ${user.access}` : ""
+        }
+
+        return await fetchWithCredentials(url, params)
+    }
 
     return (
-        <UserContext.Provider value={{user, setUser, authFetch}}>
+        <UserContext.Provider value={{user, setUser, authFetch, publicFetch}}>
             {children}
         </UserContext.Provider>
     )

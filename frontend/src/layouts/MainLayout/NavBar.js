@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense, lazy } from "react"
 import Navbar from "react-bootstrap/Navbar"
 import Nav from "react-bootstrap/Nav"
 import Container from "react-bootstrap/Container"
 import Offcanvas from "react-bootstrap/Offcanvas"
+import Spinner from 'react-bootstrap/Spinner'
 import { Link } from "react-router-dom"
-import AuthWidget from "./AuthWidget"
 import "./styles.css"
 
+
+const AuthWidget = lazy(() => import('./AuthWidget'));
 
 export default function NavBar(){
     const [expanded, setExpanded] = useState(false)
@@ -81,7 +83,9 @@ export default function NavBar(){
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>
                 <Nav>
-                    <AuthWidget />
+                    <Suspense fallback={<Spinner />}>
+                        <AuthWidget />
+                    </Suspense>
                 </Nav>
             </Container>
         </Navbar>
