@@ -8,6 +8,7 @@ const UserContext = createContext({})
 const UserContextProvider = ({children}) => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('tokens')))
 
+    
     // validate user token
     const tokenIsValid = async () => {
         return await fetch(`${backend_url}/auth/verify`,{
@@ -102,7 +103,7 @@ const UserContextProvider = ({children}) => {
     }
 
     return (
-        <UserContext.Provider value={{user, setUser, authFetch, publicFetch}}>
+        <UserContext.Provider value={{user, setUser, authFetch, publicFetch, refreshToken}}>
             {children}
         </UserContext.Provider>
     )

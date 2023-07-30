@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
 export default function Consulting(){
     const [src, setSrc] = useState(null)
 
-    // load image
+    // lazy load background image
     useEffect(() => {
         const imageLoader = new Image()
         imageLoader.src = bgImage
@@ -35,7 +35,8 @@ export default function Consulting(){
                         </Button>
                     </Col>
                 </Row>
-            </Container> :
+            </Container> 
+            :
             <Container className="p-0 vh-100 d-flex justify-content-center align-items-center">
                 <Spinner animation="border"/>
             </Container>

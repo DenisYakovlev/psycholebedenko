@@ -1,10 +1,12 @@
 import Container from "react-bootstrap/Container"
 import Spinner from 'react-bootstrap/Spinner'
-import Consulting from "./Consulting"
-import Events from "./Events"
-import About from "./About"
-import Contacts from "./Contacts"
+import { useContext, useEffect, useState, lazy } from "react"
+import { UserContext } from "../../contexts"
 
+const Consulting = lazy(() => import("./Consulting"))
+const Events = lazy(() => import("./Events"))
+const About = lazy(() => import("./About"))
+const Contacts = lazy(() => import("./Contacts"))
 
 export default function Home(){
     return (

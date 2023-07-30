@@ -22,6 +22,7 @@ export default function Events(){
         })
     }, [])
 
+
     return (
         <Container id="events" style={{minHeight: "100vh"}} className="m-0 p-0 positiion-relative" fluid>
             <Row xl={1} lg={1} style={{minWidth: "380px"}} className="m-0 vw-100 px-0 py-5 gap-3">

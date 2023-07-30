@@ -1,15 +1,43 @@
 import { Outlet } from "react-router";
 import Container from "react-bootstrap/Container"
+import Spinner from "react-bootstrap/Spinner";
+import { useContext, useEffect, useState, lazy } from "react"
+import { UserContext } from "../../contexts"
 
-import NavBar from "./NavBar";
-import Footer from "./Footer";
+const NavBar = lazy(() => import("./NavBar"))
+const Footer = lazy(() => import("./Footer"))
 
 export default function MainLayout(){
+    const {user, refreshToken} = useContext(UserContext)
+    const [isLoading, setIsLoading] = useState(true)
+
+    useEffect(() => {
+        const refresh = async () => {
+            const token = await refreshToken()
+            setIsLoading(false)
+        }
+
+        if(!user){
+            setIsLoading(false)
+            return 
+        }
+
+        refresh()
+    }, [])
+
     return (
-        <Container style={{minWidth: "380px"}} fluid className="p-0">
-            <NavBar />
-            <Outlet />
-            <Footer />
-        </Container>
+        <>
+            {isLoading ?
+                <Container className="p-0 d-flex justify-content-center align-items-center">
+                    <Spinner animation="border"/>
+                </Container>
+                :
+                <Container style={{minWidth: "380px"}} fluid className="p-0">
+                    <NavBar />
+                    <Outlet />
+                    <Footer />
+                </Container>
+                }
+        </>
     )
 }

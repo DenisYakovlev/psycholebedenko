@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Home, Appointment, Event, Contacts, User, Bot } from './pages';
 import { BotLayout, MainLayout } from './layouts';
-import { UserContextProvider } from './contexts';
+import { UserContext, UserContextProvider } from "./contexts";
 
 export default function App(){
   return (
