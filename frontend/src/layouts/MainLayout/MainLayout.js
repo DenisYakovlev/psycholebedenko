@@ -28,7 +28,7 @@ export default function MainLayout(){
     return (
         <>
             {isLoading ?
-                <Container className="p-0 d-flex justify-content-center align-items-center">
+                <Container className="p-0 h-100 d-flex justify-content-center align-items-center">
                     <Spinner animation="border"/>
                 </Container>
                 :
