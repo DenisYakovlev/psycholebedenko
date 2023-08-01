@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
+import { Suspense, useContext, useEffect, useState } from 'react'
 import TelegramLoginButton from 'telegram-login-button'
 import Container from 'react-bootstrap/Container'
 import Image from "react-bootstrap/Image"
 import { UserContext } from '../../contexts'
 import { Link } from 'react-router-dom'
+import LoadSpinner from '../../shared/LoadSpinner'
 
 
 const backend_url = process.env.REACT_APP_BACKEND_URL
@@ -46,7 +47,7 @@ export default function AuthWidget(){
     }, [user])
 
     return (
-        <Container style={{width: {userPhotoSize}}} fluid className='p-0'>
+        <Suspense fallback={<LoadSpinner />}>
             {user ?
                     <Link to="/user">
                         <Image loading="lazy" src={userPhoto} roundedCircle height={userPhotoSize}/>
@@ -60,6 +61,6 @@ export default function AuthWidget(){
                     botName={process.env.REACT_APP_BOT_NAME}
                 />
             }
-        </Container>
+        </Suspense>
     )
 }

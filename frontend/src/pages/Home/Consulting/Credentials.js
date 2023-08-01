@@ -8,8 +8,7 @@ import { faUserSecret} from "@fortawesome/free-solid-svg-icons"
 // refactor
 export default function Credentials(){
     return (
-        <Container className="m-0 mb-3 p-0 d-flex flex-column align-items-center justify-content-center">
-            <p className="mb-4 credentials-name">ЛЛЯНИЙ АНДРІЙ</p>
+        <Container className="m-0 mb-3 p-0 d-flex flex-column align-items-center justify-content-center main-credentials">
             <Row className="m-0 p-0 g-5">
                 <Col className="m-0 d-flex flex-column justify-content-center align-items-center gap-2">
                     <FontAwesomeIcon icon={faTelegram} style={{fontSize: "32px"}}/>

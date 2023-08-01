@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function ConsultingButton(){
     return (
-        <Container className="m-0 d-flex flex-column align-items-center justify-content-end gap-3">
+        <Container className="m-0 d-flex flex-column align-items-center justify-content-end gap-3 main-button-wrapper">
             <Button as={Link} to="/appointment" className="align-self-center main-button" variant="outline-light p-xl-3" size="lg">
                 ЗАПИСАТИСЯ
             </Button>

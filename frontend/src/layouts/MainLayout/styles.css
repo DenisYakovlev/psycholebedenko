@@ -11,10 +11,21 @@
 .navbar{
     height: 56px;
     width: 100%;
-    border-bottom: solid 1px #ebebeb;
+    border-bottom: solid 1px #f4f4f4;
+    animation-name: SlideIn;
+    animation-duration: 0.5s;
 }
 
 #offcanvas{
     width: 100%;
     height: 100vh;
+}
+
+@keyframes SlideIn{
+    from{
+        transform: translateY(-100%);
+    }
+    to{
+        transform: translateY(0%);
+    }
 }
