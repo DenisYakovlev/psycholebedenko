@@ -1,9 +1,8 @@
 import Container from "react-bootstrap/Container"
-import Spinner from 'react-bootstrap/Spinner'
-import { useContext, useEffect, useState, lazy } from "react"
-import { UserContext } from "../../contexts"
+import { lazy } from "react"
 
-const Consulting = lazy(() => import("./Consulting"))
+const Consulting = lazy(() => import("./Consulting/Consulting"))
+const Details = lazy(() => import("./Details/Details"))
 const Events = lazy(() => import("./Events"))
 const About = lazy(() => import("./About"))
 const Contacts = lazy(() => import("./Contacts"))
@@ -12,6 +11,7 @@ export default function Home(){
     return (
         <Container fluid className="p-0">
             <Consulting />
+            <Details />
             <Events />
             <About />
             <Contacts />

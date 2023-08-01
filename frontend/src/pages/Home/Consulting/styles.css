@@ -1,0 +1,39 @@
+.main-header{
+    text-shadow: 0px -2px 50px black;
+    font-size: 18px;
+}
+
+.main-text {
+    text-shadow: 0px -2px 50px black; 
+    font-size: 72px;
+    max-width: 600px;
+    line-height: 70px;
+}
+
+.credentials-name{
+    font-size: 18px;
+}
+
+.main-button{
+    font-size: 32px;
+}
+
+@media  screen and (max-width: 576px) {
+    .main-header{
+        font-size: 12px;
+    }
+
+    .main-text{
+        font-size: 54px;
+        line-height: 56px;
+        max-width: 450px;
+    }
+
+    .credentials-name{
+        font-size: 24px;
+    }
+
+    .main-button{
+        font-size: 24px;
+    }
+}

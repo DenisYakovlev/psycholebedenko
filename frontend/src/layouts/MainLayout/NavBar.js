@@ -77,7 +77,7 @@ export default function NavBar(){
                     >
                         <Nav.Link onClick={handleLinkClick} as={Link} to="/appointment">консультація</Nav.Link>
                         <Nav.Link onClick={handleLinkClick} as={Link} to="/event">івенти</Nav.Link>
-                        <Nav.Link onClick={handleLinkClick} as={Link} to="/contacts">контакти</Nav.Link>
+                        <Nav.Link onClick={handleLinkClick} as={Link} to="/contacts">про мене</Nav.Link>
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>
                 <Nav>

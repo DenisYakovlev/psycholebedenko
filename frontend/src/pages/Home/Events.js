@@ -25,7 +25,7 @@ export default function Events(){
 
     return (
         <Container id="events" style={{minHeight: "100vh"}} className="m-0 p-0 positiion-relative" fluid>
-            <Row xl={1} lg={1} style={{minWidth: "380px"}} className="m-0 vw-100 px-0 py-5 gap-3">
+            <Row xl={12} lg={1} style={{width: "100%", minWidth: "380px"}} className="m-0 p-0 px-0 py-5 gap-3">
                 {events.map((event, idx) => {
                     return(
                         <Col key={idx} className="m-0 p-0 d-flex justify-content-center">

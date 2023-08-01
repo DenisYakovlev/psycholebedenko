@@ -1,10 +1,14 @@
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import Button from "react-bootstrap/Button"
 import Spinner from "react-bootstrap/Spinner"
-import bgImage from "./../../assets/images/bg-home-consulting.png"
+import bgImage from "./../../../assets/images/bg-home-consulting.png"
 import { useEffect, useState } from "react"
+
+import "./styles.css"
+import MainText from "./MainText"
+import Credentials from "./Credentials"
+import ConsultingButton from "./ConsultingButton"
 
 
 export default function Consulting(){
@@ -22,17 +26,16 @@ export default function Consulting(){
             {
             src ?
             <Container style={{
-                backgroundImage: `linear-gradient(rgba(255, 255 ,255 , 0), rgba(0, 0, 0, 1)), url(${src})`,
+                backgroundImage: `linear-gradient(rgba(0, 0 ,0 , 0.25), rgba(0, 0, 0, 1)), url(${src})`,
                 backgroundSize: "cover",
-                backgroundPosition: "center"
+                backgroundPosition: "center",
+                fontFamily: "Inter"
             }} className="p-0 vh-100 position-relative" fluid>
-                <Row sm={12} className="p-0 m-0 h-100">
-                    <Col style={{marginTop: "-15vh"}} className="p-0 d-flex flex-column text-light justify-content-center align-items-center ">
-                        <p style={{textShadow: "0px -2px 50px black" ,fontSize: "10vw"}} className="m-0">Lead text #1</p>
-                        <p style={{textShadow: "0px -2px 50px black", fontSize: "5vw"}} className="m-0 mb-3">Side text #1</p>
-                        <Button style={{fontSize: "3vw"}} variant="outline-light p-xl-3" size="lg">
-                            Записатись
-                        </Button>
+                <Row sm={1} className="p-0 m-0 h-100">
+                    <Col style={{marginBottom: "10vh", width: "100%"}} className="p-0 d-flex flex-column text-light justify-content-end align-items-center">
+                        <MainText />
+                        <Credentials />
+                        <ConsultingButton />
                     </Col>
                 </Row>
             </Container> 
