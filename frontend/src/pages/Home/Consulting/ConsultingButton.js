@@ -10,7 +10,7 @@ export default function ConsultingButton(){
             <Button as={Link} to="/appointment" className="align-self-center main-button" variant="outline-light p-xl-3" size="lg">
                 ЗАПИСАТИСЯ
             </Button>
-            <p style={{fontSize: "8px"}} >какая-то хуйня еще тут</p>
+            <p style={{fontSize: "8px"}} >какой-то текст еще тут</p>
         </Container>
     )
 }

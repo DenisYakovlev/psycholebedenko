@@ -29,10 +29,10 @@ export default function Consulting(){
                 backgroundImage: `linear-gradient(rgba(0, 0 ,0 , 0.25), rgba(0, 0, 0, 1)), url(${src})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                fontFamily: "Inter"
+                fontFamily: "Cousine"
             }} className="p-0 vh-100 position-relative" fluid>
                 <Row sm={1} className="p-0 m-0 h-100">
-                    <Col style={{marginBottom: "10vh", width: "100%"}} className="p-0 d-flex flex-column text-light justify-content-end align-items-center">
+                    <Col style={{marginBottom: "7vh", width: "100%"}} className="p-0 d-flex flex-column text-light justify-content-end align-items-center">
                         <MainText />
                         <Credentials />
                         <ConsultingButton />

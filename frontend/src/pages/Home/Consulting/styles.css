@@ -1,6 +1,7 @@
 .main-wrapper{
-    animation-name: SlideInAndFade;
-    animation-duration: 0.5s;
+    animation-name: Sleep, SlideInAndFade;
+    animation-duration: 0.5s, 1s;
+    animation-delay: 0s, 0.5s;
 }
 
 .main-header{
@@ -12,7 +13,7 @@
     text-shadow: 0px -2px 50px black; 
     font-size: 72px;
     position: relative;
-    max-width: 600px;
+    max-width: 400px;
     line-height: 70px;
 }
 
@@ -22,14 +23,19 @@
 
 .main-credentials{
     animation-name: Sleep, SlideInAndFade;
-    animation-duration: 0.15s, 0.5s;
-    animation-delay: 0s, 0.15s;
+    animation-duration: 0.65s, 1s;
+    animation-delay: 0s, 0.65s;
+}
+
+.main-icon:hover{
+    transform: scale(105%);
+    transition: all 1s ease-out;
 }
 
 .main-button-wrapper{
     animation-name: Sleep, SlideInAndFade;
-    animation-duration: 0.2s, 0.5s;
-    animation-delay: 0s, 0.2s;
+    animation-duration: 0.7s, 1s;
+    animation-delay: 0s, 0.7s;
 }
 
 .main-button{

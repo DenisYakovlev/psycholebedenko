@@ -3,7 +3,7 @@ import { lazy } from "react"
 
 const Consulting = lazy(() => import("./Consulting/Consulting"))
 const Details = lazy(() => import("./Details/Details"))
-const Events = lazy(() => import("./Events"))
+const Events = lazy(() => import("./Events/Events"))
 const About = lazy(() => import("./About"))
 const Contacts = lazy(() => import("./Contacts"))
 

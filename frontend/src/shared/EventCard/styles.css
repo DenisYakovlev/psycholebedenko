@@ -1,0 +1,16 @@
+.event-card{
+    width: 1200px;
+    height: fit-content;
+    min-width: 400px;
+    min-height: 400px;
+    max-width: 80vw;
+    max-height: 50vh;
+}
+
+.event-line{
+    width: 120px;
+    height: 2px;
+    background-color: #556080;
+    border: none;
+    opacity: 1;
+}
