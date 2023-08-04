@@ -9,6 +9,7 @@ class Event(models.Model):
     thumbnail_text = models.CharField(max_length=512, blank=True)
     main_text = models.CharField(max_length=10000, blank=True)
     date = models.DateTimeField(blank=True, null=True)
+    duration = models.IntegerField(blank=True, null=True)
     online = models.BooleanField(default=False)
     zoom_link = models.URLField(blank=True, null=True) 
     address = models.CharField(max_length=512, blank=True, null=True)

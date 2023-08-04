@@ -34,7 +34,6 @@ class EventList(APIView):
     
     def get(self, request):
         events = self.get_queryset()
-        # events = Event.objects.all()
         serializer = EventListSerializer(events, many=True, context = {'request': request})
         
         return Response(serializer.data, status.HTTP_200_OK)

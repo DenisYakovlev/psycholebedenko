@@ -1,105 +1,86 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import Card from 'react-bootstrap/Card';
-import Image from 'react-bootstrap/Image'
-import Overlay from 'react-bootstrap/Overlay'
-import Tooltip from 'react-bootstrap/Tooltip'
+import Button from "react-bootstrap/Button"
 import Container from "react-bootstrap/Container"
-import Row from "react-bootstrap/Row"
-import Col from "react-bootstrap/Col"
-
 import { UserContext } from '../../contexts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays, faSignal } from "@fortawesome/free-solid-svg-icons"
-
+import { faClock } from "@fortawesome/free-solid-svg-icons"
+import CardBody from './CardBody';
+import bg from "./../../assets/images/bg-home-consulting.png"
 import "./styles.css"
 
 
+const bsBorderRadius = "var(--bs-card-inner-border-radius)"
+
+const backend_url = process.env.REACT_APP_BACKEND_URL 
+
 // need to refactor
-export default function EventCard({event}){
+export default function EventCard({event, idx}){
     const {authFetch} = useContext(UserContext)
-    
     const [participated, setParticipated] = useState(event.participated)
-    const [show, setShow] = useState(false)
-    const calendar = useRef(null)
 
-    const truncDate = dateTime => {
-        const [datePart, timePart] = dateTime.split("T");
-        const [date, timezone] = datePart.split("+");
-
-        return `${date.replace(/-/g, ".")} ${timePart.slice(0, 5)}`
+    // styles for card images depending on it's position(left or right)
+    const styles = {
+        cardImg: {
+            backgroundImage: `url(${bg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            borderBottomLeftRadius: idx % 2 ? bsBorderRadius: "0px",
+            borderTopLeftRadius: idx % 2 ? bsBorderRadius: "0px",
+            borderBottomRightRadius: idx % 2 ? "0px": bsBorderRadius,
+            borderTopRightRadius: idx % 2 ? "0px": bsBorderRadius,
+        }
     }
 
-    const handleParticipation = () => {
-
+    const handleAddParticipation = () => {
+        authFetch(`${backend_url}/event/${event.title}/participate`, {
+            method: "POST"
+        })
+        .then(response => {
+            if(response.status == 200){
+                setParticipated(true)
+            }
+        })
     }
 
-    // return (
-    //     <Card bg="white" data-bs-theme="light" style={styles.card} className='m-0'>
-    //         <Card.Header className='bg-white fs-5 d-flex flex-row justify-content-between align-items-center'>
-    //             <Card.Text title="Назва" className="m-0 align-self-center text-truncate">
-    //                 {event.title}
-    //             </Card.Text>
-    //             <Container style={{width: "fit-content"}} className='m-0 p-0 d-flex flex-row gap-2 justify-content-end align-items-center'>
-    //                 <Image 
-    //                     src={event.online ? onlineIcon : offlineIcon} 
-    //                     width="20px" height="20px"
-    //                 />
-    //                 <Image 
-    //                     src={event.online ? zoomIcon : officeIcon} 
-    //                     width="20px" height="20px"
-    //                 />
-    //                 <Image ref={calendar} src={calendarIcon} width="20px" height="20px" onClick={() => setShow(!show)}/>
-    //                 <Overlay target={calendar.current} show={show} placement="bottom">
-    //                     <Tooltip>
-    //                         {truncDate(event.date)}
-    //                     </Tooltip>
-    //                 </Overlay>
-    //                 <Image onClick={() => setParticipated(!participated)} src={participated ? participatedIcon: notParticipatedIcon} width="20px" height="22px"/>
-    //             </Container>
-    //         </Card.Header>
-    //         <Card.Body style={{overflow: "hidden"}}>
-    //             <Card.Text>
-    //                 {event.thumbnail_text}
-    //             </Card.Text>
-    //         </Card.Body>
-    //         <Card.Footer className="m-0 py-0 d-flex flex-row align-items-center justify-content-end" style={{height: "47px"}}>
-    //         </Card.Footer>
-    //     </Card>
-    // )
+    const handleRemoveParticipation = () => {
+        authFetch(`${backend_url}/event/${event.title}/participate`, {
+            method: "DELETE"
+        })
+        .then(response => {
+            if(response.status == 200){
+                setParticipated(false)
+            }
+        })
+    }
 
-    const imgUrl = "https://natureconservancy-h.assetsadobe.com/is/image/content/dam/tnc/nature/en/photos/Zugpsitze_mountain.jpg?crop=0%2C214%2C3008%2C1579&wid=1200&hei=630&scl=2.506666666666667"
+    // switch image position between left and right on large screens
+    const cardDirection = idx % 2 ? "flex-md-row-reverse": "flex-md-row"
 
     return (
-        <Card bg="white" data-bs-theme="light" className="m-0 p-0 event-card d-flex flex-column justify-content-between">
-            <Container className="p-sm-5 p-4 m-0 overflow-auto" fluid>
-                <Card.Body className="p-0 m-0 event-body">
-                    <Card.Text className="m-0 mb-2 text-dark fs-3 text-truncate">
-                        {event.title}
+        <Card style={{minWidth: "320px"}} 
+            className={"event-card bg-gradient shadow my-4 d-flex " + cardDirection + " flex-column-reverse"} 
+            bg="light" data-bs-theme="white"
+        >
+            <Container className="event-card-body p-0 m-0 d-flex flex-column justify-content-between">
+                <CardBody event={event}/>
+                <Container className="event-card-footer p-0 m-0 px-md-5 px-4 pb-4 d-flex justify-content-between align-items-center">
+                    <Card.Text className="m-0 fs-6 text-muted text-truncate">
+                        <FontAwesomeIcon icon={faClock} /> {event.duration + " хв."}
                     </Card.Text>
-                    <Card.Text className="m-0 mb-2">
-                        <FontAwesomeIcon className='pe-2' icon={ faCalendarDays } style={{fontSize: "16px"}}/>
-                        {event.date}
-                    </Card.Text>
-                    <hr className="m-0 mb-3 event-line" />
-                    <Card.Text className="m-0 text-muted text-justify">
-                            {event.thumbnail_text}
-                    </Card.Text>
-                </Card.Body>
+                    {
+                        participated ?
+                        <Button onClick={handleRemoveParticipation} variant="outline-dark" className="">
+                            Відписатися
+                        </Button>
+                        :
+                        <Button onClick={handleAddParticipation} variant="outline-dark" className="">
+                            Записатися
+                        </Button>
+                    }
+                </Container>
             </Container>
-            <Row md={4} sm={2} xs={1} className="px-sm-5 px-4 m-0 py-4 d-flex flex-row gap-3">
-                <Col style={{width: "120px", background: "rgba(83, 83, 83, 0.4)"}} className='m-0 p-0'>
-                    Hui
-                </Col>
-                <Col style={{width: "120px", background: "rgba(83, 83, 83, 0.4)"}} className='m-0 p-0'>
-                    Hui
-                </Col>
-                <Col style={{width: "120px", background: "rgba(83, 83, 83, 0.4)"}} className='m-0 p-0'>
-                    Hui
-                </Col>
-                <Col style={{width: "120px", background: "rgba(83, 83, 83, 0.4)"}} className='m-0 p-0'>
-                    Hui
-                </Col>
-            </Row>
-        </Card>
+            <Card.Img as={Container} style={styles.cardImg} className="event-card-img p-0 m-0"/>
+        </Card> 
     )
 }
