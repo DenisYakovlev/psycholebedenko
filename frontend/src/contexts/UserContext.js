@@ -1,13 +1,29 @@
 import { createContext, useState, useEffect } from "react"
+import { backend_url } from "../constants"
 
-
-const backend_url = process.env.REACT_APP_BACKEND_URL
 
 const UserContext = createContext({})
 
 const UserContextProvider = ({children}) => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('tokens')))
 
+    const checkPhoneVerification = async () => {
+        if(!user){
+            return false
+        }
+
+        const response = await authFetch(`${backend_url}/user/phone`, {
+            method: "GET"
+        })
+
+        if(response.status == 200){
+            const data = await response.json()
+            return data.phone_number ? true : false
+        }
+        else{
+            return null
+        }
+    }
 
     // validate user token
     const tokenIsValid = async () => {
@@ -103,7 +119,7 @@ const UserContextProvider = ({children}) => {
     }
 
     return (
-        <UserContext.Provider value={{user, setUser, authFetch, publicFetch, refreshToken}}>
+        <UserContext.Provider value={{user, setUser, authFetch, publicFetch, refreshToken, checkPhoneVerification}}>
             {children}
         </UserContext.Provider>
     )

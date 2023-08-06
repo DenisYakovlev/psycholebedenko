@@ -4,9 +4,9 @@ import Col from "react-bootstrap/Col"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../contexts/UserContext"
 import { EventCard } from "../../../shared"
+import { backend_url } from "../../../constants"
 import MainText from "./MainText"
 
-const backend_url = process.env.REACT_APP_BACKEND_URL
 
 export default function Events(){
     const {user, publicFetch} = useContext(UserContext)

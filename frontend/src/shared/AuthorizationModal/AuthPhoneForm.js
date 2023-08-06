@@ -3,14 +3,43 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import { useContext, useState } from "react";
 import { UserContext } from "../../contexts";
+import { backend_url } from "../../constants"
 
-const backend_url = process.env.REACT_APP_BACKEND_URL
 
-export default function AuthPhoneForm({userData, hide, saveUser}){
+export default function AuthPhoneForm({userData, hide, setIndex}){
+    const {user, authFetch} = useContext(UserContext)
     const [phone, setPhone] = useState("")
     const [notify, setNotify] = useState(false)
 
+    // need to refactor this(extremely bad code)
     const handleSubmit = () =>{
+        if(user){
+            return authFetch(`${backend_url}/user/me`, {
+                method: "PUT",
+                headers: {
+                    "Content-type": "Application/json"
+                },
+                body: JSON.stringify({
+                    phone_number: phone,
+                    notifications_on: notify
+                })
+            })
+            .then(response => {
+                if(response.status == 200){
+                    setIndex(2)
+                }
+                else{
+                    throw new Error("User update error")
+                }
+            })
+            .catch(error => console.log(error))
+        }
+
+        if(!userData){
+            hide()
+            return 
+        }
+
         fetch(`${backend_url}/user/me`, {
             method: "PUT",
             headers: {
@@ -24,25 +53,20 @@ export default function AuthPhoneForm({userData, hide, saveUser}){
         })
         .then(response => {
             if(response.status == 200){
-                saveUser()
-                hide()
+                setIndex(2)
             }
             else{
                 throw new Error("User update error")
             }
         })
-        .catch(error => {
-            console.log(error)
-        })
+        .catch(error => console.log(error))
     }
 
-    const handleSkip = () => {
-        saveUser()
-        hide()
-    }
+    // hide modal on phone verification skip
+    const handleSkip = () => hide()
 
     return (
-        <>
+        <Container style={{height: "380px"}} className="m-0 p-0">
             <Container className="p-0 m-0 mb-3 d-flex flex-column justify-content-center align-items-center">
                 <p className="p-0 mt-5 mb-2 fs-2 fw-bold text-center">
                     Додаткові кроки
@@ -76,6 +100,6 @@ export default function AuthPhoneForm({userData, hide, saveUser}){
                     Підтвердити
                 </Button>
             </Container>
-        </>
+        </Container>
     )
 }

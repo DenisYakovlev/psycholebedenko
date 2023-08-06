@@ -1,20 +1,19 @@
 import { Suspense, useContext, useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container'
 import Image from "react-bootstrap/Image"
-import { UserContext } from './../../../contexts'
+import { AuthModalContext, UserContext } from './../../../contexts'
 import { Link } from 'react-router-dom'
-import {LoadSpinner, AuthorizationModal} from '../../../shared'
+import {LoadSpinner} from '../../../shared'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { backend_url } from '../../../constants'
 
-
-const backend_url = process.env.REACT_APP_BACKEND_URL
 
 const userPhotoSize = "40px"
 
 export default function AuthWidget(){
     const {user, authFetch} = useContext(UserContext)
-    const [modalShow, setModalShow] = useState(false)
+    const {showAuthModal} = useContext(AuthModalContext)
     const [userPhoto, setUserPhoto] = useState("")
 
     // set user photo
@@ -41,7 +40,7 @@ export default function AuthWidget(){
                 <>
                     <Container 
                         style={{cursor: "pointer", paddingBottom: "2px"}} 
-                        onClick={() => setModalShow(true)} 
+                        onClick={showAuthModal} 
                         className="m-0 d-flex flex-row gap-2 align-items-center justify-content-center"
                     >
                         <p className="m-0 p-0 fs-6 text-muted text-justify">
@@ -49,8 +48,6 @@ export default function AuthWidget(){
                         </p>
                         <FontAwesomeIcon icon={faUser}/>
                     </Container>
-
-                    <AuthorizationModal show={modalShow} hide={() => setModalShow(false)}/>
                 </>
             }
         </Suspense>

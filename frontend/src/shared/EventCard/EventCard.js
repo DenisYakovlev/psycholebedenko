@@ -1,23 +1,28 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from "react-bootstrap/Button"
 import Container from "react-bootstrap/Container"
-import { UserContext } from '../../contexts';
+import { AuthModalContext, UserContext } from '../../contexts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from "@fortawesome/free-solid-svg-icons"
 import CardBody from './CardBody';
 import bg from "./../../assets/images/bg-home-consulting.png"
+import { backend_url } from "../../constants"
 import "./styles.css"
 
 
 const bsBorderRadius = "var(--bs-card-inner-border-radius)"
 
-const backend_url = process.env.REACT_APP_BACKEND_URL 
-
 // need to refactor
 export default function EventCard({event, idx}){
-    const {authFetch} = useContext(UserContext)
+    const {user, authFetch} = useContext(UserContext)
+    const {showAuthModal} = useContext(AuthModalContext)
     const [participated, setParticipated] = useState(event.participated)
+
+    // update participation state on event loading(needs to be updated when user logs in)
+    useEffect(() => {
+        setParticipated(event.participated)
+    }, [event])
 
     // styles for card images depending on it's position(left or right)
     const styles = {
@@ -70,11 +75,11 @@ export default function EventCard({event, idx}){
                     </Card.Text>
                     {
                         participated ?
-                        <Button onClick={handleRemoveParticipation} variant="outline-dark" className="">
+                        <Button onClick={user ? handleRemoveParticipation : showAuthModal} variant="outline-dark" className="">
                             Відписатися
                         </Button>
                         :
-                        <Button onClick={handleAddParticipation} variant="outline-dark" className="">
+                        <Button onClick={user ? handleAddParticipation : showAuthModal} variant="outline-dark" className="">
                             Записатися
                         </Button>
                     }

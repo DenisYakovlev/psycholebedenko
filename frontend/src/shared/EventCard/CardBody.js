@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
+import { useEffect } from 'react';
 
 export default function CardBody({event}){
     const formatDate = (eventDate) => {
