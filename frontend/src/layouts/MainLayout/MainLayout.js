@@ -5,8 +5,8 @@ import { useContext, useEffect, useState, lazy, Suspense } from "react"
 import { UserContext } from "../../contexts"
 import LoadSpinner from "../../shared/LoadSpinner";
 
-const NavBar = lazy(() => import("./NavBar"))
-const Footer = lazy(() => import("./Footer"))
+const NavBar = lazy(() => import("./Components/NavBar"))
+const Footer = lazy(() => import("./Components/Footer"))
 
 export default function MainLayout(){
     const {user, refreshToken} = useContext(UserContext)
@@ -14,7 +14,7 @@ export default function MainLayout(){
 
     useEffect(() => {
         const refresh = async () => {
-            const token = await refreshToken()
+            await refreshToken()
             setIsLoading(false)
         }
 
@@ -28,7 +28,7 @@ export default function MainLayout(){
 
     return (
         <Suspense fallback={<LoadSpinner />}>
-            <Container style={{minWidth: "380px"}} fluid className="p-0">
+            <Container  fluid className="p-0">
                     <NavBar />
                     <Outlet />
                     <Footer />

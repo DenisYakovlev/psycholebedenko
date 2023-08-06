@@ -66,7 +66,7 @@ export default function EventCard({event, idx}){
                 <CardBody event={event}/>
                 <Container className="event-card-footer p-0 m-0 px-md-5 px-4 pb-4 d-flex justify-content-between align-items-center">
                     <Card.Text className="m-0 fs-6 text-muted text-truncate">
-                        <FontAwesomeIcon icon={faClock} /> {event.duration + " хв."}
+                        <FontAwesomeIcon icon={faClock} /> {event?.duration + " хв."}
                     </Card.Text>
                     {
                         participated ?

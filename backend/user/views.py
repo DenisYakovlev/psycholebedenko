@@ -91,3 +91,9 @@ def SendDefaultUserPhoto(request):
 def SendSlowPhoto(request):
     time.sleep(5)
     return Response({"photo": "https://psycholebedenko-backend.s3.amazonaws.com/user_photo.jpeg"}, status.HTTP_200_OK)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def UserPhone(request):
+    phone_number = request.user.phone_number or None
+    return Response({"phone_number": phone_number}, status.HTTP_200_OK)

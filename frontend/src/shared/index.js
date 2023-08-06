@@ -1,4 +1,6 @@
-import AppointmentForm from "./AppointmentForm";
+import AppointmentForm from "./AppointmentForm/AppointmentForm";
+import AuthorizationModal from "./AuthorizationModal/AuthorizationModal";
 import EventCard from "./EventCard/EventCard";
+import LoadSpinner from "./LoadSpinner";
 
-export {AppointmentForm, EventCard}
+export {AppointmentForm, AuthorizationModal, EventCard, LoadSpinner}

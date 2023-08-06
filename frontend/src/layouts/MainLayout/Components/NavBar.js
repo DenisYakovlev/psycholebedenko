@@ -43,11 +43,11 @@ export default function NavBar(){
     const handleLinkClick = e => setExpanded(false)
 
     return (
-        <Navbar sticky="top" expanded={expanded} expand="md" bg="white" data-bs-theme="light">
+        <Navbar className="p-0 m-0" sticky="top" expanded={expanded} expand="md" bg="white" data-bs-theme="light">
             <Container fluid className="mx-md-3">
                 <Navbar.Toggle 
-                    style={{border: "none"}} 
-                    className="p-0" 
+                    style={{border: "none"}}
+                    className="p-0 m-0"  
                     aria-controls="offcanvas"
                     onClick={e => setExpanded(!expanded)}
                 />

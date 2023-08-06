@@ -1,5 +1,6 @@
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
+import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
@@ -29,10 +30,10 @@ export default function CardBody({event}){
     return (
         <Card.Body className="p-0 px-md-5 px-4 py-md-5 py-3">
             <Container className="m-0 p-0 d-flex flex-row justify-content-between align-items-center">
-                <Card.Text className="m-0 mb-1 fs-4 w-75 text-dark text-truncate">
+                <Card.Text as={Link} to={`./event/${event.title}`} className="m-0 mb-1 fs-4 w-75 text-dark text-truncate text-decoration-none">
                     {event.title}
                 </Card.Text>
-                <Card.Text style={{paddingRight: "12px"}} className="m-0 fs-6 text-muted text-truncate">
+                <Card.Text className="m-0 fs-6 pe-1 text-muted text-truncate">
                     {event.online ? "online" : "offline"}
                 </Card.Text>
             </Container>

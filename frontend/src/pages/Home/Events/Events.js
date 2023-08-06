@@ -9,19 +9,32 @@ import MainText from "./MainText"
 const backend_url = process.env.REACT_APP_BACKEND_URL
 
 export default function Events(){
-    const {publicFetch} = useContext(UserContext)
+    const {user, publicFetch} = useContext(UserContext)
     const [events, setEvents] = useState([])
 
-    useEffect(() => {
-        publicFetch(`${backend_url}/event?status`, {
+    const fetchEvents = () => {
+        publicFetch(`${backend_url}/event/`, {
             method: "GET"
         })
         .then(response => response.json())
         .then(data => {
             setEvents([...data])
         })
+    }
+    // fetch events if user not authorized
+    useEffect(() => {
+        if(!user){
+            fetchEvents()
+        }
     }, [])
 
+    // fetch events when user tokens are loaded from local storage
+    // and refreshed on website load or if it's not valid
+    useEffect(() => {
+        if(user){
+            fetchEvents()
+        }
+    }, [user])
 
     return (
         <Container id="events" style={{minHeight: "100vh", paddingBottom: "15vh"}} className="m-0 px-0 positiion-relative" fluid>
