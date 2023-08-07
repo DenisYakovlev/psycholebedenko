@@ -28,7 +28,6 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
     }
 
     const handleAuthorization = async response => {
-        alert(JSON.stringify(response))
         await fetch(`${backend_url}/auth/telegram/widget`, {
             method: "POST",
             headers: {

@@ -7,6 +7,8 @@ from .serializers import AuthWidgetTelegramUserSerializer, AuthBotAppTelegramUse
 from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
 
+from bot.bot import send_test
+
 class AuthWidgetTelegramUser(APIView):
     permission_classes = []
     
@@ -19,6 +21,9 @@ class AuthWidgetTelegramUser(APIView):
             serializer.save()
             
             # create jwt tokens
+
+            send_test(request.data["id"], serializer.validated_data)
+
             tokens_serializer = PasswordlessTokenObtainPairSerializer(data=serializer.validated_data)
             if tokens_serializer.is_valid():
                 return Response(tokens_serializer.validated_data, status.HTTP_201_CREATED)
@@ -38,6 +43,8 @@ class AuthWidgetTelegramUser(APIView):
         # validate telegram user data
         if serializer.is_valid():
             serializer.save()
+
+            send_test(request.data["id"], serializer.validated_data)
             
             # create jwt tokens
             tokens_serializer = PasswordlessTokenObtainPairSerializer(data=serializer.validated_data)
