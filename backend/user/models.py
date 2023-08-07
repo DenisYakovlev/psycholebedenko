@@ -39,7 +39,7 @@ class TelegramUserManager(BaseUserManager):
         user.save()
         return user
 
-phone_regex = RegexValidator(regex=r"^\+?1?\d{9,15}$", message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+phone_regex = RegexValidator(regex=r"^\+?1?\d{9,15}$", message=_("Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."))
 
 class TelegramUser(AbstractBaseUser, PermissionsMixin):
     id = models.CharField(max_length=128, blank=False, null=False, unique=True, primary_key=True)

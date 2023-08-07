@@ -12,6 +12,8 @@ from bot.bot import send_test
 class AuthWidgetTelegramUser(APIView):
     permission_classes = []
     
+    # may be, this is not needed because serializer save method is updating values
+    # need to check later
     def HandleUserUpdate(self, request):
         user = TelegramUser.objects.get(id=request.data["id"])
         
@@ -21,9 +23,6 @@ class AuthWidgetTelegramUser(APIView):
             serializer.save()
             
             # create jwt tokens
-
-            send_test(request.data["id"], serializer.validated_data)
-
             tokens_serializer = PasswordlessTokenObtainPairSerializer(data=serializer.validated_data)
             if tokens_serializer.is_valid():
                 return Response(tokens_serializer.validated_data, status.HTTP_201_CREATED)
@@ -44,8 +43,6 @@ class AuthWidgetTelegramUser(APIView):
         if serializer.is_valid():
             serializer.save()
 
-            send_test(request.data["id"], serializer.validated_data)
-            
             # create jwt tokens
             tokens_serializer = PasswordlessTokenObtainPairSerializer(data=serializer.validated_data)
             if tokens_serializer.is_valid():

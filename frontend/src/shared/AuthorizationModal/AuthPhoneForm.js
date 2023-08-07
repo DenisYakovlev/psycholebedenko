@@ -1,69 +1,34 @@
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
-import { useContext, useState } from "react";
-import { UserContext } from "../../contexts";
-import { backend_url } from "../../constants"
+import { useState, useEffect } from "react";
 
 
-export default function AuthPhoneForm({userData, hide, setIndex}){
-    const {user, authFetch} = useContext(UserContext)
+export default function AuthPhoneForm({handleSubmit, setIndex}){
     const [phone, setPhone] = useState("")
+    const [phoneIsValid, setPhoneIsValid] = useState(true)
     const [notify, setNotify] = useState(false)
 
-    // need to refactor this(extremely bad code)
-    const handleSubmit = () =>{
-        if(user){
-            return authFetch(`${backend_url}/user/me`, {
-                method: "PUT",
-                headers: {
-                    "Content-type": "Application/json"
-                },
-                body: JSON.stringify({
-                    phone_number: phone,
-                    notifications_on: notify
-                })
-            })
-            .then(response => {
-                if(response.status == 200){
-                    setIndex(2)
-                }
-                else{
-                    throw new Error("User update error")
-                }
-            })
-            .catch(error => console.log(error))
+    useEffect(() => {
+        const phoneRegex = /^\+\d{12}$/
+        console.log(phoneRegex.test(phone))
+        setPhoneIsValid(phoneRegex.test(phone))
+    }, [phone])
+
+    const nextSlide = () => setIndex(2)
+
+    // go to next slide on phone verification skip
+    const handleSkip = () => nextSlide()
+
+    const _handleSubmit = () => {
+        const data = {
+            phone_number: phone,
+            notifications_on: notify
         }
 
-        if(!userData){
-            hide()
-            return 
-        }
-
-        fetch(`${backend_url}/user/me`, {
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${userData.access}`,
-                "Content-type": "Application/json"
-            },
-            body: JSON.stringify({
-                phone_number: phone,
-                notifications_on: notify
-            })
-        })
-        .then(response => {
-            if(response.status == 200){
-                setIndex(2)
-            }
-            else{
-                throw new Error("User update error")
-            }
-        })
-        .catch(error => console.log(error))
+        handleSubmit(data)
+        nextSlide()
     }
-
-    // hide modal on phone verification skip
-    const handleSkip = () => hide()
 
     return (
         <Container style={{height: "380px"}} className="m-0 p-0">
@@ -81,10 +46,12 @@ export default function AuthPhoneForm({userData, hide, setIndex}){
                         <Form.Label className="text-dark">
                             Номер телефона
                         </Form.Label>
-                        <Form.Control type="text" placeholder="+380" value={phone} onChange={e => setPhone(e.target.value)} />
+                        <Form.Control 
+                            required type="text" isInvalid={!phoneIsValid}
+                            placeholder="+380" value={phone} 
+                            onChange={e => setPhone(e.target.value)} />
                         <Form.Check
-                            className="mt-3"
-                            type="switch"
+                            className="mt-3" type="switch"
                             label="Сповіщати мене про початок заходів"
                             value={notify}
                             onChange={() => setNotify(!notify)}
@@ -93,10 +60,10 @@ export default function AuthPhoneForm({userData, hide, setIndex}){
                 </Form>
             </Container>
             <Container className="mb-4 px-5 d-flex flex-row justify-content-end gap-3">
-                <Button variant="outline-secondary" size="sm" onClick={handleSkip}>
+                <Button variant="outline-dark" size="sm" onClick={handleSkip}>
                     Пропустити
                 </Button>
-                <Button variant="outline-dark" size="md" onClick={handleSubmit}>
+                <Button disabled={!phoneIsValid} variant="outline-dark" size="md" onClick={_handleSubmit}>
                     Підтвердити
                 </Button>
             </Container>

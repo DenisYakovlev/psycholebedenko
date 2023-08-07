@@ -76,14 +76,22 @@ class AuthWidgetTelegramUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'username', 'photo_url', 'auth_date', 'hash']
         
     def validate(self, attrs):
+        print(attrs)
         hashIsValid = confirmTelegramWidgetHash(attrs, secret_key=settings.TELEGRAM_BOT_API_KEY)
         
         if hashIsValid == False:
             raise serializers.ValidationError({"hash": "Hash is not valid"})
         
-        imgIsValid = validateIMGURL(attrs['photo_url'])
-        if imgIsValid == False:
-            # set default photo value stored on aws s3 bucket
+        try:
+            # photo_url can be not provided if user doesn't have profile image
+            # hidden photo will be provided but url will give 404 error
+            imgIsValid = validateIMGURL(attrs['photo_url'])
+            if imgIsValid == False:
+                # set default photo value stored on aws s3 bucket
+                attrs['photo_url'] = "https://psycholebedenko-backend.s3.amazonaws.com/user_photo.jpeg"
+
+        except KeyError:
+            # set default img if photo url is not provided
             attrs['photo_url'] = "https://psycholebedenko-backend.s3.amazonaws.com/user_photo.jpeg"
         
         return super().validate(attrs)

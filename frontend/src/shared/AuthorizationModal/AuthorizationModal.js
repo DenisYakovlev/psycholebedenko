@@ -21,8 +21,8 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
             // delay between modal hide and user update
             // without delay hide animation is skipped
             setTimeout(() => {
-                setUser(userData)
-                localStorage.setItem('tokens', JSON.stringify(userData))
+                setUser(userData.tokens)
+                localStorage.setItem('tokens', JSON.stringify(userData.tokens))
             }, 200)
         }
     }
@@ -37,8 +37,25 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
         })
         .then(response => response.json())
         .then(data => {
-            setUserData(data)
+            setUserData({...userData, tokens: data})
             setIndex(1)
+        })
+        .catch(error => console.log(error))
+    }
+
+    const handleExtraDataSubmit = async data =>{
+        fetch(`${backend_url}/user/me`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${userData.tokens.access}`,
+                "Content-type": "Application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error("User update error")
+            }
         })
         .catch(error => console.log(error))
     }
@@ -62,7 +79,7 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
                             <AuthTelegramForm authCallback={handleAuthorization}/>
                         </Carousel.Item>
                         <Carousel.Item className="p-0">
-                            <AuthPhoneForm userData={userData} hide={hide} setIndex={setIndex}/>
+                            <AuthPhoneForm handleSubmit={handleExtraDataSubmit} setIndex={setIndex}/>
                         </Carousel.Item>
                         <Carousel.Item className="p-0">
                             <AuthFinalForm hide={hide}/>

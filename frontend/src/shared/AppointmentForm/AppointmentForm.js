@@ -10,7 +10,7 @@ import { backend_url } from "../../constants"
 
 const styles = {
     card: {
-        maxWidth: "90vw",
+        maxWidth: "100vw",
         minWidth: "350px",
         width: "500px",
         minHeight: "80vh",

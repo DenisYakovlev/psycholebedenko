@@ -12,8 +12,8 @@
     height: 56px;
     width: 100%;
     border-bottom: solid 1px #f4f4f4;
-    animation-name: SlideIn;
-    animation-duration: 0.5s;
+    /* animation-name: SlideIn;
+    animation-duration: 0.5s; */
 }
 
 #offcanvas{

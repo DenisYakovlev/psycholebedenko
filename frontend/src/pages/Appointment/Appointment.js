@@ -5,9 +5,9 @@ import { AppointmentForm } from "../../shared"
 
 export default function Appointment(){
     return (
-        <Container style={{backgroundColor: "#f4f4f4", minHeight: "100vh", height: "fit-content", minWidth: "380px"}} className="p-0" fluid>
+        <Container style={{backgroundColor: "#f4f4f4", minHeight: "100vh", height: "fit-content"}} className="p-0" fluid>
             <Row className="p-0 m-0">
-                <Col className="p-0 m-0 vh-100 mt-5 d-flex justify-content-center align-items-start">
+                <Col style={{minHeight: "100vh", height: "fit-content"}} className="p-0 m-0 mt-sm-5 mb-5 d-flex justify-content-center align-items-start">
                     <AppointmentForm />
                 </Col>
             </Row>
