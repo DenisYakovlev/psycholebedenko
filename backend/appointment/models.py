@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from user.models import TelegramUser
+from schedule.models import Schedule
 
 # Create your models here.
 
@@ -19,7 +20,7 @@ class Appointment(models.Model):
     title = models.TextField(blank=False, null=False, default=set_default_title)
     notes = models.TextField(blank=True, null=True)
     user = models.ForeignKey(TelegramUser, on_delete=models.CASCADE)
-    date = models.DateTimeField(blank=True, null=True)
+    date = models.OneToOneField(Schedule, on_delete=models.SET_NULL, null=True, blank=True)
     online = models.BooleanField(default=True)
     zoom_link = models.URLField(blank=True, null=True)
     address = models.CharField(max_length=512, blank=True, null=True)

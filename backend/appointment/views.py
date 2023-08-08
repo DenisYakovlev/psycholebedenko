@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from django.http import Http404
 
 from .models import Appointment
-from .serializers import AppointmentSerializer, AppointmentListSerializer
+from .serializers import AppointmentSerializer, AppointmentListSerializer, AppointmentCreateSerializer
 from user.models import TelegramUser
-from user.models import TelegramUser
+from schedule.models import Schedule
 
 
 class AppointmentList(APIView):
@@ -34,7 +34,7 @@ class AppointmentList(APIView):
         except:
             return Response({"msg": "user not found"}, status.HTTP_404_NOT_FOUND)
 
-        serializer = AppointmentSerializer(data=request.data, context={'request': request})
+        serializer = AppointmentCreateSerializer(data=request.data, context={'request': request})
 
         if serializer.is_valid():
             serializer.save()
@@ -55,7 +55,7 @@ class AppointmentCreate(APIView):
         except:
             return Response({"msg": "user not found"}, status.HTTP_404_NOT_FOUND)
 
-        serializer = AppointmentSerializer(data=data, context={'request': self.request})
+        serializer = AppointmentCreateSerializer(data=data, context={'request': self.request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
@@ -80,11 +80,11 @@ class AppointmentDetail(APIView):
     def put(self, request, pk):
         appointment = self.get_appointment(pk)
         
-        serializer = AppointmentSerializer(instance=appointment, data=request.data, 
+        serializer = AppointmentCreateSerializer(instance=appointment, data=request.data, 
                                            partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.validated_data, status.HTTP_202_ACCEPTED)
+            return Response(serializer.data, status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
