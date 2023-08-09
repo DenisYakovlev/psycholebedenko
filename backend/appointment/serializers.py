@@ -5,8 +5,6 @@ from django.conf import settings
 from rest_framework import serializers
 from .models import Appointment
 from user.serializers import TelegramUserSerializer
-from schedule.models import Schedule
-from schedule.serializers import ScheduleListSerializer
 
 
 class AppointmentSerializer(serializers.ModelSerializer):

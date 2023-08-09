@@ -3,4 +3,4 @@ from django.db import models
 
 
 class Schedule(models.Model):
-    date = models.DateTimeField(blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True, unique=True)
