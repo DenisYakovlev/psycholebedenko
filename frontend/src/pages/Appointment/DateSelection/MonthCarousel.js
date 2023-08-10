@@ -29,7 +29,7 @@ export default function MonthCarousel({currYear, setCurrYear, currMonth, setCurr
     return (
         <Carousel
             activeIndex={index} onSelect={handleSelect}
-            className="mt-3 mx-auto w-50"
+            className="mx-auto w-50"
             variant="dark"
             indicators={false} interval={null}
         >

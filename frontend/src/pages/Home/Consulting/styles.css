@@ -1,7 +1,6 @@
 .main-wrapper{
-    animation-name: Sleep, SlideInAndFade;
-    animation-duration: 0.5s, 1s;
-    animation-delay: 0s, 0.5s;
+    animation-name: fade-in;
+    animation-duration: 1.2s;
 }
 
 .main-header{
@@ -22,20 +21,26 @@
 }
 
 .main-credentials{
-    animation-name: Sleep, SlideInAndFade;
-    animation-duration: 0.65s, 1s;
-    animation-delay: 0s, 0.65s;
+    animation-name: fade-in;
+    animation-duration: 1.35s;
+}
+
+.main-icon{
+    transition: all 0.2s ease-out;
 }
 
 .main-icon:hover{
-    transform: scale(105%);
-    transition: all 1s ease-out;
+    transform: scale(110%);
+}
+
+.main-icon:active{
+    transform: scale(75%);
+    transition: all 0.2s ease-out;
 }
 
 .main-button-wrapper{
-    animation-name: Sleep, SlideInAndFade;
-    animation-duration: 0.7s, 1s;
-    animation-delay: 0s, 0.7s;
+    animation-name: fade-in;
+    animation-duration: 1.4s;
 }
 
 .main-button{
@@ -62,22 +67,23 @@
     }
 }
 
-@keyframes SlideInAndFade {
-    from{
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    25%{
+        opacity: 0;
+    }
+    50%{
         opacity: 0;
         transform: translateY(5vh);
     }
-    to{
+    75%{
+        opacity: 0.5;
+    }   
+    100%{
         opacity: 1;
         transform: translateY(0vh);
-    }
-}
-
-@keyframes Sleep {
-    from{
-        opacity: 0;
-    }
-    to{
-        opacity: 0;
     }
 }

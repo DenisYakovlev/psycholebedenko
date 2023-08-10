@@ -1,81 +1,61 @@
 import Container from "react-bootstrap/Container"
-import Table from "react-bootstrap/Table"
-import { useState } from "react"
-import MonthCarousel from "./MonthCarousel"
+import { backend_url } from "../../../constants"
+import { useState, useEffect } from "react"
+import DateCalendar from "./DateCalendar"
+import DateOptionSelector from "./DateOptionSelector"
 const moment = require('moment')
 
 
+export default function DateSelection({setDate, nextSlide}){
+    const [selectedDate, setSelectedDate] = useState({})
+    const [options, setOptions] = useState([])
+    const [freeDates, setFreeDates] = useState([])
 
-export default function DateSelection(){
-    const [currMonth, setCurrMonth] = useState(() => new Date().getMonth())
-    const [currYear, setCurrYear] = useState(() => new Date().getFullYear())
+    useEffect(() => {
+        fetch(`${backend_url}/schedule?status=free`, {
+            method: "GET"
+        })
+        .then(response => {
+            if(response.ok){
+                return response.json()
+            }
+            
+            throw new Error("schedule request error")
+        })
+        .then(data => {
+            setFreeDates(data)
+        })
+        .catch(error => console.log(error))
+    }, [])
 
-    const getStartDay = () => new Date(currYear, currMonth, 1).getDay()
+    useEffect(() => {
+        const _options = [...freeDates].filter(freeDate => {
+            const date = moment(freeDate.date)
+            return selectedDate.year == date.year() && selectedDate.month == date.month() && selectedDate.day == date.date()
+        })
 
-    const getDayInMonth = month => {
-        if(month == -1){
-            month = 0
-        }
-        return moment({currYear, month}).daysInMonth()
+        setOptions(_options)
+    }, [selectedDate])
+
+
+    const dateIsEmpty = ({day, month, year}) => {
+        const dates = [...freeDates].map(({date}) => date)
+        const filteredDates = dates.filter(freeDate => {
+            const date = moment(freeDate)
+            return year == date.year() && month == date.month() && day == date.date()
+        })
+
+        return filteredDates.length == 0
     }
 
-    const countWeeks = () => {
-        const startDay = getStartDay()
-        const daysInMonth = getDayInMonth(currMonth)
-        return Math.ceil((startDay + daysInMonth) / 7)
-    } 
-
     return (
-        <Container className="px-3 mt-3 d-flex flex-column gap-3">
+        <Container className="px-3 m-0 d-flex flex-column gap-3">
             <p className="p-0 m-0 text-muted text-center fs-6">
-                Оберіть доступну дату
+                Оберіть дату
             </p>
-            
-            <MonthCarousel currYear={currYear} setCurrYear={setCurrYear} currMonth={currMonth} setCurrMonth={setCurrMonth}/>
 
-            <Table bordered={false}>
-                <thead className="text-center fw-bold fs-6">
-                    <tr>
-                        <th>НД</th>
-                        <th>ПН</th>
-                        <th>ВТ</th>
-                        <th>СР</th>
-                        <th>ЧТ</th>
-                        <th>ПТ</th>
-                        <th>СБ</th>
-                    </tr>
-                    {[...Array(countWeeks())].map((x, i) => {
-                        const startDay = getStartDay()
-                        const daysInMonth = getDayInMonth(currMonth)
-
-
-                        const evaluateDay = day =>{
-                            const _day = day - startDay + 1
-                            if(_day <= 0){
-                                return getDayInMonth(currMonth - 1) + _day
-                            }
-                            else if(_day > daysInMonth){
-                                return _day - daysInMonth
-                            }
-                            else{
-                                return _day
-                            }
-                        }
-
-                        return (
-                            <tr key={i}>
-                                <th>{evaluateDay(i*7 + 0)}</th>
-                                <th>{evaluateDay(i*7 + 1)}</th>
-                                <th>{evaluateDay(i*7 + 2)}</th>
-                                <th>{evaluateDay(i*7 + 3)}</th>
-                                <th>{evaluateDay(i*7 + 4)}</th>
-                                <th>{evaluateDay(i*7 + 5)}</th>
-                                <th>{evaluateDay(i*7 + 6)}</th>
-                            </tr>
-                        )
-                    })}
-                </thead>
-            </Table>
+            <DateCalendar dateIsEmpty={dateIsEmpty} setSelectedDate={setSelectedDate}/>
+            <DateOptionSelector options={options} setDate={setDate} nextSlide={nextSlide}/>
         </Container>
     )
 }

@@ -13,7 +13,9 @@ const styles = {
     }
 }
 
-function Tag({children, icon, ...props}){
+
+
+const Tag = ({children, icon, ...props}) => {
     return (
         <Container 
             style={{width: "fit-content"}}
@@ -29,6 +31,7 @@ function Tag({children, icon, ...props}){
         </Container>
     )
 }
+
 
 export default function TypeSelection({setOnline, nextSlide}){
     const [activeIndex, setActiveIndex] = useState()

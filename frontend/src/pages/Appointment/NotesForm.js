@@ -18,7 +18,7 @@ export default function NotesForm(){
             </Form>
             <Button
                 // onClick={handleSubmit}
-                className="mt-5 w-50 align-self-center" variant="outline-dark" size="lg"
+                className="my-5 w-50 align-self-center" variant="outline-dark" size="lg"
             >
                 Записатися
             </Button>
