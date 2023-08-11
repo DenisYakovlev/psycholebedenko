@@ -1,4 +1,5 @@
 import Container from "react-bootstrap/Container"
+import Button from "react-bootstrap/Button"
 import { backend_url } from "../../../constants"
 import { useState, useEffect } from "react"
 import DateCalendar from "./DateCalendar"
@@ -9,8 +10,10 @@ const moment = require('moment')
 export default function DateSelection({setDate, nextSlide}){
     const [selectedDate, setSelectedDate] = useState({})
     const [options, setOptions] = useState([])
+    const [selectedTime, setSelectedTime] = useState(null)
     const [freeDates, setFreeDates] = useState([])
 
+    // fetch available dates for appointment
     useEffect(() => {
         fetch(`${backend_url}/schedule?status=free`, {
             method: "GET"
@@ -37,7 +40,7 @@ export default function DateSelection({setDate, nextSlide}){
         setOptions(_options)
     }, [selectedDate])
 
-
+    // format calendar. Unavailable dates will be unactive
     const dateIsEmpty = ({day, month, year}) => {
         const dates = [...freeDates].map(({date}) => date)
         const filteredDates = dates.filter(freeDate => {
@@ -48,14 +51,30 @@ export default function DateSelection({setDate, nextSlide}){
         return filteredDates.length == 0
     }
 
+    const handleSubmit = () => {
+        setDate(selectedTime)
+        nextSlide()
+    }
+
     return (
         <Container className="px-3 m-0 d-flex flex-column gap-3">
             <p className="p-0 m-0 text-muted text-center fs-6">
-                Оберіть дату
+                Оберіть дату та час
             </p>
 
-            <DateCalendar dateIsEmpty={dateIsEmpty} setSelectedDate={setSelectedDate}/>
-            <DateOptionSelector options={options} setDate={setDate} nextSlide={nextSlide}/>
+            <DateCalendar onChange={setSelectedDate} formatValues={dateIsEmpty}/>
+            <DateOptionSelector options={options} setSelectedTime={setSelectedTime} nextSlide={nextSlide}/>
+            {selectedTime ?
+                <Button 
+                    style={{width: "fit-content"}} 
+                    onClick={handleSubmit} className="mb-3 align-self-center calendar-button"
+                    variant="outline-dark" size="md"
+                >
+                    Продовжити
+                </Button>
+                :
+                <></>
+            }
         </Container>
     )
 }

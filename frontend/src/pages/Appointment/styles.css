@@ -3,6 +3,22 @@
     animation-duration: 0.75s;
 }
 
+.button-active{
+    animation-name: button-fade-in;
+    animation-duration: 0.5s;
+}
+
+@keyframes button-fade-in {
+    from{
+        opacity: 0;
+        transform: translateY(5vh);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0vh);
+    }
+}
+
 @keyframes fade-in {
     from{
         opacity: 0;

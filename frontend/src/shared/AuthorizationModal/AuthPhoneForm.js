@@ -11,7 +11,6 @@ export default function AuthPhoneForm({handleSubmit, setIndex}){
 
     useEffect(() => {
         const phoneRegex = /^\+\d{12}$/
-        console.log(phoneRegex.test(phone))
         setPhoneIsValid(phoneRegex.test(phone))
     }, [phone])
 

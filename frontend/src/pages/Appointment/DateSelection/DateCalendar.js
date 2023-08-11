@@ -6,7 +6,7 @@ import "./styles.css"
 const moment = require('moment')
 
 
-export default function DateCalendar({dateIsEmpty, setSelectedDate}){
+export default function DateCalendar({formatValues, onChange}){
     const [currMonth, setCurrMonth] = useState(() => new Date().getMonth())
     const [currYear, setCurrYear] = useState(() => new Date().getFullYear())
 
@@ -73,9 +73,9 @@ export default function DateCalendar({dateIsEmpty, setSelectedDate}){
         }
     }
 
-    const handleClick = (date) => {
-        setSelectedDate(date)
-    }
+    // const handleClick = (date) => {
+    //     onChange(date)
+    // }
 
     return (
         <Container className="px-3 m-0 d-flex flex-column gap-3">
@@ -99,15 +99,13 @@ export default function DateCalendar({dateIsEmpty, setSelectedDate}){
                             <tr key={week}>
                                 {indexes.map(index => {
                                     const {day, month, year} = evaluateDateInCalendar(index)
-                                    const isEmpty = dateIsEmpty({day, month, year})
-                                    //need to refactor this
-                                    const color = isEmpty ? "var(--bs-gray-500)" : "var(--bs-dark)"
+                                    const isEmpty = formatValues({day, month, year})
 
                                     return (
                                         <th 
-                                            onClick={e => handleClick({day, month, year})} key={index}
+                                            onClick={e => onChange({day, month, year})} key={index}
                                             style={{
-                                                color: color, 
+                                                color: isEmpty ? "var(--bs-gray-500)" : "var(--bs-dark)",
                                                 cursor: isEmpty ? "default" : "pointer"
                                             }}
                                             className="calendar-date"

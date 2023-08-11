@@ -10,7 +10,7 @@ import { backend_url } from "../../constants"
 
 
 export default function AuthorizationModal({show, hide, index, setIndex}){
-    const {setUser} = useContext(UserContext)
+    const {user, setUser, authFetch} = useContext(UserContext)
     const [userData, setUserData] = useState()
 
     const handleSelect = selectedIndex => setIndex(selectedIndex)
@@ -44,20 +44,22 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
     }
 
     const handleExtraDataSubmit = async data =>{
-        fetch(`${backend_url}/user/me`, {
+        const url = `${backend_url}/user/me`
+        const params = {
             method: "PUT",
             headers: {
-                "Authorization": `Bearer ${userData.tokens.access}`,
                 "Content-type": "Application/json"
             },
             body: JSON.stringify(data)
-        })
-        .then(response => {
-            if(!response.ok){
-                throw new Error("User update error")
-            }
-        })
-        .catch(error => console.log(error))
+        }
+
+        // If user is signed in and have tokens use authFetch
+        // to refresh tokens if needed. If he is not signed in,
+        // then function needs to provide token from previous step
+        const response = await (user ? authFetch(url, params) : 
+                                fetch(url, {...params, headers: { ...params.headers, "Authorization": `Bearer ${userData.tokens.access}`}}))
+
+        const _response = await response.json()
     }
 
     return (

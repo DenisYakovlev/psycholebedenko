@@ -1,7 +1,9 @@
 import Container from "react-bootstrap/Container"
 import Card from "react-bootstrap/Card"
 import Carousel from "react-bootstrap/Carousel"
-import { useState, Suspense } from "react"
+import { useState, useContext, Suspense } from "react"
+import { UserContext, AuthModalContext } from "../../contexts"
+import { backend_url } from "../../constants"
 import TypeSelection from "./TypeSelection"
 import DateSelection from "./DateSelection/DateSelection"
 import NotesForm from "./NotesForm"
@@ -19,15 +21,58 @@ const styles = {
     }
 }
 
-// need to refactor(poor writen code)
 export default function Appointment(){
-    const [index, setIndex] = useState(0)
+    const {user, checkPhoneVerification, authFetch} = useContext(UserContext)
+    const {showAuthModal, setIndex} = useContext(AuthModalContext)
+
+    const [carouselIndex, setCarouselIndex] = useState(0)
     const [online, setOnline] = useState(false)
     const [date, setDate] = useState("")
+    const [notes, setNotes] = useState("")
 
-    const handleSelect = selectedIndex => setIndex(selectedIndex)
+    const handleSelect = selectedIndex => setCarouselIndex(selectedIndex)
 
-    const nextSlide = () => setIndex(index + 1)
+    const nextSlide = () => setCarouselIndex(carouselIndex + 1)
+
+    const handleSubmit = async () => {
+        if(!user){
+            showAuthModal()
+            return 
+        }
+
+        const phoneVerified = await checkPhoneVerification()
+
+        if(!phoneVerified){
+            // skip first step of telegram auth and show phone verification form
+            setIndex(1)
+            showAuthModal()
+            return 
+        }
+
+        console.log({
+            notes: notes,
+            date: date,
+            online: online
+        })
+
+        return authFetch(`${backend_url}/appointment/create`, {
+            method: "POST",
+            headers: {
+                "Content-type": "Application/json"
+            },
+            body: JSON.stringify({
+                notes: notes,
+                date: date,
+                online: online
+            })
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error("Appointment create error")
+            }
+        })
+        .catch(error => console.log(error))
+    }
     
     return (
         <Suspense fallback={<LoadSpinner />}>
@@ -53,7 +98,7 @@ export default function Appointment(){
                         <Carousel
                             className="pb-5 appointment-carousel"
                             variant="dark" style={{minHeight: "70vh", height: "fit-content"}}
-                            activeIndex={index} onSelect={handleSelect}
+                            activeIndex={carouselIndex} onSelect={handleSelect}
                             controls={false} indicators={true} 
                             interval={null} touch={true}
                         >
@@ -64,7 +109,7 @@ export default function Appointment(){
                                 <DateSelection setDate={setDate} nextSlide={nextSlide}/>
                             </Carousel.Item>
                             <Carousel.Item>
-                                <NotesForm />
+                                <NotesForm handleSubmit={handleSubmit} notes={notes} setNotes={setNotes}/>
                             </Carousel.Item>
                         </Carousel>
                     </Card.Body>

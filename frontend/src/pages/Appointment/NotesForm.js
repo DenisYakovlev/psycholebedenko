@@ -2,7 +2,8 @@ import Container from "react-bootstrap/Container"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 
-export default function NotesForm(){
+
+export default function NotesForm({handleSubmit, notes, setNotes}){
     return (
         <Container className="px-3 mt-3 d-flex flex-column gap-1">
             <p className="p-0 m-0 mb-0 text-muted text-center fs-6">
@@ -13,12 +14,15 @@ export default function NotesForm(){
                 <Form.Group>
                     <Form.Label>
                     </Form.Label>
-                    <Form.Control style={{height: "30vh"}} as="textarea" placeholder="Можна не заповнювати"/>
+                    <Form.Control 
+                        value={notes} onChange={e => setNotes(e.target.value)} 
+                        style={{height: "30vh"}} as="textarea" placeholder="Можна не заповнювати"
+                    />
                 </Form.Group>
             </Form>
             <Button
-                // onClick={handleSubmit}
-                className="my-5 w-50 align-self-center" variant="outline-dark" size="lg"
+                onClick={handleSubmit}
+                className="mt-4 mb-3 w-50 align-self-center" variant="outline-dark" size="lg"
             >
                 Записатися
             </Button>
