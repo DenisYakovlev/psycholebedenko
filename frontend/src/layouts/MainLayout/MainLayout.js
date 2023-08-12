@@ -10,16 +10,13 @@ const Footer = lazy(() => import("./Components/Footer"))
 
 export default function MainLayout(){
     const {user, refreshToken} = useContext(UserContext)
-    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const refresh = async () => {
             await refreshToken()
-            setIsLoading(false)
         }
 
         if(!user){
-            setIsLoading(false)
             return 
         }
 

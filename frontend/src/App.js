@@ -7,32 +7,32 @@ import { UserContextProvider, AuthModalContextProvider} from "./contexts";
 export default function App(){
   return (
     <BrowserRouter>
-      <UserContextProvider>
-        <AuthModalContextProvider>
-          <Routes>
+        <UserContextProvider>
+          <AuthModalContextProvider>
+            <Routes>
 
-            <Route path='/' element={<MainLayout />}>
-              <Route index element={<Home />}/>
-              <Route path="appointment" element={<Appointment />}/>
+              <Route path='/' element={<MainLayout />}>
+                <Route index element={<Home />}/>
+                <Route path="appointment" element={<Appointment />}/>
 
-              <Route path="event">
-                <Route index element={<Event />} />
-                <Route path=":title" element={<EventDetails />} />
+                <Route path="event">
+                  <Route index element={<Event />} />
+                  <Route path=":title" element={<EventDetails />} />
+                </Route>
+                
+                <Route path="contacts" element={<Contacts />}/>
+                <Route path="user" element={<User />}/>
               </Route>
-              
-              <Route path="contacts" element={<Contacts />}/>
-              <Route path="user" element={<User />}/>
-            </Route>
 
-            <Route path='/bot' element={<BotLayout />}>
-              <Route>
-                <Route index element={<Bot />}/>
+              <Route path='/bot' element={<BotLayout />}>
+                <Route>
+                  <Route index element={<Bot />}/>
+                </Route>
               </Route>
-            </Route>
 
-          </Routes>
-        </AuthModalContextProvider>
-      </UserContextProvider>
+            </Routes>
+          </AuthModalContextProvider>
+        </UserContextProvider>
     </BrowserRouter>
   )
 };

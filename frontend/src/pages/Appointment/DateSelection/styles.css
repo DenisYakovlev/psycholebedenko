@@ -1,7 +1,0 @@
-.calendar-date:hover{
-    background-color: var(--bs-gray-200);
-}
-
-.calendar-date:active{
-    background-color: var(--bs-gray-400);
-}

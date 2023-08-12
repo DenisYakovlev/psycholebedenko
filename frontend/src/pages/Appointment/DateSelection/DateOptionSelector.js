@@ -27,18 +27,18 @@ export default function DateOptionSelector({options, setSelectedTime}){
         selectedOption.current.style.setProperty("color", selectedColor, "important")
         selectedOption.current.style.setProperty("border-color", "var(--bs-success)", "important")
 
-        setSelectedTime(option.id)
+        setSelectedTime(option)
     }
 
     return (
-        <Container className="m-0 p-0 mb-3 d-flex flex-column justify-content-center">
+        <Container className="m-0 p-0 d-flex flex-column justify-content-center">
             <Row className="m-0 p-0 justify-content-center gap-1">
                 {options.map((option, idx) =>
                     <Col
                         sm={2} xs={2}
                         key={option.id} onClick={e => handleClick(e, option)}
                         style={{backgroundColor: "var(--bs-gray-200)", cursor: "pointer", minWidth: "fit-content"}}
-                        className="m-0 p-1 mt-1 text-center text-dark fs-6 rounded border"
+                        className="m-0 p-1 mt-1 text-center text-dark fs-6 rounded border time-option"
                     >
                         {formatDate(option.date)}
                     </Col>

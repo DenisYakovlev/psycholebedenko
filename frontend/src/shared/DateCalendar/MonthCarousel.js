@@ -35,7 +35,7 @@ export default function MonthCarousel({currYear, setCurrYear, currMonth, setCurr
         >
             {
                 monthes.map((month, idx) => 
-                    <Carousel.Item key={idx} className="p-0 mb-1 text-center text-muted fs-5">
+                    <Carousel.Item key={idx} className="p-0 mb-1 text-center text-muted fs-6">
                         {month}
                     </Carousel.Item>
                 )

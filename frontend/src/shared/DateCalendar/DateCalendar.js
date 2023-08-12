@@ -1,16 +1,22 @@
 import Container from "react-bootstrap/Container"
 import Table from "react-bootstrap/Table"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import MonthCarousel from "./MonthCarousel"
 import "./styles.css"
 const moment = require('moment')
 
 
 export default function DateCalendar({formatValues, onChange}){
+    let selectedDate = useRef(null)
     const [currMonth, setCurrMonth] = useState(() => new Date().getMonth())
     const [currYear, setCurrYear] = useState(() => new Date().getFullYear())
 
     const daysOfTheWeek = ["НД", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"]
+
+    // if month is changed, remove all values set by user
+    useEffect(() => {
+        onChange({})
+    }, [currMonth])
 
     // get day of the week of first day in month
     // example: if first day of month is thursday than it's 4
@@ -31,7 +37,7 @@ export default function DateCalendar({formatValues, onChange}){
         const startDay = getCalendarFirstDay()
         const daysInMonth = getDaysInMonth(currMonth)
         return Math.ceil((startDay + daysInMonth) / 7)
-    } 
+    }
 
     // get date of index in calendar grid
     // example: index = 5
@@ -73,12 +79,19 @@ export default function DateCalendar({formatValues, onChange}){
         }
     }
 
-    // const handleClick = (date) => {
-    //     onChange(date)
-    // }
+    const _onChange = (e, date) => {
+        if(selectedDate.current){
+            selectedDate.current.style.setProperty("background-color", "var(--bs-table-bg)")
+        }
+
+        selectedDate.current = e.target
+        selectedDate.current.style.setProperty("background-color", "var(--bs-gray-300)")
+
+        onChange(date)
+    }
 
     return (
-        <Container className="px-3 m-0 d-flex flex-column gap-3">
+        <Container className="px-3 m-0 d-flex flex-column gap-1">
             
             <MonthCarousel currYear={currYear} setCurrYear={setCurrYear} currMonth={currMonth} setCurrMonth={setCurrMonth}/>
 
@@ -98,19 +111,22 @@ export default function DateCalendar({formatValues, onChange}){
                         return (
                             <tr key={week}>
                                 {indexes.map(index => {
-                                    const {day, month, year} = evaluateDateInCalendar(index)
-                                    const isEmpty = formatValues({day, month, year})
+                                    const date = evaluateDateInCalendar(index)
+                                    const isEmpty = formatValues(date)
+
+                                    // let color = date.month == currMonth ? (isEmpty ? "var(--bs-dark)": "var(--bs-indigo)") : "var(--bs-gray-400)" 
 
                                     return (
                                         <th 
-                                            onClick={e => onChange({day, month, year})} key={index}
+                                            onClick={e => _onChange(e, date)} 
+                                            key={currMonth * 100 + index}
                                             style={{
-                                                color: isEmpty ? "var(--bs-gray-500)" : "var(--bs-dark)",
+                                                color: isEmpty ? "var(--bs-gray-400)" : "var(--bs-dark)",
                                                 cursor: isEmpty ? "default" : "pointer"
                                             }}
                                             className="calendar-date"
                                         >
-                                            {day}
+                                            {date.day}
                                         </th>
                                     )
                             })}

@@ -2,8 +2,9 @@ import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
 import { backend_url } from "../../../constants"
 import { useState, useEffect } from "react"
-import DateCalendar from "./DateCalendar"
 import DateOptionSelector from "./DateOptionSelector"
+import { DateCalendar } from "../../../shared"
+import { formatDate } from "../utils"
 const moment = require('moment')
 
 
@@ -37,11 +38,15 @@ export default function DateSelection({setDate, nextSlide}){
             return selectedDate.year == date.year() && selectedDate.month == date.month() && selectedDate.day == date.date()
         })
 
+        // set seleceted time to null when date is changed
+        setSelectedTime(null)
+        setDate(null)
+
         setOptions(_options)
     }, [selectedDate])
 
     // format calendar. Unavailable dates will be unactive
-    const dateIsEmpty = ({day, month, year}) => {
+    const formatCalendar = ({day, month, year}) => {
         const dates = [...freeDates].map(({date}) => date)
         const filteredDates = dates.filter(freeDate => {
             const date = moment(freeDate)
@@ -62,16 +67,21 @@ export default function DateSelection({setDate, nextSlide}){
                 Оберіть дату та час
             </p>
 
-            <DateCalendar onChange={setSelectedDate} formatValues={dateIsEmpty}/>
-            <DateOptionSelector options={options} setSelectedTime={setSelectedTime} nextSlide={nextSlide}/>
+            <DateCalendar onChange={setSelectedDate} formatValues={formatCalendar}/>
+            <DateOptionSelector options={options} setSelectedTime={setSelectedTime} />
             {selectedTime ?
-                <Button 
-                    style={{width: "fit-content"}} 
-                    onClick={handleSubmit} className="mb-3 align-self-center calendar-button"
-                    variant="outline-dark" size="md"
-                >
-                    Продовжити
-                </Button>
+                <>
+                    <p className="m-0 p-0 text-center text-dark">
+                        {formatDate(selectedTime.date)}
+                    </p>
+                    <Button 
+                        style={{width: "fit-content"}} 
+                        onClick={handleSubmit} className="mb-3 align-self-center calendar-button"
+                        variant="outline-dark" size="md"
+                    >
+                        Продовжити
+                    </Button>
+                </>
                 :
                 <></>
             }

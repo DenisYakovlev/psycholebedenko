@@ -3,12 +3,20 @@
     animation-duration: 0.75s;
 }
 
-.button-active{
-    animation-name: button-fade-in;
+.calendar-button{
+    animation-name: calendar-fade-in;
     animation-duration: 0.5s;
 }
 
-@keyframes button-fade-in {
+.accordion-button{
+    padding: 16px !important;
+    --bs-accordion-active-bg: white;
+    --bs-accordion-active-color: var(--bs-muted);
+    --bs-accordion-btn-focus-box-shadow: none;
+    --bs-accordion-btn-focus-box-shadow: none;
+}
+
+@keyframes calendar-fade-in {
     from{
         opacity: 0;
         transform: translateY(5vh);

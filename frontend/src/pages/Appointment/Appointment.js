@@ -7,7 +7,9 @@ import { backend_url } from "../../constants"
 import TypeSelection from "./TypeSelection"
 import DateSelection from "./DateSelection/DateSelection"
 import NotesForm from "./NotesForm"
+import FinalForm from "./FinalForm"
 import LoadSpinner from "./../../shared/LoadSpinner"
+import ResultModal from "./ResultModal"
 import "./styles.css"
 
 
@@ -24,10 +26,11 @@ const styles = {
 export default function Appointment(){
     const {user, checkPhoneVerification, authFetch} = useContext(UserContext)
     const {showAuthModal, setIndex} = useContext(AuthModalContext)
+    const [resultShow, setResultShow] = useState(false)
 
     const [carouselIndex, setCarouselIndex] = useState(0)
-    const [online, setOnline] = useState(false)
-    const [date, setDate] = useState("")
+    const [online, setOnline] = useState(null)
+    const [date, setDate] = useState(null)
     const [notes, setNotes] = useState("")
 
     const handleSelect = selectedIndex => setCarouselIndex(selectedIndex)
@@ -49,27 +52,25 @@ export default function Appointment(){
             return 
         }
 
-        console.log({
-            notes: notes,
-            date: date,
-            online: online
-        })
-
-        return authFetch(`${backend_url}/appointment/create`, {
+        authFetch(`${backend_url}/appointment/create`, {
             method: "POST",
             headers: {
                 "Content-type": "Application/json"
             },
             body: JSON.stringify({
                 notes: notes,
-                date: date,
+                date: date.id,
                 online: online
             })
         })
         .then(response => {
-            if(!response.ok){
+            if(response.ok){
+                setResultShow(true)
+            }
+            else{
                 throw new Error("Appointment create error")
             }
+
         })
         .catch(error => console.log(error))
     }
@@ -109,11 +110,18 @@ export default function Appointment(){
                                 <DateSelection setDate={setDate} nextSlide={nextSlide}/>
                             </Carousel.Item>
                             <Carousel.Item>
-                                <NotesForm handleSubmit={handleSubmit} notes={notes} setNotes={setNotes}/>
+                                <NotesForm nextSlide={nextSlide} notes={notes} setNotes={setNotes}/>
+                            </Carousel.Item>
+                            <Carousel.Item>
+                                <FinalForm 
+                                    online={online} date={date} notes={notes} setNotes={setNotes} 
+                                    handleSubmit={handleSubmit} setCarouselIndex={setCarouselIndex}
+                                />
                             </Carousel.Item>
                         </Carousel>
                     </Card.Body>
-                </Card> 
+                </Card>
+                <ResultModal show={resultShow} hide={() => setResultShow(false)}/> 
             </Container>
         </Suspense>
     )

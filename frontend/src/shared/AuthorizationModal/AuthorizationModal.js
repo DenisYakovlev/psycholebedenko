@@ -9,6 +9,7 @@ import LoadSpinner from "../LoadSpinner"
 import { backend_url } from "../../constants"
 
 
+// used in auth context to authorize user
 export default function AuthorizationModal({show, hide, index, setIndex}){
     const {user, setUser, authFetch} = useContext(UserContext)
     const [userData, setUserData] = useState()
