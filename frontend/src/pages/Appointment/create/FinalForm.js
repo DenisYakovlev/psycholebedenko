@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
-import { formatDate } from "./utils";
+import { formatDate } from "../utils";
 
 
 const CheckCard = ({children, value, title, ...props}) => {

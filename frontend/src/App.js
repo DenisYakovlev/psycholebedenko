@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import { Home, Appointment, Event, EventDetails, Contacts, User, Bot } from './pages';
+import { Home, Appointment, AppointmentCreate, Event, EventDetails, Contacts, User, Bot } from './pages';
 import { BotLayout, MainLayout } from './layouts';
 import { UserContextProvider, AuthModalContextProvider} from "./contexts";
+
 
 export default function App(){
   return (
@@ -13,7 +13,10 @@ export default function App(){
 
               <Route path='/' element={<MainLayout />}>
                 <Route index element={<Home />}/>
-                <Route path="appointment" element={<Appointment />}/>
+                <Route path="appointment">
+                  <Route index element={<Appointment />}/>
+                  <Route path="create" element={<AppointmentCreate />}/>
+                </Route>
 
                 <Route path="event">
                   <Route index element={<Event />} />

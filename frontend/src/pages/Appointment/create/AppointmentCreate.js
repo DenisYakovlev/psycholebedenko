@@ -2,13 +2,13 @@ import Container from "react-bootstrap/Container"
 import Card from "react-bootstrap/Card"
 import Carousel from "react-bootstrap/Carousel"
 import { useState, useContext, Suspense } from "react"
-import { UserContext, AuthModalContext } from "../../contexts"
-import { backend_url } from "../../constants"
+import { UserContext, AuthModalContext } from "../../../contexts"
+import { backend_url } from "../../../constants"
 import TypeSelection from "./TypeSelection"
 import DateSelection from "./DateSelection/DateSelection"
 import NotesForm from "./NotesForm"
 import FinalForm from "./FinalForm"
-import LoadSpinner from "./../../shared/LoadSpinner"
+import LoadSpinner from "../../../shared/LoadSpinner"
 import ResultModal from "./ResultModal"
 import "./styles.css"
 
@@ -23,10 +23,11 @@ const styles = {
     }
 }
 
-export default function Appointment(){
+export default function AppointmentCreate(){
     const {user, checkPhoneVerification, authFetch} = useContext(UserContext)
     const {showAuthModal, setIndex} = useContext(AuthModalContext)
     const [resultShow, setResultShow] = useState(false)
+    const [resultType, setResultType] = useState(null)
 
     const [carouselIndex, setCarouselIndex] = useState(0)
     const [online, setOnline] = useState(null)
@@ -65,12 +66,13 @@ export default function Appointment(){
         })
         .then(response => {
             if(response.ok){
+                setResultType("success")
                 setResultShow(true)
             }
             else{
-                throw new Error("Appointment create error")
+                setResultType("conflict")
+                setResultShow(true)
             }
-
         })
         .catch(error => console.log(error))
     }
@@ -121,7 +123,7 @@ export default function Appointment(){
                         </Carousel>
                     </Card.Body>
                 </Card>
-                <ResultModal show={resultShow} hide={() => setResultShow(false)}/> 
+                <ResultModal show={resultShow} hide={() => setResultShow(false)} resultType={resultType}/> 
             </Container>
         </Suspense>
     )

@@ -3,14 +3,19 @@ import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons"
+import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons"
 
-export default function ResultModal({show, hide}){
+export default function ResultModal({show, hide, resultType}){
     let navigate = useNavigate()
 
     const hadnleClick = () => {
-        hide()
-        navigate("/")
+        if(resultType == "success"){
+            hide()
+            navigate("/")
+        }
+        else if(resultType == "conflict"){
+            hide()
+        }
     }
 
     return (
@@ -22,10 +27,18 @@ export default function ResultModal({show, hide}){
             onExit={hide}
         >
             <Modal.Body className="m-0 px-3">
-                <Container style={{ fontSize: "36px"}} className="m-0 mt-3 p-0 text-success d-flex d-row gap-3 align-items-center justify-content-center">
-                    <FontAwesomeIcon icon={faCircleCheck} />
-                    Записано!
-                </Container>
+                {
+                    resultType == "success" ?
+                        <Container style={{ fontSize: "36px"}} className="m-0 mt-3 p-0 d-flex text-success d-row gap-3 align-items-center justify-content-center">
+                            <FontAwesomeIcon icon={faCircleCheck} />
+                            Записано!
+                        </Container>
+                        :
+                        <Container style={{ fontSize: "36px"}} className="m-0 mt-3 p-0 d-flex text-danger d-row gap-3 align-items-center justify-content-center">
+                            <FontAwesomeIcon icon={faCircleXmark} />
+                            Помилка(вже існує)
+                        </Container>
+                }
                 <Container className="p-0 m-0">
                     <p className="p-0 text-muted text-center fs-5">
                         Какой-то текст про запись

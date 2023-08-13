@@ -31,6 +31,10 @@ class AppointmentList(APIView):
             user_phone = request.data["user"]
             user = TelegramUser.objects.filter(phone_number=user_phone).first()
             request.data['user'] = user
+
+            # only 1 pending appointment is allowed
+            if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).exists():
+                return Response({"msg": "Another pending appointment exists"}, status.HTTP_409_CONFLICT)
         except:
             return Response({"msg": "user not found"}, status.HTTP_404_NOT_FOUND)
 
@@ -50,8 +54,13 @@ class AppointmentCreate(APIView):
         # set default values
         try:
             data = request.data
-            data['status'] = Appointment.Status.PENDING
             data['user'] = self.request.user
+
+            # only 1 pending appointment is allowed
+            if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).exists():
+                return Response({"msg": "Another pending appointment exists"}, status.HTTP_409_CONFLICT)
+
+            data['status'] = Appointment.Status.PENDING
         except:
             return Response({"msg": "user not found"}, status.HTTP_404_NOT_FOUND)
 

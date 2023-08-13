@@ -16,7 +16,7 @@ from .serializers import TelegramUserSerializer, TelegramUserUpdateSerializer
 from appointment.serializers import AppointmentSerializer
 from appointment.models import Appointment
 from event.models import Event, Participation
-from event.serializers import EventListSerializer, ParticipationSerializer
+from event.serializers import EventListSerializer
 
 
 class UserList(APIView, LimitOffsetPagination):
@@ -53,7 +53,7 @@ def UserAppointments(request):
     try:
         appointments = Appointment.objects.filter(user=request.user)
     except:
-        raise Http404
+        return Response({}, status.HTTP_200_OK)
     
     serializer = AppointmentSerializer(appointments, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
@@ -65,7 +65,7 @@ def UserEvents(request):
         event_ids = Participation.objects.filter(user=request.user).values('event_id')
         events = Event.objects.filter(id__in=event_ids)
     except:
-        raise Http404
+        return Response({}, status.HTTP_200_OK)
     
     serializer = EventListSerializer(events, many=True, context={"request": request})
     return Response(serializer.data, status.HTTP_200_OK)
