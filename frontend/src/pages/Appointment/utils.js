@@ -38,3 +38,29 @@ export const formatTime = (eventDate) => {
     const formattedDate = `${hours}:${minutes}`;
     return formattedDate
 }
+
+export const timeDiff = (givenDate) => {
+    const now = new Date();
+    givenDate = new Date(givenDate)
+    const timeDifference = givenDate - now;
+    
+    const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hoursDifference = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    
+    return daysDifference > 0 ? `${daysDifference} дн.` : `${hoursDifference} год.`
+}
+
+export const setStatusColor = status => {
+    if(status == "pending"){
+        return "#FFD700"
+    }
+    else if(status == "appointed"){
+        return "#32CD32"
+    }
+    else if(status == "complete"){
+        return "#4169E1"
+    }
+    else if(status == "denied"){
+        return "#FF6347"
+    }
+}

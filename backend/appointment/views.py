@@ -72,7 +72,7 @@ class AppointmentCreate(APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class AppointmentDetail(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
     
     def get_appointment(self, pk):
         try:
