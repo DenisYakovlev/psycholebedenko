@@ -30,7 +30,7 @@ class EventListSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Event
-        fields = ['title', 'thumbnail_text', 'date', 'duration', 'participants_count', 'outdated', 'participated', 'online', 'created_at']
+        fields = ['title', 'thumbnail_text', 'date', 'img_url', 'duration', 'participants_count', 'outdated', 'participated', 'online', 'created_at']
         
     def get_participants_count(self, obj):
         return obj.participants.all().count()

@@ -117,3 +117,19 @@ class ParticipationManagement(APIView):
         participation.delete()
         
         return Response(status=status.HTTP_200_OK)
+    
+
+class EventImages(APIView):
+    """
+        default images for creating events
+        static, because s3 bucket is not connected to server
+    """
+    permission_classes = []
+
+    def get(self, request):
+        return Response({
+            "https://psycholebedenko-backend.s3.amazonaws.com/event_img_1.jpeg",
+            "https://psycholebedenko-backend.s3.amazonaws.com/event_img_2.jpeg",
+            "https://psycholebedenko-backend.s3.amazonaws.com/event_img_3.jpeg",
+            "https://psycholebedenko-backend.s3.amazonaws.com/event_img_4.jpeg"
+        }, status.HTTP_200_OK)

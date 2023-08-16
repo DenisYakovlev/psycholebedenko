@@ -10,7 +10,10 @@ import { backend_url } from "../../constants"
 
 
 // used in auth context to authorize user
-export default function AuthorizationModal({show, hide, index, setIndex}){
+export default function AuthorizationModal({
+    show, hide, 
+    index, setIndex, 
+}){
     const {user, setUser, authFetch} = useContext(UserContext)
     const [userData, setUserData] = useState()
 
@@ -18,7 +21,6 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
 
     const saveUser = () => {
         if(userData.tokens && userData.extra){
-            hide()
             // delay between modal hide and user update
             // without delay hide animation is skipped
             setTimeout(() => {
@@ -64,6 +66,11 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
         setUserData({...userData, extra: {data}})
     }
 
+    const exit = () =>{
+        saveUser()
+        hide()
+    }
+
     return (
         <Suspense fallback={<LoadSpinner />}>
             <Modal 
@@ -71,7 +78,7 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
                 className="m-0 p-0"
                 size="md" show={show} onHide={hide} 
                 animation={true} centered
-                onExit={saveUser}
+                onExited={exit}
             >
                 <Modal.Body className="p-0 m-0">
                     <Carousel 
@@ -86,7 +93,7 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
                             <AuthPhoneForm handleSubmit={handleExtraDataSubmit} setIndex={setIndex}/>
                         </Carousel.Item>
                         <Carousel.Item className="p-0">
-                            <AuthFinalForm hide={hide}/>
+                            <AuthFinalForm exit={hide} />
                         </Carousel.Item>
                     </Carousel>
                 </Modal.Body>

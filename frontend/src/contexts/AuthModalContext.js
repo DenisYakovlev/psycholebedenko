@@ -13,7 +13,10 @@ const AuthModalContextProvider = ({children}) => {
     const showAuthModal = () => setAuthModalShow(true)
 
     return (
-        <AuthModalContext.Provider value={{authModalShow, setAuthModalShow, showAuthModal, index, setIndex}}>
+        <AuthModalContext.Provider value={{
+            authModalShow, setAuthModalShow, showAuthModal, 
+            index, setIndex, 
+        }}>
             {children}
             <AuthorizationModal 
                 show={authModalShow} hide={handleAuthModalHide} 

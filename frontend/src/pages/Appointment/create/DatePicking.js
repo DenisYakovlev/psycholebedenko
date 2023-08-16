@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button"
 import { backend_url } from "../../../constants"
 import { useState, useEffect, Suspense } from "react"
 import { LoadSpinner } from "../../../shared"
-import { formatDate } from "../utils"
+import { formatDate } from "../../utils"
 const moment = require('moment')
 
 

@@ -6,7 +6,6 @@ import { AuthModalContext, UserContext } from '../../contexts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from "@fortawesome/free-solid-svg-icons"
 import CardBody from './CardBody';
-import bg from "./../../assets/images/bg-home-consulting.png"
 import { backend_url } from "../../constants"
 import "./styles.css"
 
@@ -24,10 +23,11 @@ export default function EventCard({event, idx}){
         setParticipated(event.participated)
     }, [event])
 
+
     // styles for card images depending on it's position(left or right)
     const styles = {
         cardImg: {
-            backgroundImage: `url(${bg})`,
+            backgroundImage: `url(${event.img_url})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             borderBottomLeftRadius: idx % 2 ? bsBorderRadius: "0px",

@@ -1,7 +1,7 @@
 import Container from "react-bootstrap/Container"
 import Card from "react-bootstrap/Card"
 import Carousel from "react-bootstrap/Carousel"
-import { useState, useContext, Suspense } from "react"
+import { useState, useContext, Suspense, useEffect } from "react"
 import { UserContext, AuthModalContext } from "../../../contexts"
 import { backend_url } from "../../../constants"
 import TypeSelection from "./TypeSelection"

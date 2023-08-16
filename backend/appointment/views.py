@@ -63,7 +63,7 @@ class AppointmentCreate(APIView):
             data['user'] = self.request.user
 
             # only 5 pending appointments are allowed
-            if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).count() > 5:
+            if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).count() > 10:
                 return Response({"msg": "Pending appointments limit exceeded"}, status.HTTP_409_CONFLICT)
 
             data['status'] = Appointment.Status.PENDING

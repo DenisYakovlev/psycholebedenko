@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import Accordion from "react-bootstrap/Accordion"
 import Dropdown from 'react-bootstrap/Dropdown'
-import { formatOnlyDate, formatTime, timeDiff, setStatusColor } from "../utils"
+import { formatOnlyDate, formatTime, timeDiff, setStatusColor } from "../../utils"
 import { useContext, useState } from "react"
 import { backend_url } from "../../../constants"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
