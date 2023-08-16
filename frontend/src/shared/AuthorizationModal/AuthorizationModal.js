@@ -17,7 +17,7 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
     const handleSelect = selectedIndex => setIndex(selectedIndex)
 
     const saveUser = () => {
-        if(userData){
+        if(userData.tokens && userData.extra){
             hide()
             // delay between modal hide and user update
             // without delay hide animation is skipped
@@ -61,6 +61,7 @@ export default function AuthorizationModal({show, hide, index, setIndex}){
                                 fetch(url, {...params, headers: { ...params.headers, "Authorization": `Bearer ${userData.tokens.access}`}}))
 
         const _response = await response.json()
+        setUserData({...userData, extra: {data}})
     }
 
     return (

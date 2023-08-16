@@ -76,7 +76,6 @@ class AuthWidgetTelegramUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'username', 'photo_url', 'auth_date', 'hash']
         
     def validate(self, attrs):
-        print(attrs)
         hashIsValid = confirmTelegramWidgetHash(attrs, secret_key=settings.TELEGRAM_BOT_API_KEY)
         
         if hashIsValid == False:

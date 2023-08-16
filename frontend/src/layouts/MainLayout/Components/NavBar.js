@@ -16,7 +16,7 @@ export default function NavBar(){
         // need to refactor with usage of useCallback and useRef
         const handleNavbarScroll = () => {
             const currentScrollY = window.scrollY
-            const threshold = 0  // min scroll to hide navbar
+            const threshold = 56  // min scroll to hide navbar
             const _navbar = document.querySelector(".navbar")
 
             if(currentScrollY < threshold){

@@ -11,7 +11,7 @@ export default function ResultModal({show, hide, resultType}){
     const hadnleClick = () => {
         if(resultType == "success"){
             hide()
-            navigate("/")
+            navigate("/appointment")
         }
         else if(resultType == "conflict"){
             hide()
@@ -24,7 +24,7 @@ export default function ResultModal({show, hide, resultType}){
             className="m-0 p-0"
             size="md" show={show} onHide={hide} 
             animation={true} centered
-            onExit={hide}
+            onExit={hadnleClick}
         >
             <Modal.Body className="m-0 px-3">
                 {

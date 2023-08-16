@@ -5,12 +5,12 @@ import { useState, useContext, Suspense } from "react"
 import { UserContext, AuthModalContext } from "../../../contexts"
 import { backend_url } from "../../../constants"
 import TypeSelection from "./TypeSelection"
-import DateSelection from "./DateSelection/DateSelection"
 import NotesForm from "./NotesForm"
 import FinalForm from "./FinalForm"
 import LoadSpinner from "../../../shared/LoadSpinner"
 import ResultModal from "./ResultModal"
-import "./styles.css"
+import DatePicking from "./DatePicking"
+import "../styles.css"
 
 
 const styles = {
@@ -76,6 +76,11 @@ export default function AppointmentCreate(){
         })
         .catch(error => console.log(error))
     }
+
+    const submitDate = date => {
+        setDate(date)
+        nextSlide()
+    }
     
     return (
         <Suspense fallback={<LoadSpinner />}>
@@ -109,7 +114,7 @@ export default function AppointmentCreate(){
                                 <TypeSelection setOnline={setOnline} nextSlide={nextSlide}/>
                             </Carousel.Item>
                             <Carousel.Item>
-                                <DateSelection setDate={setDate} nextSlide={nextSlide}/>
+                                <DatePicking sumbitDate={submitDate}/>
                             </Carousel.Item>
                             <Carousel.Item>
                                 <NotesForm nextSlide={nextSlide} notes={notes} setNotes={setNotes}/>

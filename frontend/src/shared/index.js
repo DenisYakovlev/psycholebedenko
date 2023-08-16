@@ -1,7 +1,8 @@
-import AppointmentForm from "./AppointmentForm/AppointmentForm";
 import AuthorizationModal from "./AuthorizationModal/AuthorizationModal";
 import EventCard from "./EventCard/EventCard";
-import DateCalendar from "./DateCalendar/DateCalendar";
+import Calendar from "./Calendar/Calendar";
+import TimeOptionPicker from "./TimeOptionPicker/TimeOptionPicker";
+import DatePicker from "./DatePicker/DatePicker";
 import LoadSpinner from "./LoadSpinner";
 
-export {AppointmentForm, AuthorizationModal, EventCard, LoadSpinner, DateCalendar}
+export {AuthorizationModal, EventCard, LoadSpinner, Calendar, TimeOptionPicker, DatePicker}

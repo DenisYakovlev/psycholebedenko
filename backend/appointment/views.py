@@ -1,7 +1,11 @@
+import pytz
+import datetime
+
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+from django.conf import settings
 from django.http import Http404
 
 from .models import Appointment
@@ -14,11 +18,13 @@ class AppointmentList(APIView):
     permission_classes = [IsAdminUser]
     
     def get_queryset(self):
+        queryset = Appointment.objects.order_by('date__date')
+
         try:
             status = self.request.query_params.get('status').split(',')
-            return Appointment.objects.filter(status__in=status)
+            return queryset.filter(status__in=status)
         except:
-            return Appointment.objects.all()
+            return queryset.all()
     
     def get(self, request):
         appointments = self.get_queryset()
@@ -32,9 +38,9 @@ class AppointmentList(APIView):
             user = TelegramUser.objects.filter(phone_number=user_phone).first()
             request.data['user'] = user
 
-            # only 1 pending appointment is allowed
-            if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).exists():
-                return Response({"msg": "Another pending appointment exists"}, status.HTTP_409_CONFLICT)
+            # only 5 pending appointments are allowed
+            if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).count() > 5:
+                return Response({"msg": "Pending appointments limit exceeded"}, status.HTTP_409_CONFLICT)
         except:
             return Response({"msg": "user not found"}, status.HTTP_404_NOT_FOUND)
 
@@ -56,9 +62,9 @@ class AppointmentCreate(APIView):
             data = request.data
             data['user'] = self.request.user
 
-            # only 1 pending appointment is allowed
-            if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).exists():
-                return Response({"msg": "Another pending appointment exists"}, status.HTTP_409_CONFLICT)
+            # only 5 pending appointments are allowed
+            if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).count() > 5:
+                return Response({"msg": "Pending appointments limit exceeded"}, status.HTTP_409_CONFLICT)
 
             data['status'] = Appointment.Status.PENDING
         except:

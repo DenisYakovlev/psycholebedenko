@@ -1,3 +1,4 @@
+import Events from "../../Home/Events/Events"
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
@@ -5,10 +6,9 @@ import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../contexts/UserContext"
 import { EventCard } from "../../../shared"
 import { backend_url } from "../../../constants"
-import MainText from "./MainText"
 
 
-export default function Events(){
+export default function Event(){
     const {user, publicFetch} = useContext(UserContext)
     const [events, setEvents] = useState([])
 
@@ -37,8 +37,15 @@ export default function Events(){
     }, [user])
 
     return (
-        <Container id="events" style={{minHeight: "100vh", paddingBottom: "15vh"}} className="my-5 px-0 positiion-relative" fluid>
-            <MainText />
+        <Container id="events" style={{minHeight: "100vh", paddingBottom: "15vh", backgroundColor: "#f4f4f4"}} className="m-0 py-5 px-0 positiion-relative" fluid>
+            <Container fluid style={{height: "10vh"}} className="m-0 p-0 d-flex flex-column justify-content-end align-items-center">
+                <h1 className="text-dark text-center text-justify">
+                    Групові зустрічі
+                </h1>
+                <p className="text-muted text-center text-justify">
+                    Какой-то текст про групові зустрічі
+                </p>
+            </Container>
             <Row sm={1} xs={1} style={{width: "100%"}} className="m-0 p-0 px-0 py-5 gap-3">
                 {events.map((event, idx) => {
                     return(

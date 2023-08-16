@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
-import { useEffect } from 'react';
 
 export default function CardBody({event}){
     const formatDate = (eventDate) => {
@@ -31,7 +30,7 @@ export default function CardBody({event}){
     return (
         <Card.Body className="p-0 px-md-5 px-4 py-md-5 py-3">
             <Container className="m-0 p-0 d-flex flex-row justify-content-between align-items-center">
-                <Card.Text as={Link} to={`./event/${event.title}`} className="m-0 mb-1 fs-4 w-75 text-dark text-truncate text-decoration-none">
+                <Card.Text as={Link} to={`/event/${event.title}`} className="m-0 mb-1 fs-4 w-75 text-dark text-truncate text-decoration-none">
                     {event.title}
                 </Card.Text>
                 <Card.Text className="m-0 fs-6 pe-1 text-muted text-truncate">

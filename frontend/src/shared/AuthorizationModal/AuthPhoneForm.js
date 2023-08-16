@@ -16,9 +16,6 @@ export default function AuthPhoneForm({handleSubmit, setIndex}){
 
     const nextSlide = () => setIndex(2)
 
-    // go to next slide on phone verification skip
-    const handleSkip = () => nextSlide()
-
     const _handleSubmit = () => {
         const data = {
             phone_number: phone,
@@ -33,7 +30,7 @@ export default function AuthPhoneForm({handleSubmit, setIndex}){
         <Container style={{height: "380px"}} className="m-0 p-0">
             <Container className="p-0 m-0 mb-3 d-flex flex-column justify-content-center align-items-center">
                 <p className="p-0 mt-5 mb-2 fs-2 fw-bold text-center">
-                    Додаткові кроки
+                    Номер телефона
                 </p>
                 <p className="p-0 m-0 fs-6 text-muted text-center w-75">
                     Текст про подключение номера телефона 
@@ -59,9 +56,6 @@ export default function AuthPhoneForm({handleSubmit, setIndex}){
                 </Form>
             </Container>
             <Container className="mb-4 px-5 d-flex flex-row justify-content-end gap-3">
-                <Button variant="outline-dark" size="sm" onClick={handleSkip}>
-                    Пропустити
-                </Button>
                 <Button disabled={!phoneIsValid} variant="outline-dark" size="md" onClick={_handleSubmit}>
                     Підтвердити
                 </Button>

@@ -1,11 +1,14 @@
-import Container from "react-bootstrap/Container"
-import Row from "react-bootstrap/Row";
+import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import {useRef} from "react"
-const moment = require('moment');
+import Container from "react-bootstrap/Container"
+import { useRef } from "react"
+const moment = require('moment')
 
 
-export default function DateOptionSelector({options, setSelectedTime}){
+export default function TimeOptionPicker({
+    onChange,
+    options = []
+}){
     let selectedOption = useRef(null)
 
     const selectedColor = "var(--bs-success)"
@@ -15,23 +18,21 @@ export default function DateOptionSelector({options, setSelectedTime}){
         return moment(date).format("HH:mm")
     }
 
-    // need to refactor. without !important color is not changing
     const handleClick = (e, option) => {
         if(selectedOption.current){
             selectedOption.current.style.setProperty("color", defalutColor, "important")
             selectedOption.current.style.setProperty("border", "none")
-
         }
 
         selectedOption.current = e.target
         selectedOption.current.style.setProperty("color", selectedColor, "important")
         selectedOption.current.style.setProperty("border-color", "var(--bs-success)", "important")
 
-        setSelectedTime(option)
+        onChange(option)
     }
 
     return (
-        <Container className="m-0 p-0 d-flex flex-column justify-content-center">
+        <Container className="mе-3 p-0 d-flex flex-column justify-content-center">
             <Row className="m-0 p-0 justify-content-center gap-1">
                 {options.map((option, idx) =>
                     <Col
