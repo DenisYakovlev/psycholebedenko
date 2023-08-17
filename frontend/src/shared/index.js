@@ -4,5 +4,14 @@ import Calendar from "./Calendar/Calendar";
 import TimeOptionPicker from "./TimeOptionPicker/TimeOptionPicker";
 import DatePicker from "./DatePicker/DatePicker";
 import LoadSpinner from "./LoadSpinner";
+import Tag from "./Tag";
 
-export {AuthorizationModal, EventCard, LoadSpinner, Calendar, TimeOptionPicker, DatePicker}
+export {
+    AuthorizationModal, 
+    EventCard, 
+    LoadSpinner, 
+    Calendar, 
+    TimeOptionPicker, 
+    DatePicker, 
+    Tag
+}

@@ -4,6 +4,8 @@
     min-width: 350px;
     height: fit-content;
     min-height: 300px;
+    animation-name: card-fade-in;
+    animation-duration: 0.75s;
 }
 
 .event-card-body{
@@ -28,11 +30,11 @@
 @keyframes card-fade-in {
     from{
         opacity: 0;
-        transform: translateY(100vh);
+        transform: translateY(100%);
     }
     to{
         opacity: 1;
-        transform: translateY(0vh);
+        transform: translateY(0%);
     }
 }
 

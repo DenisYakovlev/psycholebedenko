@@ -64,3 +64,18 @@ export const setStatusColor = status => {
         return "#FF6347"
     }
 }
+
+export const setStatusUkrName = status => {
+    if(status == "pending"){
+        return "в обробці"
+    }
+    else if(status == "appointed"){
+        return "назначено"
+    }
+    else if(status == "complete"){
+        return "виконано"
+    }
+    else if(status == "denied"){
+        return "відмінено"
+    }
+}

@@ -8,21 +8,24 @@ import { backend_url } from "../../../constants"
 import { useContext, useEffect, useState } from "react"
 import EventMain from "./EventMain"
 import EventSide from "./EventSide"
+import ResultModal from "./ResultModal"
 import { AuthModalContext, UserContext } from "../../../contexts"
+import "./styles.css"
 
 export default function EventDetails(){
     const {title} = useParams()
     const {user, authFetch, publicFetch} = useContext(UserContext)
     const {showAuthModal} = useContext(AuthModalContext)
+    const [showResult, setShowResult] = useState(false)
+    const [resultType, setResultType] = useState("")
     const [event, setEvent] = useState({})
     const [participated, setParticipated] = useState(null)
-
 
     useEffect(() => {
         setParticipated(event.participated)
     }, [event])
 
-    useEffect(() => {
+    const fetchEvent = () => {
         publicFetch(`${backend_url}/event/${title}`, {
             method: "GET"
         })
@@ -30,6 +33,14 @@ export default function EventDetails(){
         .then(data => {
             setEvent(data)
         })
+    }
+
+    useEffect(() => {
+        fetchEvent()
+    }, [user])
+
+    useEffect(() => {
+        fetchEvent()
     }, [])
 
     const handleAddParticipation = () => {
@@ -39,6 +50,8 @@ export default function EventDetails(){
         .then(response => {
             if(response.status == 200){
                 setParticipated(true)
+                setResultType("success")
+                setShowResult(true)
             }
         })
     }
@@ -50,6 +63,8 @@ export default function EventDetails(){
         .then(response => {
             if(response.status == 200){
                 setParticipated(false)
+                setResultType("success")
+                setShowResult(true)
             }
         })
     }
@@ -58,21 +73,21 @@ export default function EventDetails(){
     return (
         <Container 
             style={{height: "fit-content", minHeight: "100vh", backgroundColor:"#f4f4f4"}} 
-            className="m-0 p-0 py-5 d-flex flex-column align-items-center" fluid
+            className="m-0 p-0 py-md-5 py-0 pb-5 d-flex flex-column align-items-center" fluid
         >
             <Card
-                className="bg-gradient shadow border-0"
-                style={{width: "1200px", maxWidth: "90vw", minWidth: "320px"}}
+                className="bg-gradient shadow border-0 event-details-card"
+                // style={{width: "1200px", maxWidth: "90vw", minWidth: "350px"}}
                 bg="white" data-bs-theme="light"
             >
-                <p className="m-0 py-5 text-center fs-1 fw-bold">
+                <p className="m-0 py-md-5 py-3 text-center fs-1 fw-bold">
                     {event.title}
                 </p>
 
                 <Row md={2} sm={1} xs={1} className="m-0 p-0 d-flex flex-md-row flex-column-reverse">
-                    <Col md={8} sm={12} xs={12} className="m-0 py-5">
+                    <Col md={8} sm={12} xs={12} className="m-0 py-md-5 py-3">
                         <EventMain event={event}/>
-                        <Container className="m-0 px-5">
+                        <Container className="m-0 my-3 px-md-5 px-3">
                         {participated ?
                             <Button onClick={user ? handleRemoveParticipation : showAuthModal} variant="outline-dark" className="">
                                 Відписатися
@@ -89,6 +104,7 @@ export default function EventDetails(){
                     </Col>
                 </Row>
             </Card>
+            <ResultModal show={showResult} hide={() => setShowResult(false)} resultType={resultType}/>
         </Container>
     )
 }

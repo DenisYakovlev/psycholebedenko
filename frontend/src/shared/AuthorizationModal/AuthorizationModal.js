@@ -15,12 +15,12 @@ export default function AuthorizationModal({
     index, setIndex, 
 }){
     const {user, setUser, authFetch} = useContext(UserContext)
-    const [userData, setUserData] = useState()
+    const [userData, setUserData] = useState(null)
 
     const handleSelect = selectedIndex => setIndex(selectedIndex)
 
     const saveUser = () => {
-        if(userData.tokens && userData.extra){
+        if(userData?.tokens && userData?.extra){
             // delay between modal hide and user update
             // without delay hide animation is skipped
             setTimeout(() => {

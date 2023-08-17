@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import Accordion from "react-bootstrap/Accordion"
 import Dropdown from 'react-bootstrap/Dropdown'
-import { formatOnlyDate, formatTime, timeDiff, setStatusColor } from "../../utils"
+import { formatOnlyDate, formatTime, timeDiff, setStatusColor, setStatusUkrName } from "../../utils"
 import { useContext, useState } from "react"
 import { backend_url } from "../../../constants"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -46,6 +46,12 @@ export default function AppointmentCard({appointment, handleDelete, handleUpdate
 
     const _handleUpdate = () => {
         setUpdateModalShow(true)
+    }
+
+    const handleZoomRedirect = () => {
+        if(appointment.zoom_link){
+            window.open(appointment.zoom_link)
+        }
     }
 
     return (
@@ -93,9 +99,9 @@ export default function AppointmentCard({appointment, handleDelete, handleUpdate
 
                     {
                         appointment.online ? 
-                        <Card.Text className="m-0 p-0 fs-6">
+                        <Card.Text onClick={handleZoomRedirect} style={{cursor: "pointer"}} className="m-0 p-0 fs-6">
                             <FontAwesomeIcon icon={faArrowUpRightFromSquare} style={{width: "16px"}} className="pe-2"/>
-                            zoom link
+                            Посилання на зум 
                         </Card.Text>
                         :
                         <Card.Text className="m-0 p-0 fs-6">
@@ -106,7 +112,7 @@ export default function AppointmentCard({appointment, handleDelete, handleUpdate
 
                     <Card.Text className="m-0 p-0 fs-6">
                         <FontAwesomeIcon icon={faCircleDot} style={{width: "16px", color: setStatusColor(appointment.status)}} className="pe-2"/>
-                        {appointment.status}
+                        {setStatusUkrName(appointment.status)}
                     </Card.Text>
 
                 </Container>

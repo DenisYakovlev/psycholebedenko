@@ -2,6 +2,7 @@ import Container from "react-bootstrap/Container"
 import Card from "react-bootstrap/Card"
 import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Tag } from "../../../shared"
 import { faBookmark, faTag, faClock, faHouseLaptop, faHouse, faCircleRight, faCircleCheck } from "@fortawesome/free-solid-svg-icons"
 
 const styles = {
@@ -12,25 +13,6 @@ const styles = {
         cursor: "pointer"
     }
 }
-
-
-const Tag = ({children, icon, ...props}) => {
-    return (
-        <Container 
-            style={{width: "fit-content"}}
-            className="m-0 p-0 text-muted text-truncate d-flex flex-row gap-1 align-items-center"
-            {...props}
-        >
-            {icon ?
-                <FontAwesomeIcon icon={icon} />
-                :
-                <></>
-            }
-            {children}
-        </Container>
-    )
-}
-
 
 export default function TypeSelection({setOnline, nextSlide}){
     const [activeIndex, setActiveIndex] = useState()
