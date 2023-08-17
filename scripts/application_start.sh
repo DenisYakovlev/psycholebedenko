@@ -7,6 +7,5 @@ echo "building app"
 # sudo docker-compose build
 
 echo "starting app"
-# sudo docker-compose up -d --build	
-sudo docker-compose up -d
+sudo docker-compose up -d --build	
 sudo docker exec -it -d backend python manage.py runbot
