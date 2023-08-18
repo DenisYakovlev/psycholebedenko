@@ -99,7 +99,11 @@ class AppointmentDetail(APIView):
                                            partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status.HTTP_202_ACCEPTED)
+
+            # another serializer is used to serialize nested schedule object
+            # and return date instead of date.id to client
+            _serializer = AppointmentListSerializer(instance=appointment)
+            return Response(_serializer.data, status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 

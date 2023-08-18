@@ -5,8 +5,9 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import { backend_url } from "../../../constants"
-import { useContext, useEffect, useState } from "react"
+import {  useContext, useEffect, useState } from "react"
 import EventMain from "./EventMain"
+import { LoadSpinner } from "../../../shared"
 import EventSide from "./EventSide"
 import ResultModal from "./ResultModal"
 import { AuthModalContext, UserContext } from "../../../contexts"
@@ -14,6 +15,7 @@ import "./styles.css"
 
 export default function EventDetails(){
     const {title} = useParams()
+    const [isLoading, setIsLoading] = useState(false)
     const {user, authFetch, publicFetch} = useContext(UserContext)
     const {showAuthModal} = useContext(AuthModalContext)
     const [showResult, setShowResult] = useState(false)
@@ -25,14 +27,16 @@ export default function EventDetails(){
         setParticipated(event.participated)
     }, [event])
 
-    const fetchEvent = () => {
-        publicFetch(`${backend_url}/event/${title}`, {
+    const fetchEvent = async () => {
+        setIsLoading(true)
+        await publicFetch(`${backend_url}/event/${title}`, {
             method: "GET"
         })
         .then(response => response.json())
         .then(data => {
             setEvent(data)
         })
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -69,6 +73,9 @@ export default function EventDetails(){
         })
     }
 
+    if(isLoading){
+        return <LoadSpinner />
+    }
 
     return (
         <Container 
@@ -80,7 +87,7 @@ export default function EventDetails(){
                 // style={{width: "1200px", maxWidth: "90vw", minWidth: "350px"}}
                 bg="white" data-bs-theme="light"
             >
-                <p className="m-0 py-md-5 py-3 text-center fs-1 fw-bold">
+                <p className="m-0 pt-md-5 pt-3 pb-3 text-center fs-1 fw-bold">
                     {event.title}
                 </p>
 

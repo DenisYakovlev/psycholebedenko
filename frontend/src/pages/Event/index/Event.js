@@ -1,7 +1,7 @@
-import Events from "../../Home/Events/Events"
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import {LoadSpinner} from "../../../shared"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../contexts/UserContext"
 import { EventCard } from "../../../shared"
@@ -11,15 +11,18 @@ import { backend_url } from "../../../constants"
 export default function Event(){
     const {user, publicFetch} = useContext(UserContext)
     const [events, setEvents] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
-    const fetchEvents = () => {
-        publicFetch(`${backend_url}/event/`, {
+    const fetchEvents = async () => {
+        setIsLoading(true)
+        await publicFetch(`${backend_url}/event/`, {
             method: "GET"
         })
         .then(response => response.json())
         .then(data => {
             setEvents([...data])
         })
+        setIsLoading(false)
     }
     // fetch events if user not authorized
     useEffect(() => {
@@ -46,15 +49,19 @@ export default function Event(){
                     Какой-то текст про групові зустрічі
                 </p>
             </Container>
-            <Row sm={1} xs={1} style={{width: "100%"}} className="m-0 p-0 px-0 py-5 gap-3">
-                {events.map((event, idx) => {
-                    return(
-                        <Col key={idx} className="m-0 p-0 d-flex justify-content-center">
-                            <EventCard event={event} idx={idx}/>
-                        </Col>
-                    )
-                })}
-            </Row>
+            {isLoading ? 
+                <LoadSpinner />
+                :
+                <Row sm={1} xs={1} style={{width: "100%"}} className="m-0 p-0 px-0 py-5 gap-3">
+                    {events.map((event, idx) => {
+                        return(
+                            <Col key={idx} className="m-0 p-0 d-flex justify-content-center">
+                                <EventCard event={event} idx={idx}/>
+                            </Col>
+                        )
+                    })}
+                </Row>
+            }
         </Container>
     )
 }

@@ -21,7 +21,7 @@ class Appointment(models.Model):
         DENIED = 'denied'
         
     title = models.TextField(blank=False, null=False, default=set_default_title)
-    notes = models.TextField(blank=True, null=True)
+    notes = models.CharField(max_length=2048, blank=True, null=True)
     user = models.ForeignKey(TelegramUser, on_delete=models.CASCADE)
     date = models.OneToOneField(Schedule, on_delete=models.SET_NULL, null=True, blank=False)
     online = models.BooleanField(default=True)

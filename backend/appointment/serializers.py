@@ -1,26 +1,20 @@
 import datetime
 import pytz
-import uuid
+
 from django.conf import settings
 from rest_framework import serializers
 from .models import Appointment
 from user.serializers import TelegramUserSerializer
+from schedule.serializers import ScheduleSerializer
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
     outdated = serializers.SerializerMethodField('get_outdated')
-    date = serializers.SerializerMethodField('get_date')
+    date = ScheduleSerializer()
     
     class Meta:
         model = Appointment
         fields = ['id', 'title', 'notes', 'user', 'date', 'online', 'zoom_link', 'address', 'status', 'created_at', 'outdated']
-
-    def get_date(self, obj):
-        # return date instead of Schedule instance
-        if obj.date is None:
-            return None
-
-        return obj.date.date
         
     def get_outdated(self, obj):
         # change to timestamp
@@ -64,18 +58,11 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
 class AppointmentListSerializer(serializers.ModelSerializer):
     user = TelegramUserSerializer()
     outdated = serializers.SerializerMethodField('get_outdated')
-    date = serializers.SerializerMethodField('get_date')
+    date = ScheduleSerializer()
     
     class Meta:
         model = Appointment
         fields = ['id', 'title', 'notes', 'user', 'date', 'online', 'zoom_link', 'address', 'status', 'created_at', 'outdated']
-
-    def get_date(self, obj):
-        # return date instead of Schedule instance
-        if obj.date is None:
-            return None
-
-        return obj.date.date
         
     def get_outdated(self, obj):
         # change to timestamp

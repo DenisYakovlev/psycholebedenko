@@ -63,7 +63,7 @@ export default function AppointmentCard({appointment, handleDelete, handleUpdate
                         {appointment.outdated ? 
                             "Вже пройшло"
                             :
-                            `Через ${timeDiff(appointment.date)}`
+                            `Через ${timeDiff(appointment.date.date)}`
                         }
                     </Card.Text>
                     <Dropdown>
@@ -89,12 +89,12 @@ export default function AppointmentCard({appointment, handleDelete, handleUpdate
 
                     <Card.Text className="m-0 p-0 fs-6">
                         <FontAwesomeIcon icon={faCalendarDays} style={{width: "16px"}} className="pe-2"/>
-                        {formatOnlyDate(appointment.date)}
+                        {formatOnlyDate(appointment.date.date)}
                     </Card.Text>
 
                     <Card.Text className="m-0 p-0 fs-6">
                         <FontAwesomeIcon icon={faClock} style={{width: "16px"}} className="pe-2"/>
-                        {formatTime((appointment.date))}
+                        {formatTime((appointment.date.date))}
                     </Card.Text>
 
                     {

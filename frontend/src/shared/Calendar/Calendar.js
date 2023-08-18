@@ -14,6 +14,7 @@ export default function Calendar({
     const [currMonth, setCurrMonth] = useState(() => new Date().getMonth())
     const [currYear, setCurrYear] = useState(() => new Date().getFullYear())
 
+    // default format. Only show days in current month
     const defaultFormat = date =>  date.month == currMonth
 
     return (

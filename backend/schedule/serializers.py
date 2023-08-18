@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Schedule
 from appointment.models import Appointment
-from appointment.serializers import AppointmentSerializer
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
@@ -20,10 +19,10 @@ class ScheduleListSerializer(serializers.ModelSerializer):
             return None
         
         try:
-            _appointment = Appointment.objects.get(date=obj.id)
-            serializer = AppointmentSerializer(instance=_appointment)
+            _appointment = Appointment.objects.filter(date=obj.id).values_list("id")
+            # serializer = AppointmentSerializer(instance=_appointment)
 
-            return serializer.data
+            return _appointment
         except Appointment.DoesNotExist:
             return None
         

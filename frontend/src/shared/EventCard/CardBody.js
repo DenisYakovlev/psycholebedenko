@@ -38,7 +38,8 @@ export default function CardBody({event}){
                 </Card.Text>
             </Container>
             <Card.Text className="m-0 mb-1 fs-6 text-muted text-justify">
-                <FontAwesomeIcon icon={faCalendarDays}/> {formatDate(event.date)}
+                <FontAwesomeIcon icon={faCalendarDays}/> 
+                {formatDate(event.date)}
             </Card.Text>
             <hr className="event-card-line m-0 mb-3 p-0"/>
             <Container style={{maxHeight: "150px"}} className="p-0 overflow-auto">
