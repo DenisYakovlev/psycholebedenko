@@ -24,10 +24,10 @@ export default function DeleteModal({show, hide, appointment, handleDelete}){
                     </p>
                     <Container className="m-0 p-0 d-flex flex-row justify-content-center gap-3">
                         <Button onClick={hide} variant="outline-dark" size="md">
-                            Назад
+                            Ні
                         </Button>
                         <Button onClick={_handleClick} variant="outline-dark" size="md">
-                            Відмінити
+                            Так
                         </Button>
                     </Container>
                 </Container>

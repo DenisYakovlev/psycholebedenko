@@ -61,7 +61,6 @@ export default function Appointment(){
         .catch(error => console.log(error))
     }
 
-    //refactor
     const handleUpdate = (appointment, body) => {
         authFetch(`${backend_url}/appointment/${appointment.id}`, {
             method: "PUT",
@@ -109,11 +108,11 @@ export default function Appointment(){
                         lg={4} md={3} sm={1} xs={1} 
                         className="m-0 p-0 justify-content-around align-items-center gap-3"
                     >
-                        <Col lg={3} md={4} sm={6} xs={10} className="mt-3 p-0 appointment-card">
+                        <Col lg={3} md={4} sm={6} xs={10} className="mt-3 p-0 fade-in-card">
                             <CreateCard />
                         </Col>
                         {appointments.map((appointment, idx) => 
-                            <Col key={idx} lg={3} md={4} sm={6} xs={10} className="mt-3 p-0 appointment-card">
+                            <Col key={idx} lg={3} md={4} sm={6} xs={10} className="mt-3 p-0 fade-in-card">
                                 <AppointmentCard appointment={appointment} handleDelete={handleDelete} handleUpdate={handleUpdate}/>
                             </Col>
                         )}

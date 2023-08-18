@@ -90,7 +90,7 @@ export default function AppointmentCreate(){
                 style={styles.card} bg="light" data-bs-theme="light" 
                 className= 
                     "h-100 mt-sm-5 mb-5 p-0 shadow border-0 \
-                    d-flex flex-column justify-content-start appointment-card"
+                    d-flex flex-column justify-content-start fade-in-card"
             >
                 <Card.Header 
                     style={{height: "10vh"}} 

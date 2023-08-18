@@ -1,0 +1,10 @@
+.hover-text{
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none !important;
+}
+
+.hover-text:hover{
+    text-decoration: underline !important;
+    color: var(--bs-dark)  !important;
+}

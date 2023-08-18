@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home, Appointment, AppointmentCreate, Event, EventDetails, Contacts, User, Bot } from './pages';
+import { Home, Appointment, AppointmentCreate, Event, EventDetails, Contacts, User, Exit, Bot } from './pages';
 import { BotLayout, MainLayout } from './layouts';
 import { UserContextProvider, AuthModalContextProvider} from "./contexts";
 
@@ -13,6 +13,7 @@ export default function App(){
 
               <Route path='/' element={<MainLayout />}>
                 <Route index element={<Home />}/>
+
                 <Route path="appointment">
                   <Route index element={<Appointment />}/>
                   <Route path="create" element={<AppointmentCreate />}/>
@@ -24,7 +25,10 @@ export default function App(){
                 </Route>
                 
                 <Route path="contacts" element={<Contacts />}/>
-                <Route path="user" element={<User />}/>
+                <Route path="user">
+                  <Route index element={<User />}/>
+                  <Route path="exit" element={<Exit />}/>
+                </Route>
               </Route>
 
               <Route path='/bot' element={<BotLayout />}>

@@ -39,7 +39,7 @@ export default function CalendarBody({
                                 // cell of calendar
                                 <th 
                                     onClick={e => _onChange(e, date)}
-                                    key={index} className="calendar-date"
+                                    key={currMonth * 100 + index} className="calendar-date"
                                     style={{
                                         color: !active ? "var(--bs-gray-400)" : "var(--bs-dark)",
                                         cursor: !active ? "default" : "pointer"

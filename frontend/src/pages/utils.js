@@ -20,6 +20,21 @@ export const formatDate = (eventDate) => {
     return formattedDate
 }
 
+export const formatUnixDate = (timestamp) => {
+    // telegram timestamp is without timezone, so it's set here
+    // timezone is Kiyv +03:00
+    const date = new Date((timestamp + 3 * 3600) * 1000)
+
+    const dayOfWeek = daysUkr[date.getUTCDay()]
+    const dayOfMonth = date.getUTCDate()
+    const month = monthsUkr[date.getUTCMonth()]
+    const hours = String(date.getUTCHours()).padStart(2, '0')
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0')
+
+    const formattedDate = `${dayOfWeek}, ${dayOfMonth} ${month} о ${hours}:${minutes}`
+    return formattedDate
+}
+
 export const formatOnlyDate = (eventDate) => {
     const date = new Date(eventDate);
     const dayOfWeek = daysUkr[date.getDay()];

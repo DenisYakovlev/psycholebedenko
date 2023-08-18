@@ -55,7 +55,10 @@ export default function AppointmentCard({appointment, handleDelete, handleUpdate
     }
 
     return (
-        <Card style={{height: "50vh"}} bg="light" data-bs-theme="light" className="m-0 p-0 bg-gradient border-0 shadow position-relative">
+        <Card 
+            style={{height: "50vh", minHeight: "400px"}} bg="light" data-bs-theme="light" 
+            className="m-0 p-0 bg-gradient border-0 shadow position-relative"
+        >
             <Card.Body className="m-0 pb-5 pt-4 px-4 w-100 position-absolute">
 
                 <Container className="m-0 p-0 d-flex justify-content-between align-items-center">
