@@ -16,7 +16,7 @@ export default function NotesForm({nextSlide, notes, setNotes}){
                     </Form.Label>
                     <Form.Control 
                         value={notes} onChange={e => setNotes(e.target.value)} 
-                        style={{height: "30vh"}} as="textarea" placeholder="Можна не заповнювати"
+                        style={{height: "30vh", minHeight: "200px"}} as="textarea" placeholder="Можна не заповнювати"
                     />
                 </Form.Group>
             </Form>

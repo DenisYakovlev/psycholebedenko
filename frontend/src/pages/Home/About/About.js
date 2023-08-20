@@ -8,7 +8,7 @@ import bg from "./../../../assets/images/zoom-icon.png"
 
 export default function About(){
     return (
-        <Container id="about" style={{minHeight: "100vh", backgroundColor: "#f4f4f4"}} className="m-0 p-0" fluid>
+        <Container id="about" style={{minHeight: "100vh", height: "fit-content", backgroundColor: "#f4f4f4"}} className="m-0 p-0 py-3" fluid>
             <HeaderText />
             <Container fluid className="p-0">
                 <Row md={2} sm={1} xs={1} style={{height: "fit-content", maxWidth: "1200px"}} className="p-0 m-0 my-5 mx-md-auto">

@@ -93,8 +93,8 @@ export default function AppointmentCreate(){
                     d-flex flex-column justify-content-start fade-in-card"
             >
                 <Card.Header 
-                    style={{height: "10vh"}} 
-                    className="p-0 fs-2 d-flex align-items-center justify-content-center fw-bold bg-light border-0"
+                    // style={{height: "10vh"}} 
+                    className="mt-5 mb-3 p-0 fs-2 d-flex align-items-center justify-content-center fw-bold bg-light border-0"
                 >
                     <p className="m-0 p-0">
                         Запис на прийом

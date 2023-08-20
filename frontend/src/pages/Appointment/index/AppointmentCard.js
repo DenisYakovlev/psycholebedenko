@@ -56,7 +56,7 @@ export default function AppointmentCard({appointment, handleDelete, handleUpdate
 
     return (
         <Card 
-            style={{height: "50vh", minHeight: "400px"}} bg="light" data-bs-theme="light" 
+            style={{height: "500px"}} bg="light" data-bs-theme="light" 
             className="m-0 p-0 bg-gradient border-0 shadow position-relative"
         >
             <Card.Body className="m-0 pb-5 pt-4 px-4 w-100 position-absolute">
@@ -124,7 +124,7 @@ export default function AppointmentCard({appointment, handleDelete, handleUpdate
             <Container className="mt-auto p-0">
                 <Accordion className="app-accardion">
                     <Accordion.Item eventKey="0" className="border-0 rounded-0 position-relative">
-                        <Accordion.Body className="pt-5" style={{height: "45vh"}}>
+                        <Accordion.Body className="pt-5" style={{height: "450px"}}>
                             <p className="m-0 p-0 text-center fs-6 text-muted">
                                 Ваші записи
                             </p>
@@ -132,17 +132,17 @@ export default function AppointmentCard({appointment, handleDelete, handleUpdate
                                 <Form.Group>
                                 <Form.Control 
                                     value={notes} onChange={e => setNotes(e.target.value)}
-                                    style={{height: "25vh", resize: "none"}} as="textarea" placeholder="Можна не заповнювати"
+                                    style={{height: "250px", resize: "none"}} as="textarea" placeholder="Можна не заповнювати"
                                 />
                                 </Form.Group>
                             </Form>
                             <Container className="m-0 p-0 d-flex justify-content-center">
-                                <Button onClick={handleClick} variant="outline-dark" className="mt-3 w-50 align-self-center" size="md">
+                                <Button onClick={handleClick} variant="outline-dark" className="mt-4 w-50 align-self-center" size="md">
                                     Зберегти
                                 </Button>
                             </Container>
                         </Accordion.Body>
-                        <Accordion.Header className="border-top" style={{height: "5vh"}}>
+                        <Accordion.Header className="border-top" style={{height: "50px"}}>
                             Записки
                         </Accordion.Header>
                     </Accordion.Item>

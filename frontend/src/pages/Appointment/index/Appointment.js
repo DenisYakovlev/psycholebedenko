@@ -101,7 +101,7 @@ export default function Appointment(){
                 :
                 <Container 
                     style={{maxWidth: "100vw", minWidth: "350px", width: "1200px"}} 
-                    className="m-0 p-0 align-self-center d-flex flex-column justify-content-center align-items-center gap-3" fluid
+                    className="m-0 p-0 pt-5 align-self-center d-flex flex-column justify-content-center align-items-center gap-3" fluid
                 >
                     <Row 
                         style={{maxWidth: "100vw", minWidth: "350px", width: "1200px"}} 

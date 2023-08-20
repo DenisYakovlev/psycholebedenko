@@ -8,7 +8,7 @@ export default function CreateCard(){
     return (
         <Card 
             as={Link} to="/appointment/create"
-            style={{height: "50vh", cursor: "pointer"}} 
+            style={{height: "500px", cursor: "pointer"}} 
             bg="light" data-bs-theme="light" 
             className="m-0 p-0 bg-gradient border-0 shadow rounded"
         >

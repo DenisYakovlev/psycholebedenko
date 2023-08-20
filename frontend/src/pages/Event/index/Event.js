@@ -45,9 +45,9 @@ export default function Event(){
                 <h1 className="text-dark text-center text-justify">
                     Групові зустрічі
                 </h1>
-                <p className="text-muted text-center text-justify">
+                {/* <p className="text-muted text-center text-justify">
                     Какой-то текст про групові зустрічі
-                </p>
+                </p> */}
             </Container>
             {isLoading ? 
                 <LoadSpinner />
