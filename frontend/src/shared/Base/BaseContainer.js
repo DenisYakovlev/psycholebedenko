@@ -11,7 +11,7 @@ export default function BaseContainer({
     return (
         <Container
             className={
-                `mb-5 p-0 py-5 d-flex flex-column gap-3 justify-content-start align-items-center ${className}`
+                `m-0 p-0 py-5 d-flex flex-column justify-content-start align-items-center ${className}`
             }
             style={{
                 minHeight: "100vh",

@@ -12,7 +12,7 @@ const PanelLink = ({to="#", children, props}) => {
             as={Link} to={to} 
             className="m-0 p-0 
             border-0 border-bottom rounded-0 
-            text-decoration-none text-justify fs-2" 
+            text-decoration-none text-justify fs-3" 
             {...props}
         >
             {children}

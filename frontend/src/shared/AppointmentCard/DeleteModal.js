@@ -3,9 +3,9 @@ import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
 
 
-export default function DeleteModal({show, hide, appointment, handleDelete}){
+export default function DeleteModal({show, hide, handleDelete}){
     const _handleClick = () => {
-        handleDelete(appointment)
+        handleDelete()
         hide()
     }
 

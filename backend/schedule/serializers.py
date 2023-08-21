@@ -20,10 +20,10 @@ class ScheduleListSerializer(serializers.ModelSerializer):
         
         try:
             # importing on whole file scope leads to circular import error
-            from appointment.serializers import AppointmentSerializer
+            from appointment.serializers import AppointmentListSerializer
             
             _appointment = Appointment.objects.get(date=obj.id)
-            serializer = AppointmentSerializer(instance=_appointment)
+            serializer = AppointmentListSerializer(instance=_appointment)
 
             return serializer.data
         except Appointment.DoesNotExist:

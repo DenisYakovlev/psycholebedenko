@@ -4,6 +4,7 @@ import Calendar from "./Calendar/Calendar";
 import TimeOptionPicker from "./TimeOptionPicker/TimeOptionPicker";
 import DatePicker from "./DatePicker/DatePicker";
 import { LoadSpinner, BaseContainer, BaseTitle } from "./Base";
+import AppointmentCard from "./AppointmentCard/AppointmentCard";
 import Tag from "./Tag";
 
 
@@ -16,5 +17,6 @@ export {
     Calendar, 
     TimeOptionPicker, 
     DatePicker, 
-    Tag
+    Tag,
+    AppointmentCard
 }

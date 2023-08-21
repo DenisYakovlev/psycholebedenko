@@ -14,7 +14,7 @@ export default function Admin(){
             <Row 
                 style={{maxWidth: "100vw", minWidth: "350px", width: "100%"}} 
                 xl={4} lg={2} md={2} sm={1} xs={1}
-                className="my--md-5 my-3 px-md-5 px-3 align-items-start"
+                className="my-md-5 my-3 px-md-5 px-3 align-items-start"
             >
                 <Col xl={3} lg={6} md={6} sm={12} className="m-0 p-3 fade-in-card">
                     <SchedulePanel />

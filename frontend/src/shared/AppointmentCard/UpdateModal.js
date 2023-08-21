@@ -1,14 +1,14 @@
 import Modal from "react-bootstrap/Modal"
-import DatePicking from "../create/DatePicking"
+import DatePicking from "../../pages/Appointment/create/DatePicking"
 import { useState } from "react"
 
 
-export default function UpdateModal({show, hide, appointment, handleUpdate}){
+export default function UpdateModal({show, hide, handleUpdate}){
     const [date, setDate] = useState(null)
 
     const submitDate = (date) => {
         setDate(date)
-        handleUpdate(appointment, {date: date.id})
+        handleUpdate({date: date.id})
         hide()
     }
 
@@ -20,7 +20,7 @@ export default function UpdateModal({show, hide, appointment, handleUpdate}){
             animation={true} centered
             onExit={hide}
         >
-            <Modal.Body className="m-3">
+            <Modal.Body className="m-0 px-0 py-5">
                 <DatePicking sumbitDate={submitDate}/>
             </Modal.Body>
         </Modal>
