@@ -44,6 +44,7 @@ export default function EventDetails(){
     }, [user])
 
     useEffect(() => {
+        window.scrollTo(0, 0)
         fetchEvent()
     }, [])
 

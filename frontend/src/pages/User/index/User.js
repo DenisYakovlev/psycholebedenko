@@ -5,6 +5,7 @@ import { backend_url } from "../../../constants"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../contexts"
 import CardHeader from "./CardHeader"
+import { useNavigate } from "react-router-dom";
 import CardBody from "./CardBody"
 import "../styles.css"
 
@@ -20,6 +21,7 @@ const styles = {
 }
 
 export default function User(){
+    const navigate = useNavigate()
     const {user, authFetch} = useContext(UserContext)
     const [userData, setUserData] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -45,6 +47,7 @@ export default function User(){
 
     useEffect(() => {
         if(!user){
+            navigate("/")
             return
         }
 

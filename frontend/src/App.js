@@ -1,6 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home, Appointment, AppointmentCreate, Event, EventDetails, Contacts, User, Exit, Bot } from './pages';
-import { BotLayout, MainLayout } from './layouts';
+
+import { 
+  Home,
+  Appointment, 
+  AppointmentCreate, 
+  Event, 
+  EventDetails, 
+  Contacts, 
+  User, 
+  Exit, 
+  Bot, 
+  Admin,
+  ScheduleCalendar,
+  Planning
+} from './pages';
+
+import { BotLayout, MainLayout, AdminLayout } from './layouts';
 import { UserContextProvider, AuthModalContextProvider} from "./contexts";
 
 
@@ -28,6 +43,14 @@ export default function App(){
                 <Route path="user">
                   <Route index element={<User />}/>
                   <Route path="exit" element={<Exit />}/>
+                </Route>
+
+                <Route path="admin" element={<AdminLayout />}>
+                  <Route index element={<Admin />}/>
+                  <Route path="schedule">
+                    <Route path="calendar" element={<ScheduleCalendar />}/>
+                    <Route path="planning" element={<Planning />}/>
+                  </Route>
                 </Route>
               </Route>
 

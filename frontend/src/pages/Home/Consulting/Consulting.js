@@ -33,7 +33,7 @@ export default function Consulting(){
                 minHeight: "100vh",
                 height: "fit-content"
             }} className="m-0 p-0 d-flex align-items-end justify-content-center" fluid>
-                <Row className="p-0 mt-5">
+                <Row className="m-0 p-0 mt-5">
                     <Col style={{width: "100%"}} className="mb-5 p-0 d-flex flex-column text-light justify-content-end align-items-center">
                         <MainText />
                         <Credentials />

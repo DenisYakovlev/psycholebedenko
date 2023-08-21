@@ -14,11 +14,11 @@ export default function Calendar({
     const [currMonth, setCurrMonth] = useState(() => new Date().getMonth())
     const [currYear, setCurrYear] = useState(() => new Date().getFullYear())
 
-    // default format. Only show days in current month
+    // default format. Only show days in current month as active
     const defaultFormat = date =>  date.month == currMonth
 
     return (
-        <Container className="m-0 p-0 d-flex flex-column gap-1">
+        <Container style={{maxWidth: "400px"}} className="m-0 px-3 d-flex flex-column gap-1">
             <MonthCarousel 
                 currYear={currYear} setCurrYear={setCurrYear} 
                 currMonth={currMonth} setCurrMonth={setCurrMonth}

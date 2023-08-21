@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container"
 import Spinner from "react-bootstrap/Spinner";
 import { useContext, useEffect, useState, lazy, Suspense } from "react"
 import { UserContext } from "../../contexts"
-import LoadSpinner from "../../shared/LoadSpinner";
+import LoadSpinner from "../../shared/Base/LoadSpinner";
 
 const NavBar = lazy(() => import("./Components/NavBar"))
 const Footer = lazy(() => import("./Components/Footer"))

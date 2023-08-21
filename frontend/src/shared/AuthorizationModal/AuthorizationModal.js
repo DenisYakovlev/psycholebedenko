@@ -5,7 +5,7 @@ import AuthTelegramForm from "./AuthTelegramForm";
 import AuthPhoneForm from "./AuthPhoneForm";
 import AuthFinalForm from "./AuthFinalForm";
 import { UserContext } from "../../contexts";
-import LoadSpinner from "../LoadSpinner"
+import LoadSpinner from "../Base/LoadSpinner"
 import { backend_url } from "../../constants"
 
 

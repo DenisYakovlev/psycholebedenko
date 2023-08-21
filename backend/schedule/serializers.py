@@ -19,10 +19,13 @@ class ScheduleListSerializer(serializers.ModelSerializer):
             return None
         
         try:
-            _appointment = Appointment.objects.filter(date=obj.id).values_list("id")
-            # serializer = AppointmentSerializer(instance=_appointment)
+            # importing on whole file scope leads to circular import error
+            from appointment.serializers import AppointmentSerializer
+            
+            _appointment = Appointment.objects.get(date=obj.id)
+            serializer = AppointmentSerializer(instance=_appointment)
 
-            return _appointment
+            return serializer.data
         except Appointment.DoesNotExist:
             return None
         

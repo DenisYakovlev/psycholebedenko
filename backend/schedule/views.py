@@ -37,10 +37,16 @@ class ScheduleList(APIView):
 
     def get(self, request):
         schedule = self.get_queryset()
-        serializer = ScheduleListSerializer(schedule, many=True)
+        try:
+            if request.user.is_staff:
+                serializer = ScheduleListSerializer(schedule, many=True)
+            else:
+                serializer = ScheduleSerializer(schedule, many=True)
+        except:
+            serializer = ScheduleSerializer(schedule, many=True)
 
         return Response(serializer.data, status.HTTP_200_OK)
-
+    
 
 class ScheduleManage(APIView):
     permission_classes = [IsAdminUser]
