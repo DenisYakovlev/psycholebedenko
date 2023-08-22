@@ -1,6 +1,5 @@
 import { Outlet } from "react-router";
 import Container from "react-bootstrap/Container"
-import Spinner from "react-bootstrap/Spinner";
 import { useContext, useEffect, useState, lazy, Suspense } from "react"
 import { UserContext } from "../../contexts"
 import LoadSpinner from "../../shared/Base/LoadSpinner";
@@ -8,12 +7,16 @@ import LoadSpinner from "../../shared/Base/LoadSpinner";
 const NavBar = lazy(() => import("./Components/NavBar"))
 const Footer = lazy(() => import("./Components/Footer"))
 
+
 export default function MainLayout(){
     const {user, refreshToken} = useContext(UserContext)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         const refresh = async () => {
+            setIsLoading(true)
             await refreshToken()
+            setIsLoading(false)
         }
 
         if(!user){
@@ -24,12 +27,15 @@ export default function MainLayout(){
     }, [])
 
     return (
-        <Suspense fallback={<LoadSpinner />}>
-            <Container  fluid className="p-0">
+        isLoading ?
+            <LoadSpinner />
+            :
+            <Suspense fallback={<LoadSpinner />}>
+                <Container  fluid className="p-0">
                     <NavBar />
                     <Outlet />
                     <Footer />
                 </Container>
-        </Suspense>
+            </Suspense>
     )
 }

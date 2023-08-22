@@ -1,10 +1,10 @@
-import { BaseContainer, BaseTitle, Calendar } from "../../../../shared"
+import { BaseContainer, BaseTitle, Calendar, LoadSpinner } from "../../../../shared"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import { backend_url } from "../../../../constants"
 import { useState, useEffect, useContext } from "react"
 import { UserContext } from "../../../../contexts"
-import { generateDates, generateFullDate } from "./utils"
+import DateCard from "./DateCard"
 const moment = require("moment")
 
 
@@ -13,13 +13,13 @@ export default function Planning(){
     const [isLoading, setIsLoading] = useState(false)
     const [date, setDate] = useState(null)
     const [options, setOptions] = useState([])
-    const [dateOptions, setDateOptions] = useState([])
+    const [dateOptions, setDateOptions] = useState(null)
 
 
     const fetchSchedule = async () => {
         setIsLoading(true)
 
-        await authFetch(`${backend_url}/schedule?status=free`, {
+        await authFetch(`${backend_url}/schedule`, {
             method: "GET"
         })
         .then(response => {
@@ -40,13 +40,32 @@ export default function Planning(){
     }, [])
 
     useEffect(() => {
-        const _options = [...options].filter(freeDate => {
-            const _date = moment(freeDate.date)
-            return date.year == _date.year() && date.month == _date.month() 
-                && date.day == _date.date()
-        })
+        const fetch = async () => {
+            const _date = moment(date).format("YYYY-MM-DD")
+            setIsLoading(true)
 
-        setDateOptions(_options)
+            authFetch(`${backend_url}/schedule/calendar?date=${_date}`,{
+                method: "GET"
+            })
+            .then(response => {
+                if(response.ok){
+                    return response.json()
+                }
+
+                throw new Error("Schedule calendar fetch error")
+            })
+            .then(data => {
+                setDateOptions(data)
+            })
+            .catch(error => console.log(error))
+            setIsLoading(false)
+        }
+
+        if(!date){
+            return 
+        }
+
+        fetch()
     }, [date])
 
 
@@ -61,24 +80,6 @@ export default function Planning(){
         return filteredDates.length > 0
     }
 
-    const formatFreeDates = () => {
-        const generatedDates = generateDates()
-        const currentDay = moment().startOf('day')
-        const formatedDateOptions = [...dateOptions].map(option => {
-            return moment(option.date).format("HH:mm")
-        })
-
-        const freeDates = generatedDates.map(_date => {
-            const isFree = !formatedDateOptions.includes(_date) && moment(date).isAfter(currentDay)
-
-            return {
-                date: _date,
-                fullDate: generateFullDate(date, _date),
-                isFree: isFree
-            }
-        })
-        return freeDates
-    }
 
     return(
         <BaseContainer light>
@@ -86,46 +87,43 @@ export default function Planning(){
                 Планування
             </BaseTitle>
 
-            <Row
-                lg={2} sm={1} xs={1}
-                className="my-5 p-0 w-100 align-items-start justify-content-center"
-            >
-                <Col 
-                    lg={6} sm={12} xs={12}
-                    style={{maxWidth: "400px"}} 
-                    className="mb-5 mt-lg-5 mt-0 p-0 d-flex justify-content-center"
+            {isLoading ?
+                <LoadSpinner />
+                :
+                <Row
+                    lg={2} sm={1} xs={1}
+                    className="my-5 p-0 w-100 align-items-start justify-content-center"
                 >
-                    <Calendar onChange={setDate} format={formatCalendar}/>
-                </Col>
+                    <Col 
+                        lg={6} sm={12} xs={12}
+                        style={{maxWidth: "400px"}} 
+                        className="mb-5 mt-lg-5 mt-0 p-0 d-flex justify-content-center"
+                    >
+                        <Calendar onChange={setDate} format={formatCalendar}/>
+                    </Col>
 
-                <Col
-                    lg={8} sm={12} xs={12}
-                    className="m-0 p-0"
-                >
-                    {date ?
-                        formatFreeDates().map(freeDate => 
-                            <h1>{`${freeDate.date} : ${freeDate.isFree} : ${freeDate.fullDate}`}</h1>
-                        )
-                        :
-                        <h1>Nothing</h1>
-                    }
-                </Col>
-            </Row>
+                    <Col
+                        lg={8} sm={12} xs={12}
+                        className="my-sm-5 my-3 px-5"
+                    >
+                        <Row
+                            lg={2} sm={1} xs={1}
+                            className="m-0 p-0 align-items-start justify-content-center"
+                        >
+                            {dateOptions ?
+                                Object.values(dateOptions).map((value) => 
+                                    <Col lg={6} sm={12} xs={12} className="m-0 p-3">
+                                        <DateCard date={value}/>
+                                    </Col>
+                                )
+                                :
+                                <h1>Виберіть дати, на які можна буде записатися</h1>
+                            }
+                        </Row>
+                    </Col>
+                </Row>
+            }
         </BaseContainer>
     )
 }
 
-
-// {dateOptions.length > 0 ? 
-//     <Row 
-//         style={{maxWidth: "100vw", minWidth: "350px", width: "100%", height: "fit-content"}} 
-//         lg={2} sm={1} xs={1}
-//         className="m-0 p-0 align-items-start justify-content-center"
-//     >
-        
-//     </Row>
-//     :
-//     <h2 className="mt-5 p-0 text-center align-self-center">
-//         Виберіть дати, на які можна буде записатися
-//     </h2>
-// }

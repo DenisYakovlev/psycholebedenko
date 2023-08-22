@@ -12,5 +12,5 @@ export const generateDates = () => {
 
 // from HH:mm format to YYYY-MM-DDTHH:mm:ss+TZ
 export const generateFullDate = (date, hours) => {
-    return `${date.year}-${date.month.toString().padStart(2, '0')}-${date.day.toString().padStart(2, '0')}T${hours}:00+03:00`
+    return `${date.year}-${(date.month + 1).toString().padStart(2, '0')}-${date.day.toString().padStart(2, '0')}T${hours}:00+03:00`
 }

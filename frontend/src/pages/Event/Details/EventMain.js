@@ -9,7 +9,7 @@ export default function EventMain({event}){
     return(
         <Container style={{minWidth: "100%", minHeight: "30vh"}} className="m-0 px-md-5 px-3 d-flex flex-column align-items-start">
             <Card.Text className="m-0 mb-1 fs-6 text-muted text-justify">
-                <FontAwesomeIcon icon={faCalendarDays}/> 
+                <FontAwesomeIcon icon={faCalendarDays} className="pe-2"/> 
                 {formatDate(event.date)}
             </Card.Text>
             <hr className="event-card-line m-0 mb-3 p-0"/>

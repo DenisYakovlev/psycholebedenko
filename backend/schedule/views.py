@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timedelta
 import pytz
 from django.conf import settings
 from django.http import Http404
@@ -13,6 +13,70 @@ from appointment.models import Appointment
 # Create your views here.
 
 
+class ScheduleListDay(APIView):
+    permission_classes = [IsAdminUser]
+
+    def aware_date(self, date):
+        tz = pytz.timezone(settings.TIME_ZONE)
+        date = tz.localize(date)
+
+        return date
+
+    def get_queryset(self):
+        try:
+            date = self.request.query_params.get("date")
+            date = datetime.strptime(date, "%Y-%m-%d")
+
+            start_date = self.aware_date(date)
+            end_date = start_date + timedelta(days=1)
+
+            schedule = Schedule.objects.filter(date__range=[start_date, end_date])
+            return schedule
+        except Schedule.DoesNotExist:
+            raise Http404
+        
+    def convertScheduleDate(self, date):
+        # converting from "2023-08-30T16:00:00+03:00" to "16:00"
+        parsed_datetime = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S%z")
+        return parsed_datetime.strftime("%H:%M")
+
+    def generateDaySchedule(self, actualSchedule: dict):
+        """
+            generate list for day schedule like this:
+            "00:00": data1,
+            "01:00": data2 ...
+        """
+        daySchedule = {}
+
+        for hour in range(24):
+            dayKey = f"{hour:02}:00"
+
+            # from "2023-08-10" to "2023-08-10:15:00:00+tz"
+            dayDate = self.request.query_params.get("date") + f"T{dayKey}:00"
+            dayDate = datetime.strptime(dayDate, "%Y-%m-%dT%H:%M:%S")
+            dayDate = self.aware_date(dayDate)
+
+            # extract HH:MM from dayDate
+            dayHour = dayDate.strftime("%H:%M")
+
+            # check if value date is equal to key and append schedule value to it
+            dayValue = filter(lambda item: self.convertScheduleDate(item["date"]) == dayKey, actualSchedule)
+
+            daySchedule[dayKey] = {
+                "date": dayDate,
+                "time": dayHour,
+                "schedule": next(dayValue, None)
+            }
+        
+        return daySchedule
+
+    def get(self, request):
+        schedule = self.get_queryset()
+        serializer = ScheduleListSerializer(schedule, many=True)
+
+        data = self.generateDaySchedule(serializer.data)
+        return Response(data, status.HTTP_200_OK)
+
 class ScheduleList(APIView):
     permission_classes = []
 
@@ -20,7 +84,7 @@ class ScheduleList(APIView):
         status = self.request.query_params.get("status")
 
         tz = pytz.timezone(settings.TIME_ZONE)
-        current_time = datetime.datetime.now(tz=tz)
+        current_time = datetime.now(tz=tz)
 
         querySet = Schedule.objects.filter(date__gte=current_time).order_by("date")
 
