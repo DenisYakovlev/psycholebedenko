@@ -82,7 +82,12 @@ class AppointmentDetail(APIView):
     
     def get_appointment(self, pk):
         try:
-            return Appointment.objects.get(id=pk)
+            # staff user can get access to any appointment
+            if self.request.user.is_staff:
+                return Appointment.objects.get(id=pk)
+            
+            # return user appointment
+            return Appointment.objects.filter(id=pk, user=self.request.user).first()
         except:
             raise Http404
     

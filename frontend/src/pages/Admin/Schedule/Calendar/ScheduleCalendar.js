@@ -89,33 +89,49 @@ export default function ScheduleCalendar(){
             {isLoading ?
                 <LoadSpinner />
                 :
-                <Container 
-                    className="mt-3 p-0 d-flex flex-column justify-content-center align-items-center gap-5"
+                <Row
+                    lg={2} sm={1} xs={1}
+                    className="my-5 p-0 w-100 align-items-start justify-content-center"
                 >
-                    <Calendar onChange={setDate} format={formatCalendar}/>
+                    <Col 
+                        lg={6} sm={12} xs={12}
+                        style={{maxWidth: "400px"}} 
+                        className="mb-5 mt-lg-5 mt-0 p-0 d-flex justify-content-center"
+                    >
+                        <Calendar onChange={setDate} format={formatCalendar}/>
+                    </Col>
 
-                    {dateOptions.length > 0 ? 
-                        <Row 
-                            style={{maxWidth: "100vw", minWidth: "350px", width: "100%", height: "fit-content"}} 
-                            lg={3} md={2} sm={1} xs={1}
-                            className="my-md-5 my-3 px-md-5 px-3 align-items-start justify-content-center"
-                        >
-                            {[...dateOptions].map(_option => 
-                                <Col key={_option.id} lg={4} md={6} sm={12} className="m-0 p-3 fade-in-card">
-                                    <AppointmentCard
-                                        appointment={_option.appointment}
-                                        onChange={option => handleChange(option)}
-                                        onDelete={option => handleDelete(option)}
-                                    />
-                                </Col>
-                            )}
-                        </Row>
-                        :
-                        <h2 className="m-0 p-0 text-center">
-                            Показуються майбутні записи
-                        </h2>
-                    }
-                </Container>
+                    <Col
+                        lg={8} sm={12} xs={12}
+                        className="m-0 p-0"
+                    >
+                        {dateOptions.length > 0 ? 
+                            <Row 
+                                style={{maxWidth: "100vw", minWidth: "350px", width: "100%", height: "fit-content"}} 
+                                lg={2} sm={1} xs={1}
+                                className="m-0 p-0 align-items-start justify-content-center"
+                            >
+                                {[...dateOptions].map(_option => 
+                                    <Col 
+                                        style={{width: "300px"}}
+                                        key={_option.id} lg={6} sm={12} xs={12} 
+                                        className="m-3 p-0 fade-in-card"
+                                    >
+                                        <AppointmentCard
+                                            appointment={_option.appointment}
+                                            onChange={option => handleChange(option)}
+                                            onDelete={option => handleDelete(option)}
+                                        />
+                                    </Col>
+                                )}
+                            </Row>
+                            :
+                            <h2 className="mt-5 p-0 text-center align-self-center">
+                                Показуються майбутні записи
+                            </h2>
+                        }
+                    </Col>
+                </Row>
             }
             
         </BaseContainer>

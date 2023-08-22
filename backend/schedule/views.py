@@ -52,7 +52,7 @@ class ScheduleManage(APIView):
     permission_classes = [IsAdminUser]
 
     def post(self, request):
-        serializer = ScheduleSerializer(data=request.data)
+        serializer = ScheduleSerializer(data=request.data, many=True)
 
         if serializer.is_valid():
             serializer.save()

@@ -30,7 +30,6 @@ export default function AdminLayout(){
                 if(!user.is_staff){
                     throw new Error("user is not admin")
                 }
-                console.log("admin is here")
             })
             .catch(error => {
                 console.log(error)

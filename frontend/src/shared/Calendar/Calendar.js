@@ -18,7 +18,7 @@ export default function Calendar({
     const defaultFormat = date =>  date.month == currMonth
 
     return (
-        <Container style={{maxWidth: "400px"}} className="m-0 px-3 d-flex flex-column gap-1">
+        <Container className="m-0 px-3 d-flex flex-column gap-1">
             <MonthCarousel 
                 currYear={currYear} setCurrYear={setCurrYear} 
                 currMonth={currMonth} setCurrMonth={setCurrMonth}
