@@ -45,18 +45,19 @@ export default function App(){
                   <Route path="exit" element={<Exit />}/>
                 </Route>
 
-                <Route path="admin" element={<AdminLayout />}>
-                  <Route index element={<Admin />}/>
-                  <Route path="schedule">
-                    <Route path="calendar" element={<ScheduleCalendar />}/>
-                    <Route path="planning" element={<Planning />}/>
-                  </Route>
-                </Route>
               </Route>
 
               <Route path='/bot' element={<BotLayout />}>
                 <Route>
                   <Route index element={<Bot />}/>
+                </Route>
+              </Route>
+
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Admin />}/>
+                <Route path="schedule">
+                  <Route path="calendar" element={<ScheduleCalendar />}/>
+                  <Route path="planning" element={<Planning />}/>
                 </Route>
               </Route>
 

@@ -3,6 +3,9 @@ import { Outlet, useNavigate } from "react-router";
 import { UserContext } from "../../contexts";
 import { backend_url } from "../../constants";
 import { LoadSpinner } from "../../shared";
+import SideMenu from "./SideMenu/SideMenu";
+import NavBar from "./NavBar/NavBar";
+import Container from "react-bootstrap/Container";
 
 
 export default function AdminLayout(){
@@ -43,12 +46,17 @@ export default function AdminLayout(){
     }, [])
 
 
-    if(isLoading){
-        return <LoadSpinner />
-    }
-
-
     return (
-        <Outlet />
+        <Container className="p-0" fluid>
+            <NavBar/>
+            <Container className="p-0 d-flex" fluid>
+                <SideMenu />
+                {isLoading ?
+                    <LoadSpinner />
+                    :
+                    <Outlet />
+                }
+            </Container>
+        </Container>
     )
 }

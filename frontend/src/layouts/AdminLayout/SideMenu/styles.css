@@ -1,0 +1,23 @@
+.side-menu{
+    transition: 0.25s;
+}
+
+.side-menu-item{
+    color: var(--bs-secondary) !important;
+    transition: 0.25s;
+}
+
+.side-menu-item:hover{
+    color: var(--bs-dark) !important;
+}
+
+.side-menu-item:focus{
+    color: var(--bs-dark) !important;
+}
+
+@media screen and (max-width: 768px) {
+    .side-menu{
+        width: 0px !important;
+        border: none !important; 
+    }
+}
