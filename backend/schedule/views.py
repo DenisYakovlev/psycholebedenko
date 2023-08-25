@@ -77,6 +77,7 @@ class ScheduleListDay(APIView):
         data = self.generateDaySchedule(serializer.data)
         return Response(data, status.HTTP_200_OK)
 
+
 class ScheduleList(APIView):
     permission_classes = []
 
@@ -91,11 +92,12 @@ class ScheduleList(APIView):
         if not status:
             return querySet 
         
+        usedDates = Appointment.objects. \
+                exclude(date__isnull=True).values("date_id")
+        
         if status == "free":
-            usedDates = Appointment.objects.exclude(date__isnull=True).values("date_id")
             return querySet.exclude(id__in=usedDates)
         elif status == "appointed":
-            usedDates = Appointment.objects.exclude(date__isnull=True).values("date_id")
             return querySet.filter(id__in=usedDates)
 
 

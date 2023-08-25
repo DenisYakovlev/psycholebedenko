@@ -3,15 +3,12 @@ import AccordionItem from "./AccordionItem"
 import AccordionToggle from "./AccordionToggle"
 import AccordionBody from "./AccordionBody"
 import AccordionBodyItem from "./AccordionBodyItem"
-import ListGroup from 'react-bootstrap/ListGroup'
-import Button from "react-bootstrap/Button"
-import Container from "react-bootstrap/Container"
 import { faUser, faUsers, faCalendarDays, faComments } from "@fortawesome/free-solid-svg-icons"
 
 
 export default function SideMenuBody({onHide=null}){
     return (
-        <Accordion>
+        <Accordion defaultActiveKey="0">
             <AccordionItem eventKey="0">
                 <AccordionToggle eventKey="0" bordered={false} icon={faCalendarDays}>
                         <p className="m-0 px-3 text-muted fs-4">

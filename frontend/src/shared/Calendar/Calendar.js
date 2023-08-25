@@ -9,7 +9,7 @@ import "./styles.css"
 
 export default function Calendar({
     onChange, 
-    format = null
+    format = null,
 }){
     const [currMonth, setCurrMonth] = useState(() => new Date().getMonth())
     const [currYear, setCurrYear] = useState(() => new Date().getFullYear())

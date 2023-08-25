@@ -4,7 +4,6 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons"
-import Container from "react-bootstrap/esm/Container"
 
 
 
@@ -13,8 +12,14 @@ export default function NavBar(){
 
     return (
         <Navbar 
-            style={{height: "56px", borderBottom: "solid 1px var(--bs-gray-400)"}}
-            className="m-0 p-0 position-relative justify-content-between" bg="white" fixed="top" expand="md"
+            style={{
+                height: "64px", 
+                borderBottom: "solid 1px var(--bs-gray-400)"
+            }}
+            className="m-0 p-0 position-relative justify-content-between" 
+            bg="white" 
+            fixed="top" 
+            expand="md"
         >
             <Navbar.Toggle onClick={() => setShowMenu(true)} className="ms-2"/>
 

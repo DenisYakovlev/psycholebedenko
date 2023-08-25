@@ -10,15 +10,12 @@ import Container from "react-bootstrap/Container";
 
 export default function AdminLayout(){
     const navigate = useNavigate()
-    const [isLoading, setIsLoading] = useState(false)
     const {authFetch} = useContext(UserContext)
 
     // check is user is admin and navigate him to home page
     // if he is not
     useEffect(() => {
         const fetchUser = async () => {
-            setIsLoading(true) 
-
             await authFetch(`${backend_url}/user/me`, {
                 method: "GET"
             })
@@ -38,8 +35,6 @@ export default function AdminLayout(){
                 console.log(error)
                 navigate("/")
             })
-
-            setIsLoading(false)
         }
         
         fetchUser()
@@ -51,11 +46,7 @@ export default function AdminLayout(){
             <NavBar/>
             <Container className="p-0 d-flex" fluid>
                 <SideMenu />
-                {isLoading ?
-                    <LoadSpinner />
-                    :
-                    <Outlet />
-                }
+                <Outlet />
             </Container>
         </Container>
     )

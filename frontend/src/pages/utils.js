@@ -8,6 +8,13 @@ const daysUkr = [
 ];
 
 
+export const formatJSONDate = (date) => {
+    const dayOfWeek = daysUkr[new Date(date.year, date.month, date.day).getDay()];
+    const monthName = monthsUkr[date.month];
+
+    return `${dayOfWeek}, ${date.day} ${monthName}`;
+}
+
 export const formatDate = (eventDate) => {
     const date = new Date(eventDate);
     const dayOfWeek = daysUkr[date.getDay()];

@@ -1,0 +1,22 @@
+.admin-schedule-calendar-side{
+    min-height: 100vh;
+    height: fit-content;
+    background-color: var(--bs-gray-100);
+    border-right: solid 2px var(--bs-gray-400);
+    position: sticky;
+    top: 0;
+}
+
+.admin-schedule-calendar-main{
+    min-height: 100vh;
+    height: fit-content;
+}
+
+@media screen and (max-width: 992px){
+    .admin-schedule-calendar-side{
+        min-height: 100%;
+        border-right: none;
+        border-bottom: solid 1px var(--bs-gray-400);
+        position: relative !important;
+    }
+}
