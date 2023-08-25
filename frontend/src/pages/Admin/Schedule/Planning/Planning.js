@@ -1,25 +1,27 @@
-import { BaseContainer, BaseTitle, Calendar, LoadSpinner } from "../../../../shared"
+import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import { backend_url } from "../../../../constants"
+import SideFilters from "./SideFilters"
 import { useState, useEffect, useContext } from "react"
+import { backend_url } from "../../../../constants"
 import { UserContext } from "../../../../contexts"
+import { formatJSONDate } from "../../../utils"
 import DateCard from "./DateCard"
+import AppointmentContainer from "./AppointmentContainer"
+import "./styles.css"
 const moment = require("moment")
 
 
 export default function Planning(){
     const {authFetch} = useContext(UserContext)
-    const [isLoading, setIsLoading] = useState(false)
     const [date, setDate] = useState(null)
     const [options, setOptions] = useState([])
-    const [dateOptions, setDateOptions] = useState(null)
+    const [dateSchedule, setDateSchedule] = useState(null)
+    const [selectedAppointment, setSelectedAppointment] = useState(null)
 
-
+    // fetch schedule
     const fetchSchedule = async () => {
-        setIsLoading(true)
-
-        await authFetch(`${backend_url}/schedule`, {
+        return await authFetch(`${backend_url}/schedule`, {
             method: "GET"
         })
         .then(response => {
@@ -31,45 +33,52 @@ export default function Planning(){
         })
         .then(data => setOptions(data))
         .catch(error => console.error(error))
-
-        setIsLoading(false)
     }
 
+    const fetchDateSchedule = async () => {
+        if(!date){
+            return
+        }
+        const _date = `${date?.year}-${(date?.month + 1).toString().padStart(2, '0')}-${date?.day}`
+
+        return await authFetch(`${backend_url}/schedule/calendar?date=${_date}`, {
+            method: "GET"
+        })
+        .then(response => {
+            if(response.ok){
+                return response.json()
+            }
+
+            throw new Error("Admin date schedule fetch error")
+        })
+        .then(data => setDateSchedule(data))
+        .catch(error => console.log(error))
+    }
+
+    // filter full schedule and get appointments that share
+    // the same date as calendar date
+    const filterDates = () => {
+        const _options = [...options].filter(freeDate => {
+            const _date = moment(freeDate.date)
+            return date.year == _date.year() && date.month == _date.month() 
+                && date.day == _date.date()
+        })
+
+        return _options
+    }
+
+    // fetch schedule on page load
     useEffect(() => {
         fetchSchedule()
     }, [])
 
+    // fetch day schedule on date change
     useEffect(() => {
-        const fetch = async () => {
-            const _date = moment(date).format("YYYY-MM-DD")
-            setIsLoading(true)
-
-            authFetch(`${backend_url}/schedule/calendar?date=${_date}`,{
-                method: "GET"
-            })
-            .then(response => {
-                if(response.ok){
-                    return response.json()
-                }
-
-                throw new Error("Schedule calendar fetch error")
-            })
-            .then(data => {
-                setDateOptions(data)
-            })
-            .catch(error => console.log(error))
-            setIsLoading(false)
-        }
-
-        if(!date){
-            return 
-        }
-
-        fetch()
+        fetchDateSchedule()
+        setSelectedAppointment(null)
     }, [date])
 
-
-    // format calendar to show only days with free schedule dates
+    // format calendar to show only days with appointed schedule dates
     const formatCalendar = ({year, month, day}) => {
         const dates = [...options].map(({date}) => date)
         const filteredDates = dates.filter(freeDate => {
@@ -80,50 +89,63 @@ export default function Planning(){
         return filteredDates.length > 0
     }
 
+    const onChange = async () => {
+        await fetchSchedule()
+        await fetchDateSchedule()
+    }
 
-    return(
-        <BaseContainer light>
-            <BaseTitle>
-                Планування
-            </BaseTitle>
-
-            {isLoading ?
-                <LoadSpinner />
-                :
-                <Row
-                    lg={2} sm={1} xs={1}
-                    className="my-5 p-0 w-100 align-items-start justify-content-center"
+    return (
+        <Container style={{minHeight: "100vh", height: "fit-content", backgroundColor: "var(--bs-gray-100)"}} className="p-0" fluid>
+            <Row
+                xl={2} lg={2} sm={1} xs={1}
+                className="m-0 p-0"
+            >
+                <Col
+                    xl={4} lg={6} sm={12} xs={12}
+                    className="m-0 p-0 admin-planning-calendar-side"
                 >
-                    <Col 
-                        lg={6} sm={12} xs={12}
-                        style={{maxWidth: "400px"}} 
-                        className="mb-5 mt-lg-5 mt-0 p-0 d-flex justify-content-center"
-                    >
-                        <Calendar onChange={setDate} format={formatCalendar}/>
-                    </Col>
+                    <SideFilters onChange={setDate} format={formatCalendar}/>
+                </Col>
 
-                    <Col
-                        lg={8} sm={12} xs={12}
-                        className="my-sm-5 my-3 px-5"
-                    >
-                        <Row
-                            lg={2} sm={1} xs={1}
-                            className="m-0 p-0 align-items-start justify-content-center"
-                        >
-                            {dateOptions ?
-                                Object.values(dateOptions).map((value) => 
-                                    <Col lg={6} sm={12} xs={12} className="m-0 p-3">
-                                        <DateCard date={value}/>
-                                    </Col>
-                                )
-                                :
-                                <h1>Виберіть дати, на які можна буде записатися</h1>
-                            }
-                        </Row>
-                    </Col>
-                </Row>
-            }
-        </BaseContainer>
+                <Col
+                    xl={8} lg={6} sm={12} xs={12}
+                    className="m-0 p-0 admin-planning-calendar-main"
+                    style={{backgroundColor: "var(--bs-gray-100)"}}
+                >
+                    <Container className="p-0">
+                        {date ? 
+                            <p className="py-3 px-0 m-0 text-center text-muted fs-4 fw-semibold border-bottom border-muted">
+                                {formatJSONDate(date)}
+                            </p>
+                            :
+                            <></>
+                        }
+                        {dateSchedule ?
+                            <Row xl={2} sm={1} xs={1} className="m-0 p-0">
+                                <Col 
+                                    xl={6} sm={12} xs={12} className="p-0 admin-planning-calendar-main-side"
+                                >
+                                    {Object.values(dateSchedule).map((_date, idx) =>
+                                        <DateCard key={idx} date={_date} onChange={onChange} onSelect={setSelectedAppointment}/>
+                                    )}
+                                </Col>
+                                <Col 
+                                    xl={6} sm={12} xs={12} 
+                                    className="p-0 py-5 admin-planning-calendar-main-appointment"
+                                >
+                                    <AppointmentContainer 
+                                        appointment={selectedAppointment} 
+                                        onChange={onChange}
+                                        setAppointment={setSelectedAppointment}
+                                    />
+                                </Col>
+                            </Row>
+                            :
+                            <h1></h1>
+                        }
+                    </Container>
+                </Col>
+            </Row>
+        </Container>
     )
 }
-

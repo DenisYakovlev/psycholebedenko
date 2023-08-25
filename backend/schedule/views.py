@@ -32,7 +32,7 @@ class ScheduleListDay(APIView):
 
             schedule = Schedule.objects.filter(date__range=[start_date, end_date])
             return schedule
-        except Schedule.DoesNotExist:
+        except:
             raise Http404
         
     def convertScheduleDate(self, date):

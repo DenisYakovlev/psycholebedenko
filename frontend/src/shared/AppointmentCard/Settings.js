@@ -34,7 +34,11 @@ export default function Settings({appointment, onChange, onDelete}){
 
     const handleDelete = () => {
         authFetch(`${backend_url}/appointment/${appointment.id}`, {
-            method: "DELETE"
+            method: "PUT",
+            body: JSON.stringify({status: "denied", date: ""}),
+            headers: {
+                "Content-type": "Application/json"
+            }
         })
         .then(response => {
             if(response.ok){
@@ -82,11 +86,11 @@ export default function Settings({appointment, onChange, onDelete}){
         <Dropdown>
             <Dropdown.Toggle  as={FontAwesomeIcon} style={{cursor: "pointer"}} icon={faEllipsis} />
             <Dropdown.Menu align="end">
-                <Dropdown.Item onClick={_handleUpdate} disabled={appointment.outdated}>
+                <Dropdown.Item onClick={_handleUpdate} disabled={appointment.outdated || appointment.status == "denied"}>
                     <FontAwesomeIcon style={{width: "16px", cursor: "pointer"}} className="pe-1" icon={faGear}/>
                     Редагувати дату
                 </Dropdown.Item>
-                {isStaff ?
+                {isStaff && appointment.date?.date ?
                     <Dropdown.Item onClick={_handleStatusUpdate} disabled={appointment.outdated}>
                         <FontAwesomeIcon style={{width: "16px", cursor: "pointer"}} className="pe-1" icon={faCircleNotch}/>
                         Редагувати статус
@@ -94,9 +98,9 @@ export default function Settings({appointment, onChange, onDelete}){
                     :
                     <></>
                 }
-                <Dropdown.Item onClick={_handleDelete} disabled={appointment.outdated}>
+                <Dropdown.Item onClick={_handleDelete} disabled={appointment.outdated || appointment.status == "denied"}>
                     <FontAwesomeIcon style={{width: "16px", cursor: "pointer"}} className="pe-1" icon={faXmark}/>
-                    Видалити
+                    Відмінити
                 </Dropdown.Item>
             </Dropdown.Menu>
 

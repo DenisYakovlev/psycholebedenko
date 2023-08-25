@@ -23,12 +23,12 @@ export default function CardBody({appointment}){
 
                 <Card.Text className="m-0 p-0 fs-6">
                     <FontAwesomeIcon icon={faCalendarDays} style={{width: "16px"}} className="pe-2"/>
-                    {formatOnlyDate(appointment.date.date)}
+                    {appointment.date?.date ? formatOnlyDate(appointment.date.date): "Відмінено"}
                 </Card.Text>
 
                 <Card.Text className="m-0 p-0 fs-6">
                     <FontAwesomeIcon icon={faClock} style={{width: "16px"}} className="pe-2"/>
-                    {formatTime((appointment.date.date))}
+                    {appointment.date?.date ? formatTime(appointment.date.date): "Відмінено"}
                 </Card.Text>
 
                 {

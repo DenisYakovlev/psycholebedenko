@@ -8,10 +8,10 @@ export default function CardHeader({appointment, onChange, onDelete}){
     return (
         <Container className="m-0 p-0 d-flex justify-content-between align-items-center">
             <Card.Text className="m-0 p-0 text-muted fs-6">
-                {appointment.outdated ? 
+                {!appointment.date?.date || appointment.outdated ? 
                     "Вже пройшло"
                     :
-                    `Через ${timeDiff(appointment.date.date)}`
+                    `Через ${timeDiff(appointment.date?.date)}`
                 }
             </Card.Text>
 

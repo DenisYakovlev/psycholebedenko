@@ -3,16 +3,12 @@ import { useState, useEffect } from "react"
 
 
 export default function MonthCarousel({currYear, setCurrYear, currMonth, setCurrMonth}){
-    const [index, setIndex] = useState()
+    const [index, setIndex] = useState(currMonth)
 
     const monthes = [
         "Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень",
         "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"
     ]
-
-    useEffect(() => {
-        setIndex(currMonth)
-    }, [])
 
     const handleSelect = selectedIndex => {
         if(index == 11 && selectedIndex == 0){

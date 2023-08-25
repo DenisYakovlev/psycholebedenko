@@ -1,27 +1,96 @@
-import { useEffect, useState } from "react"
 import Card from "react-bootstrap/Card"
-import { formatDate } from "../../../utils"
 import Container from "react-bootstrap/Container"
+import Button from "react-bootstrap/Button"
+import { backend_url } from "../../../../constants"
+import { useContext, useState } from "react"
+import { UserContext } from "../../../../contexts"
 
 
-export default function DateCard({date}){
-    const [status, setStatus] = useState("") 
-    
+export default function DateCard({date, onChange, onSelect}){
+    const {authFetch} = useContext(UserContext)
+
+    const handleAppointmentUpdate = () => {
+        if(date.schedule?.appointment){
+            onSelect(date.schedule.appointment)
+        }
+        else{
+            onSelect(null)
+        }
+    }
+
+    const handleActivate = async () => {
+        await authFetch(`${backend_url}/schedule/create`, {
+            method: "POST",
+            body: JSON.stringify([{
+                date: date.date
+            }]),
+            headers: {
+                "Content-type": "Application/json"
+            }
+        })
+        .then(response => {
+            if(response.ok){
+                onChange()
+                return 
+            }
+
+            throw new Error("Admin schedule create error")
+        })
+        .catch(error => console.log(error))
+    }
+
+    const handleDeactivate = async () => {
+        await authFetch(`${backend_url}/schedule/${date.schedule.id}`, {
+            method: "DELETE",
+        })
+        .then(response => {
+            if(response.ok){
+                onChange()
+                return 
+            }
+
+            throw new Error("Admin schedule delete error")
+        })
+        .catch(error => console.log(error))
+    }
 
     return (
         <Card
-            bg="light" data-bg-theme="light"
-            className="m-0 p-0 shadow border-dark"
+            bg="light" data-bs-theme="theme"
+            className="m-0 p-3 rounded-0 border-0 border-bottom border-muted"
         >
-            <Card.Body
-                className="m-0 px-3 d-flex flex-column gap-3"
-            >
-                <Card.Text className="m-0 p-0 fs-4 text-dark fw-semibold">
+            <Card.Body className="m-0 p-0 d-flex flex-column">
+                <Card.Text
+                    onClick={handleAppointmentUpdate}
+                    style={{cursor: "pointer"}}
+                    className="m-0 p-0 fs-5 text-muted fw-semibold"
+                >
                     {date.time}
                 </Card.Text>
-                <Container className="m-0 p-0 d-flex justify-content-between">
-                    <Card.Text className="m-0 p-0 fs-4 text-muted fw-semibold">
+
+                <Container className="p-0 d-flex justify-content-between align-items-center">
+                    <Card.Text
+                        style={{color: date.schedule ? date.schedule.appointment ? "var(--bs-danger)" : "var(--bs-primary)" : "var(--bs-muted)"}} 
+                        className="m-0 p-0 fs-3"
+                    >
+                        {date.schedule ? date.schedule.appointment ? "Занято": "Доступно" : "Пусто"}
                     </Card.Text>
+                    {date.schedule ?
+                        <Button 
+                            onClick={handleDeactivate}
+                            variant="outline-dark align-self-center" 
+                            size="sm" disabled={date.schedule?.appointment}
+                        >
+                            Деактивувати
+                        </Button>
+                        :
+                        <Button 
+                            onClick={handleActivate}
+                            variant="outline-dark align-self-center" size="sm"
+                        >
+                            Активувати
+                        </Button>
+                    }
                 </Container>
             </Card.Body>
         </Card>

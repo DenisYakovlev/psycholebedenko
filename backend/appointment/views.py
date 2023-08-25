@@ -107,7 +107,9 @@ class AppointmentDetail(APIView):
 
             # another serializer is used to serialize nested schedule object
             # and return date instead of date.id to client
-            _serializer = AppointmentListSerializer(instance=appointment)
+            _serializer = AppointmentListSerializer(instance=appointment) \
+                            if request.user.is_staff \
+                            else AppointmentSerializer(instance=appointment)
             return Response(_serializer.data, status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

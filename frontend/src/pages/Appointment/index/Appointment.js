@@ -55,8 +55,17 @@ export default function Appointment(){
     }
 
     const handleDelete = appointemnt => {
-        let _appointments = [...appointments]
-        _appointments.splice(_appointments.findIndex(a => a.id == appointemnt.id), 1)
+        // use this if appointment needs to be deleted from collection
+        // let _appointments = [...appointments]
+        // _appointments.splice(_appointments.findIndex(a => a.id == appointemnt.id), 1)
+
+        const _appointments = [...appointments].map(_appointemnt => {
+            if(_appointemnt.id == appointemnt.id){
+                return appointemnt
+            }
+            return _appointemnt
+        })
+
         setAppointments(_appointments)
     }
 
@@ -70,7 +79,7 @@ export default function Appointment(){
                 <LoadSpinner />
                 :
                 <Container 
-                    style={{maxWidth: "100vw", minWidth: "350px", width: "1200px"}} 
+                    style={{maxWidth: "100vw", maxWidth: "320px", width: "1200px"}} 
                     className="m-0 p-0 py-5 align-self-center d-flex flex-column justify-content-center align-items-center gap-3" fluid
                 >
                     <Row 
@@ -78,11 +87,11 @@ export default function Appointment(){
                         lg={4} md={3} sm={1} xs={1} 
                         className="m-0 p-0 justify-content-around align-items-center gap-3"
                     >
-                        <Col lg={3} md={4} sm={6} xs={10} className="mt-3 p-0 fade-in-card">
+                        <Col lg={3} md={4} sm={6} xs={10} className="mt-3 p-0 d-flex justify-content-center fade-in-card">
                             <CreateCard />
                         </Col>
                         {appointments.map(appointment => 
-                            <Col key={appointment.id} lg={3} md={4} sm={6} xs={10} className="mt-3 p-0 fade-in-card">
+                            <Col key={appointment.id} lg={3} md={4} sm={6} xs={10} className="mt-3 p-0 fade-in-card d-flex justify-content-center">
                                 <AppointmentCard 
                                     appointment={appointment} 
                                     onChange={_appointment => handleChange(_appointment)}
