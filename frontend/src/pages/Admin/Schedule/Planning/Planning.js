@@ -6,6 +6,7 @@ import { useState, useEffect, useContext } from "react"
 import { backend_url } from "../../../../constants"
 import { UserContext } from "../../../../contexts"
 import { formatJSONDate } from "../../../utils"
+import { BasePageLayout, BaseLayoutTitle, TwoSideLayout } from "../../Components"
 import DateCard from "./DateCard"
 import AppointmentContainer from "./AppointmentContainer"
 import "./styles.css"
@@ -95,31 +96,19 @@ export default function Planning(){
     }
 
     return (
-        <Container style={{minHeight: "100vh", height: "fit-content", backgroundColor: "var(--bs-gray-100)"}} className="p-0" fluid>
-            <Row
-                xl={2} lg={2} sm={1} xs={1}
-                className="m-0 p-0"
-            >
-                <Col
-                    xl={4} lg={6} sm={12} xs={12}
-                    className="m-0 p-0 admin-planning-calendar-side"
-                >
+        <BasePageLayout>
+            <TwoSideLayout>
+                <TwoSideLayout.Side>
                     <SideFilters onChange={setDate} format={formatCalendar}/>
-                </Col>
-
-                <Col
-                    xl={8} lg={6} sm={12} xs={12}
-                    className="m-0 p-0 admin-planning-calendar-main"
-                    style={{backgroundColor: "var(--bs-gray-100)"}}
-                >
+                </TwoSideLayout.Side>
+                
+                <TwoSideLayout.Main>
                     <Container className="p-0">
-                        {date ? 
-                            <p className="py-3 px-0 m-0 text-center text-muted fs-4 fw-semibold border-bottom border-muted">
-                                {formatJSONDate(date)}
-                            </p>
-                            :
-                            <></>
-                        }
+                        
+                        <BaseLayoutTitle>
+                            {date ? formatJSONDate(date): "Графік | Консультації"}
+                        </BaseLayoutTitle>
+
                         {dateSchedule ?
                             <Row xl={2} sm={1} xs={1} className="m-0 p-0">
                                 <Col 
@@ -144,8 +133,8 @@ export default function Planning(){
                             <h1></h1>
                         }
                     </Container>
-                </Col>
-            </Row>
-        </Container>
+                </TwoSideLayout.Main>
+            </TwoSideLayout>
+        </BasePageLayout>
     )
 }

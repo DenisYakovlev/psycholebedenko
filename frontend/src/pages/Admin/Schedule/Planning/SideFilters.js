@@ -1,5 +1,6 @@
 import Container from "react-bootstrap/Container";
 import { Calendar } from "../../../../shared";
+import { BaseLayoutTitle } from "../../Components";
 
 
 export default function SideFilters({onChange, format}){
@@ -7,9 +8,9 @@ export default function SideFilters({onChange, format}){
         <Container 
             className="p-0" fluid
         >
-            <p className="py-3 px-0 m-0 text-center text-muted fs-4 fw-semibold border-bottom border-muted">
+            <BaseLayoutTitle>
                 Оберіть дату
-            </p>
+            </BaseLayoutTitle>
 
             <Container style={{maxWidth: "450px"}} className="my-5 mx-auto px-3" fluid>
                 <Calendar onChange={onChange} format={format}/>

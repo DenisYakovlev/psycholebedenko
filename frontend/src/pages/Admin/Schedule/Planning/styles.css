@@ -1,12 +1,3 @@
-.admin-planning-calendar-side{
-    min-height: 100vh;
-    height: fit-content;
-    background-color: var(--bs-gray-100);
-    border-right: solid 2px var(--bs-gray-400);
-    position: sticky;
-    top: 0;
-}
-
 .admin-planning-calendar-main-side{
     border-right: solid 2px var(--bs-gray-400);
 }
@@ -15,15 +6,6 @@
     height: fit-content;
     position: sticky;
     top: 0;
-}
-
-@media screen and (max-width: 992px){
-    .admin-planning-calendar-side{
-        min-height: 100%;
-        border-right: none;
-        border-bottom: solid 1px var(--bs-gray-400);
-        position: relative !important;
-    }
 }
 
 @media screen and (max-width: 1200px){

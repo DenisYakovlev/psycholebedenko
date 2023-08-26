@@ -4,6 +4,8 @@ import time
 from django.conf import settings
 from django.http import HttpResponse
 from django.http import Http404
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import status
 from rest_framework.response import Response
@@ -19,15 +21,12 @@ from event.models import Event, Participation
 from event.serializers import EventListSerializer
 
 
-class UserList(APIView, LimitOffsetPagination):
+class UserList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
-
-    def get(self, request):
-        user = TelegramUser.objects.all()
-
-        results = self.paginate_queryset(user, request, view=self)
-        serializer = TelegramUserSerializer(results, many=True)
-        return self.get_paginated_response(serializer.data)
+    queryset = TelegramUser.objects.all()
+    serializer_class = TelegramUserSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['phone_number', 'username']
 
 
 class UserInfo(APIView):

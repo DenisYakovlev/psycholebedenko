@@ -35,7 +35,7 @@ export default function SideMenuBody({onHide=null}){
                 </AccordionToggle>
 
                 <AccordionBody>
-                    <AccordionBodyItem onClick={onHide} to="#">
+                    <AccordionBodyItem onClick={onHide} to="/admin/users/">
                         Список Користувачів
                     </AccordionBodyItem>
 

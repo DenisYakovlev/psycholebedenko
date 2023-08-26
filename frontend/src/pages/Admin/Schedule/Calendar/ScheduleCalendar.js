@@ -7,7 +7,7 @@ import SideCalendar from "./SideCalendar"
 import { formatJSONDate } from "../../../utils"
 import { backend_url } from "../../../../constants"
 import { UserContext } from "../../../../contexts"
-import "./styles.css"
+import { TwoSideLayout, BasePageLayout, BaseLayoutTitle } from "../../Components"
 const moment = require("moment")
 
 
@@ -88,34 +88,22 @@ export default function ScheduleCalendar(){
 
 
     return (
-        <Container style={{minHeight: "100vh", height: "fit-content"}} className="p-0" fluid>
-            <Row
-                xl={2} lg={2} sm={1} xs={1}
-                className="m-0 p-0"
-            >
-                <Col
-                    xl={4} lg={6} sm={12} xs={12}
-                    className="m-0 p-0 admin-schedule-calendar-side"
-                >
+        <BasePageLayout>
+            <TwoSideLayout>
+                <TwoSideLayout.Side>
                     <SideCalendar onChange={setDate} format={formatCalendar}/>
-                </Col>
+                </TwoSideLayout.Side>
 
-                <Col
-                    xl={8} lg={6} sm={12} xs={12}
-                    className="m-0 p-0 admin-schedule-calendar-main"
-                    style={{backgroundColor: "var(--bs-gray-100)"}}
-                >
+                <TwoSideLayout.Main>
                     <Container className="p-0">
-                        {date ? 
-                            <p className="py-3 px-0 m-0 text-center text-muted fs-4 fw-semibold border-bottom border-muted">
-                                {formatJSONDate(date)}
-                            </p>
-                            :
-                            <></>
-                        }
+
+                        <BaseLayoutTitle>
+                            {date ? formatJSONDate(date): "Консультації"}
+                        </BaseLayoutTitle>
+
                         {dateOptions.length > 0 ?
                             <Row
-                                className=" m-0 my-3 px-3 justify-content-center"
+                                className="m-0 my-3 px-3 justify-content-center"
                             >
                                 {[...dateOptions].map(option => 
                                     <Col
@@ -135,8 +123,8 @@ export default function ScheduleCalendar(){
                             <></>
                         }
                     </Container>
-                </Col>
-            </Row>
-        </Container>
+                </TwoSideLayout.Main>
+            </TwoSideLayout>
+        </BasePageLayout>
     )
 }

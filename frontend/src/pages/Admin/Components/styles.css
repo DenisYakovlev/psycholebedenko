@@ -1,4 +1,4 @@
-.admin-schedule-calendar-side{
+.two-side-layout-side{
     min-height: 100vh;
     height: fit-content;
     background-color: var(--bs-gray-100);
@@ -7,13 +7,13 @@
     top: 0;
 }
 
-.admin-schedule-calendar-main{
+.two-side-layout-main{
     min-height: 100vh;
     height: fit-content;
 }
 
 @media screen and (max-width: 992px){
-    .admin-schedule-calendar-side{
+    .two-side-layout-side{
         min-height: 100%;
         border-right: none;
         border-bottom: solid 1px var(--bs-gray-400);
