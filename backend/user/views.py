@@ -1,5 +1,7 @@
 import os
 import time
+import pytz
+from datetime import datetime
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -50,11 +52,23 @@ class UserInfo(APIView):
 @permission_classes([IsAuthenticated])
 def UserAppointments(request):
     try:
-        appointments = Appointment.objects.filter(user=request.user)
+        queryset = Appointment.objects.order_by('date__date').filter(user=request.user)
+
+        if 'status' in request.query_params:
+            _status = request.query_params.get('status').split(',')
+            queryset = queryset.filter(status__in=_status)
+        if 'outdated' in request.query_params:
+            _outdated = request.query_params.get('outdated') == "true"
+            tz = pytz.timezone(settings.TIME_ZONE)
+            now = datetime.now(tz=tz)
+
+            if not _outdated:
+                queryset = queryset.filter(date__date__gt=now)
+
     except:
         return Response({}, status.HTTP_200_OK)
     
-    serializer = AppointmentSerializer(appointments, many=True)
+    serializer = AppointmentSerializer(queryset, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
 @api_view(["GET"])

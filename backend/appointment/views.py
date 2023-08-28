@@ -1,5 +1,5 @@
 import pytz
-import datetime
+from datetime import datetime
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -18,13 +18,29 @@ class AppointmentList(APIView):
     permission_classes = [IsAdminUser]
     
     def get_queryset(self):
-        queryset = Appointment.objects.order_by('date__date')
+        queryset = Appointment.objects.order_by('date__date').all()
 
         try:
-            status = self.request.query_params.get('status').split(',')
-            return queryset.filter(status__in=status)
+            if 'user' in self.request.query_params:
+                _user = self.request.query_params.get('user')
+                queryset = queryset.filter(user=_user)
+
+            if 'status' in self.request.query_params:
+                _status = self.request.query_params.get('status').split(',')
+                queryset = queryset.filter(status__in=_status)
+
+            if 'outdated' in self.request.query_params:
+                _outdated = self.request.query_params.get('outdated') == "1"
+                tz = pytz.timezone(settings.TIME_ZONE)
+                now = datetime.now(tz=tz)
+
+                if not _outdated:
+                    queryset = queryset.filter(date__date__gt=now)
+
+            return queryset
         except:
-            return queryset.all()
+            return queryset
+
     
     def get(self, request):
         appointments = self.get_queryset()

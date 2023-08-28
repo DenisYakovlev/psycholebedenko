@@ -13,7 +13,8 @@ import {
   Admin,
   ScheduleCalendar,
   Planning,
-  Users
+  Users,
+  Appointments
 } from './pages';
 
 import { BotLayout, MainLayout, AdminLayout } from './layouts';
@@ -66,6 +67,9 @@ export default function App(){
                   </Route>
                   <Route path="users">
                     <Route index element={<Users />}/>
+                  </Route>
+                  <Route path="appointments">
+                    <Route index element={<Appointments />}/>
                   </Route>
                 </Route>
 

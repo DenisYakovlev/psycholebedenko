@@ -8,28 +8,23 @@ import { faEllipsis, faGear, faXmark, faCircleNotch } from "@fortawesome/free-so
 import DeleteModal from "./DeleteModal"
 import UpdateModal from "./UpdateModal"
 import StatusModal from "./StatusModal"
+import jwt_decode from "jwt-decode";
 
 
 export default function Settings({appointment, onChange, onDelete}){
-    const {authFetch} = useContext(UserContext)
+    const {authFetch, user} = useContext(UserContext)
     const [isStaff, setIsStaff] = useState(false)
     const [deleteModalShow, setDeleteModalShow] = useState(false)
     const [updateModalShow, setUpdateModalShow] = useState(false)
     const [statusModalShow, setStatusModalShow] = useState(false)
 
     useEffect(() => {
-        authFetch(`${backend_url}/user/me`, {
-            "method": "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
+        if(!user){
+            return
+        }
 
-            throw new Error("Appointment Card user fetch error")
-        })
-        .then(user => setIsStaff(user.is_staff))
-        .catch(error => console.log(error))
+        const decodedToken = jwt_decode(user.access)
+        setIsStaff(decodedToken.is_staff)
     }, [])
 
     const handleDelete = () => {

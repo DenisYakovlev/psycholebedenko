@@ -8,7 +8,7 @@ import { faUser, faUsers, faCalendarDays, faComments } from "@fortawesome/free-s
 
 export default function SideMenuBody({onHide=null}){
     return (
-        <Accordion defaultActiveKey="0">
+        <Accordion>
             <AccordionItem eventKey="0">
                 <AccordionToggle eventKey="0" bordered={false} icon={faCalendarDays}>
                         <p className="m-0 px-3 text-muted fs-4">
@@ -47,7 +47,7 @@ export default function SideMenuBody({onHide=null}){
             </Accordion.Item>
 
             <Accordion.Item className="border-0 rounded-0" eventKey="2">
-                <AccordionToggle eventKey="2" icon={faUsers}>
+                <AccordionToggle eventKey="2" icon={faUsers} >
                     <p className="m-0 px-3 text-muted fs-4">
                         Івенти
                     </p>
@@ -70,14 +70,14 @@ export default function SideMenuBody({onHide=null}){
             </Accordion.Item>
 
             <Accordion.Item className="border-0 rounded-0" eventKey="3">
-                <AccordionToggle eventKey="3" icon={faComments}>
+                <AccordionToggle eventKey="3" icon={faComments} >
                     <p className="m-0 px-3 text-muted fs-4">
                         Консультації
                     </p>
                 </AccordionToggle>
 
                 <AccordionBody>
-                    <AccordionBodyItem onClick={onHide} to="#">
+                    <AccordionBodyItem onClick={onHide} to="/admin/appointments/">
                         Список консультацій
                     </AccordionBodyItem>
 
