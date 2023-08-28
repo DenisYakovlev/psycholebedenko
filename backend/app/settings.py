@@ -38,6 +38,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://api.psycholebedenko.online'
 ]
 
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", os.getenv('SSL_HEADER'))
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -86,7 +88,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
-    "REFRESH_TOKEN_LIFETIME": timedelta(weeks=10),
+    "REFRESH_TOKEN_LIFETIME": timedelta(weeks=40),
     
     "AUTH_HEADER_TYPES": ("Bearer",),
     "TOKEN_OBTAIN_SERIALIZER": "authorization.serializers.PasswordlessTokenObtainPairSerializer",

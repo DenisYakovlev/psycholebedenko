@@ -1,3 +1,5 @@
+const moment = require("moment")
+
 const monthsUkr = [
     "Січня", "Лютого", "Березня", "Квітня", "Травня", "Червня",
     "Липня", "Серпня", "Вересня", "Жовтня", "Листопада", "Грудня"
@@ -7,6 +9,28 @@ const daysUkr = [
     "Нед", "Пнд", "Втр", "Срд", "Чтв", "Птн", "Суб"
 ];
 
+// {day: 30, month: 7, year: 2050} to "2050-08-30"
+export const formatCalendarDate = date => {
+    return moment(date).format("YYYY-MM-DD")
+}
+
+export const pretifyCalendarDate = date => {
+    const _date = moment(date, 'YYYY-MM-DD');
+    const translatedDay = daysUkr[_date.day()];
+    const translatedMonth = monthsUkr[_date.month()];
+
+    return `${translatedDay}, ${_date.date()} ${translatedMonth}`
+}
+
+// "2050-08-30" to {day: 30, month: 7, year: 2050}
+export const reverseFormatCalendarDate = date => {
+    const parsedDate = moment(date, 'YYYY-MM-DD');
+    return {
+        day: parsedDate.date(),
+        month: parsedDate.month(),
+        year: parsedDate.year()
+    }
+}
 
 export const formatJSONDate = (date) => {
     const dayOfWeek = daysUkr[new Date(date.year, date.month, date.day).getDay()];

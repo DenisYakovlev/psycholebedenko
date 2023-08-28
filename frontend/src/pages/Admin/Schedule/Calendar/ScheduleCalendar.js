@@ -4,16 +4,17 @@ import Container from "react-bootstrap/esm/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import SideCalendar from "./SideCalendar"
-import { formatJSONDate } from "../../../utils"
+import { formatCalendarDate, reverseFormatCalendarDate, pretifyCalendarDate } from "../../../utils"
 import { backend_url } from "../../../../constants"
 import { UserContext } from "../../../../contexts"
 import { TwoSideLayout, BasePageLayout, BaseLayoutTitle } from "../../Components"
+import { useQueryParam, StringParam} from 'use-query-params';
 const moment = require("moment")
 
 
 export default function ScheduleCalendar(){
     const {authFetch} = useContext(UserContext)
-    const [date, setDate] = useState(null)
+    const [date , setDate] = useQueryParam('date', StringParam)
     const [options, setOptions] = useState([])
     const [dateOptions, setDateOptions] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -39,8 +40,9 @@ export default function ScheduleCalendar(){
     const filterDates = () => {
         const _options = [...options].filter(freeDate => {
             const _date = moment(freeDate.date)
-            return date.year == _date.year() && date.month == _date.month() 
-                && date.day == _date.date()
+            const calendarDate = reverseFormatCalendarDate(date)
+            return calendarDate.year == _date.year() && calendarDate.month == _date.month() 
+                && calendarDate.day == _date.date()
         })
 
         return _options
@@ -76,29 +78,36 @@ export default function ScheduleCalendar(){
         return filteredDates.length > 0
     }
 
-    // update values by refeching schedule
+    // update values by refeshing schedule
     const handleChange = () => {
         fetchSchedule()
     }
 
-    // update values by refeching schedule
+    // update values by refeshing schedule
     const handleDelete = () => {
         fetchSchedule()
     }
 
+    // calendar sets date value like {date: 30, month: 6, year:2050}
+    // to make it more approachable with query params, use formatCalendarDate
+    // that formats json type date to "2050-06-30"
+    const _setDate = calendarDate => {
+        const _date = formatCalendarDate(calendarDate)
+        setDate(_date)
+    }
 
     return (
         <BasePageLayout>
             <TwoSideLayout>
                 <TwoSideLayout.Side>
-                    <SideCalendar onChange={setDate} format={formatCalendar}/>
+                    <SideCalendar onChange={_setDate} format={formatCalendar}/>
                 </TwoSideLayout.Side>
 
                 <TwoSideLayout.Main>
                     <Container className="p-0">
 
                         <BaseLayoutTitle>
-                            {date ? formatJSONDate(date): "Консультації"}
+                            {date ? pretifyCalendarDate(date) : "Консультації"}
                         </BaseLayoutTitle>
 
                         {dateOptions.length > 0 ?

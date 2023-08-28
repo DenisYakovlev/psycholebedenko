@@ -9,13 +9,9 @@ import { UserContext } from "../../../../contexts"
 export default function DateCard({date, onChange, onSelect}){
     const {authFetch} = useContext(UserContext)
 
-    const handleAppointmentUpdate = () => {
-        if(date.schedule?.appointment){
-            onSelect(date.schedule.appointment)
-        }
-        else{
-            onSelect(null)
-        }
+    const handleSelect = event => {
+        event.target = document.getElementById(`admin-date-card-${date.time}`)
+        onSelect(event, date)
     }
 
     const handleActivate = async () => {
@@ -58,10 +54,11 @@ export default function DateCard({date, onChange, onSelect}){
         <Card
             bg="light" data-bs-theme="theme"
             className="m-0 p-3 rounded-0 border-0 border-bottom border-muted"
+            id={`admin-date-card-${date.time}`}
         >
             <Card.Body className="m-0 p-0 d-flex flex-column">
                 <Card.Text
-                    onClick={handleAppointmentUpdate}
+                    onClick={e => handleSelect(e)}
                     style={{cursor: "pointer"}}
                     className="m-0 p-0 fs-5 text-muted fw-semibold"
                 >

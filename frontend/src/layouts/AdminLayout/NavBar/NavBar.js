@@ -18,7 +18,7 @@ export default function NavBar(){
             }}
             className="m-0 p-0 position-relative justify-content-between" 
             bg="white" 
-            fixed="top" 
+            fixed="top"
             expand="md"
         >
             <Navbar.Toggle onClick={() => setShowMenu(true)} className="ms-2"/>

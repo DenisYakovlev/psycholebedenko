@@ -18,11 +18,11 @@ export default function SideMenuBody({onHide=null}){
 
                     <AccordionBody>
                         <AccordionBodyItem onClick={onHide} to="/admin/schedule/calendar">
-                            Календар
+                            Графік Консультацій
                         </AccordionBodyItem>
 
                         <AccordionBodyItem onClick={onHide} to="/admin/schedule/planning">
-                            Планування
+                            Планування Графіку
                         </AccordionBodyItem>
                     </AccordionBody>
             </AccordionItem>
