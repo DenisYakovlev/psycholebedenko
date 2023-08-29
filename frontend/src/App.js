@@ -14,7 +14,8 @@ import {
   ScheduleCalendar,
   Planning,
   Users,
-  Appointments
+  Appointments,
+  Assign
 } from './pages';
 
 import { BotLayout, MainLayout, AdminLayout } from './layouts';
@@ -70,6 +71,7 @@ export default function App(){
                   </Route>
                   <Route path="appointments">
                     <Route index element={<Appointments />}/>
+                    <Route path="assign" element={<Assign />}/>
                   </Route>
                 </Route>
 

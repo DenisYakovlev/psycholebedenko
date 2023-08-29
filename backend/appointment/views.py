@@ -50,9 +50,9 @@ class AppointmentList(APIView):
     
     def post(self, request):
         try:
-            user_phone = request.data["user"]
-            user = TelegramUser.objects.filter(phone_number=user_phone).first()
-            request.data['user'] = user
+            # user_phone = request.data["user"]
+            # user = TelegramUser.objects.filter(phone_number=user_phone).first()
+            # request.data['user'] = user
 
             # only 5 pending appointments are allowed
             if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).count() > 5:

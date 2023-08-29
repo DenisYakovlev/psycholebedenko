@@ -60,7 +60,7 @@ export default function DatePicking({sumbitDate}){
                             onClick={() => sumbitDate(selectedDate)} className="mb-3 align-self-center calendar-button"
                             variant="outline-dark" size="md"
                         >
-                            Продовжити
+                            Вибрати
                         </Button>
                     </>
                     :

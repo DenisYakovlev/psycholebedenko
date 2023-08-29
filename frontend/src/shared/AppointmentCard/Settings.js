@@ -86,7 +86,7 @@ export default function Settings({appointment, onChange, onDelete}){
                     Редагувати дату
                 </Dropdown.Item>
                 {isStaff && appointment.date?.date ?
-                    <Dropdown.Item onClick={_handleStatusUpdate} disabled={appointment.outdated}>
+                    <Dropdown.Item onClick={_handleStatusUpdate} disabled={false}>
                         <FontAwesomeIcon style={{width: "16px", cursor: "pointer"}} className="pe-1" icon={faCircleNotch}/>
                         Редагувати статус
                     </Dropdown.Item>

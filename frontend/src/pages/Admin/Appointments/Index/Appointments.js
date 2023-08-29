@@ -41,7 +41,6 @@ export default function Appointments(){
         })
         .then(data => {
             setAppointments(data)
-            console.log(data)
         })
         .catch(error => console.log(error))
     }

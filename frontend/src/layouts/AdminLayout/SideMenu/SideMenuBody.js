@@ -38,10 +38,6 @@ export default function SideMenuBody({onHide=null}){
                     <AccordionBodyItem onClick={onHide} to="/admin/users/">
                         Список Користувачів
                     </AccordionBodyItem>
-
-                    <AccordionBodyItem onClick={onHide} to="#">
-                        Редагування
-                    </AccordionBodyItem>
                 </AccordionBody>
 
             </Accordion.Item>
@@ -78,14 +74,10 @@ export default function SideMenuBody({onHide=null}){
 
                 <AccordionBody>
                     <AccordionBodyItem onClick={onHide} to="/admin/appointments/">
-                        Список консультацій
+                        Список Консультацій
                     </AccordionBodyItem>
 
-                    <AccordionBodyItem onClick={onHide} to="#">
-                        Редагування
-                    </AccordionBodyItem>
-
-                    <AccordionBodyItem onClick={onHide} to="#">
+                    <AccordionBodyItem onClick={onHide} to="/admin/appointments/assign">
                         Записати Користувача
                     </AccordionBodyItem>
                 </AccordionBody>

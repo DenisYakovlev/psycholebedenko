@@ -1,5 +1,5 @@
 import { BaseLayoutTitle, UserSearchFilter } from "../../Components"
-import {FiltersAccordion, FiltersAccordionToggle} from "./FiltersAccordion"
+import {FiltersAccordion, FiltersAccordionToggle} from "../../Components/"
 import Container from "react-bootstrap/Container"
 import StatusFilter from "./StatusFilter"
 import DateFilters from "./DateFilters"

@@ -10,11 +10,13 @@ export default function LayoutMain({user}){
                 Вибраний Користувач
             </BaseLayoutTitle>
 
-            {user ?
-                <UserFullCard user={user}/>
-                :
-                <></>
-            }
+            <Container className="my-5 p-0 d-flex justify-content-center align-items-center">
+                {user ?
+                    <UserFullCard userId={user}/>
+                    :
+                    <></>
+                }
+            </Container>
         </Container>
     )  
 }

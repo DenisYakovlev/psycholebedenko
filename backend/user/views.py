@@ -17,7 +17,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from .models import TelegramUser
 from .serializers import TelegramUserSerializer, TelegramUserUpdateSerializer
-from appointment.serializers import AppointmentSerializer
+from appointment.serializers import AppointmentSerializer, AppointmentListSerializer
 from appointment.models import Appointment
 from event.models import Event, Participation
 from event.serializers import EventListSerializer
@@ -47,6 +47,38 @@ class UserInfo(APIView):
             return Response(serializer.validated_data, status.HTTP_200_OK)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+    
+
+class UserFull(APIView):
+    permission_classes =[IsAdminUser]
+
+    def get_object(self, id):
+        try:
+            user = TelegramUser.objects.get(id=id)
+            user_serializer = TelegramUserSerializer(user)
+
+            event_ids = Participation.objects.filter(user=user).values('event_id')
+            events = Event.objects.filter(id__in=event_ids)
+
+            appointments = Appointment.objects.order_by('date__date').filter(user=user)
+
+            return {
+                "user": user_serializer.data, 
+                "events": {
+                    "link": "#",
+                    "count": events.count()
+                },
+                "appointments": {
+                    "link": f"/admin/appointments/?state=1&user={user.id}",
+                    "count": appointments.count()
+                }
+            }
+        except:
+            raise Http404
+
+    def get(self, request, id):
+        return Response(self.get_object(id), status.HTTP_200_OK)
+    
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

@@ -60,7 +60,7 @@ export default function Planning(){
 
     // if time is specified, than show related appointment for that date and time
     useEffect(() => {
-        if(time && dateSchedule){
+        if(time && dateSchedule && !selectedAppointment){
             const target = document.getElementById(`admin-date-card-${time}`)
             handleDateSelect(target, dateSchedule[time])
         }

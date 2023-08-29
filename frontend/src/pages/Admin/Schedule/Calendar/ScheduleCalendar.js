@@ -21,7 +21,7 @@ export default function ScheduleCalendar(){
 
     // fetch schedule
     const fetchSchedule = async () => {
-        return await authFetch(`${backend_url}/schedule?status=appointed`, {
+        return await authFetch(`${backend_url}/schedule/?status=appointed`, {
             method: "GET"
         })
         .then(response => {
