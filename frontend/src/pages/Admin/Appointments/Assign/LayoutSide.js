@@ -13,7 +13,7 @@ export default function LayoutSide({users, setUsers, setSelectedUser}){
             <UserSearchFilter
                 users={users}
                 setUsers={setUsers}
-                setSelectedUser={user => setSelectedUser(user.id)}
+                setSelectedUser={setSelectedUser}
             />
         </Container>
     )

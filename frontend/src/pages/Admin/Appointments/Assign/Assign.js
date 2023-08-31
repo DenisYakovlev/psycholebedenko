@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { BasePageLayout, TwoSideLayout } from "../../Components"
-import { useQueryParam, StringParam } from "use-query-params"
+import { useQueryParam, JsonParam, StringParam } from "use-query-params"
 import LayoutSide from "./LayoutSide"
 import LayoutMain from "./LayoutMain"
 
@@ -16,7 +16,7 @@ export default function Assign(){
                     <LayoutSide 
                         users={users}
                         setUsers={setUsers}
-                        setSelectedUser={setSelectedUser}
+                        setSelectedUser={user => setSelectedUser(user.id)}
                     />
                 </TwoSideLayout.Side>
 

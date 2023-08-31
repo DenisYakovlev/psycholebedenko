@@ -9,6 +9,7 @@ import { useQueryParam, StringParam } from "use-query-params"
 import LayoutMain from "./LayoutMain"
 import DateCard from "./DateCard"
 import AppointmentContainer from "./AppointmentContainer"
+import AppointmentCreateCard from "./AppointmentCreateCard"
 import "./styles.css"
 const moment = require("moment")
 
@@ -21,6 +22,7 @@ export default function Planning(){
     const [date, setDate] = useQueryParam("date", StringParam)
     const [time, setTime] = useQueryParam("time", StringParam)
     let selectedTimeCard = useRef(null)
+    let dateIsFree = useRef(false)
 
     // fetch schedule
     const fetchSchedule = async () => {
@@ -104,7 +106,21 @@ export default function Planning(){
         selectedTimeCard.current.style.setProperty("border-right", "solid 5px #556080", "important")
 
         setTime(date.time)
-        setSelectedAppointment(date.schedule?.appointment)
+
+        if(date.schedule){
+            if(date.schedule?.appointment){
+                setSelectedAppointment(date.schedule?.appointment)
+                dateIsFree.current = false
+            }
+            else{
+                setSelectedAppointment(null)
+                dateIsFree.current = true
+            }
+        }
+        else{
+            dateIsFree.current = false
+        }
+
         window.scrollTo({top: target.getBoundingClientRect().top + window.scrollY})
     }
 
@@ -144,11 +160,18 @@ export default function Planning(){
                                     )}
                                 </LayoutMain.Schedule>
                                 <LayoutMain.Appointments>
-                                    <AppointmentContainer 
-                                        appointment={selectedAppointment} 
-                                        onChange={onChange}
-                                        setAppointment={setSelectedAppointment}
-                                    />
+                                    {selectedAppointment ?
+                                        <AppointmentContainer 
+                                            appointment={selectedAppointment} 
+                                            onChange={onChange}
+                                            setAppointment={setSelectedAppointment}
+                                        />
+                                        :
+                                        dateIsFree.current ?
+                                            <AppointmentCreateCard date={dateSchedule[time]}/>
+                                            :
+                                            <></>
+                                    }
                                 </LayoutMain.Appointments>
                             </LayoutMain>
                             :

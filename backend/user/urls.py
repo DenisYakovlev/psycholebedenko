@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserInfo, SendDefaultUserPhoto, UserAppointments, UserEvents, UserList, UserPhoto, SendSlowPhoto, UserPhone, UserFull
+from .views import UserInfo, SendDefaultUserPhoto, UserAppointments, UserEvents, UserList, UserPhoto, UserPhone, UserFull
 
 # Create your views here.
 

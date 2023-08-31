@@ -5,9 +5,9 @@ import Container from "react-bootstrap/Container"
 const CardLayout = ({children}) => {
     return (
         <Card
-            style={{maxWidth: "500px", minWidth: "320px"}}
+            style={{maxWidth: "100%", width: "400px", minWidth: "350px"}}
             bg="light" data-bs-theme="theme"
-            className="m-3 p-3 rounded border-0 shadow"
+            className="m-3 p-3 rounded border-0 shadow fade-in-card"
         >
             {children}
         </Card>
