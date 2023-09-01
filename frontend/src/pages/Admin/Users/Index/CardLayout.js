@@ -32,9 +32,17 @@ CardLayout.Body.Header = ({children}) => {
     )
 }
 
-CardLayout.Body.Main = ({children}) => {
+CardLayout.Body.Stats = ({children}) => {
     return (
         <Container className="m-0 mt-3 p-0 py-3 d-flex justify-content-center align-items-center gap-3 border-top border-secondary">
+            {children}
+        </Container>
+    )
+}
+
+CardLayout.Body.Info = ({children}) => {
+    return (
+        <Container className="m-0 p-0 d-flex flex-column align-items-center">
             {children}
         </Container>
     )

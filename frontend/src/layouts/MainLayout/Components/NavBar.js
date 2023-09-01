@@ -1,15 +1,34 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import Navbar from "react-bootstrap/Navbar"
 import Nav from "react-bootstrap/Nav"
 import Container from "react-bootstrap/Container"
 import Offcanvas from "react-bootstrap/Offcanvas"
 import { Link } from "react-router-dom"
 import AuthWidget from "./AuthWidget"
+import jwt_decode from "jwt-decode";
 import "./styles.css"
+import { UserContext } from "../../../contexts"
 
 
 export default function NavBar(){
+    const {user} = useContext(UserContext)
     const [expanded, setExpanded] = useState(false)
+    const [isStaff, setIsStaff] = useState(false)
+
+    // if user is staff than show admin panel link in navbar
+    const checkIfStaff = () => {
+        if(!user){
+            return
+        }
+
+        const decodedToken = jwt_decode(user.access)
+        setIsStaff(decodedToken.is_staff)
+    }
+
+    // check if user staff on user update
+    useEffect(() => {
+        checkIfStaff()
+    }, [user])
 
     // navbar scroll animation 
     useEffect(() => {
@@ -35,13 +54,15 @@ export default function NavBar(){
             prevScrollY = currentScrollY
         }
 
+        checkIfStaff()
+
         var prevScrollY = 0
         window.addEventListener("scroll", handleNavbarScroll)
         return () => {window.removeEventListener("scroll", handleNavbarScroll)}
     }, [])
 
     const handleLinkClick = e => setExpanded(false)
-
+    
     return (
         <Navbar className="p-0 m-0" sticky="top" expanded={expanded} expand="md" bg="white" data-bs-theme="light">
             <Container fluid className="mx-md-3">
@@ -71,18 +92,26 @@ export default function NavBar(){
                         <Nav.Link 
                             onClick={handleLinkClick} as={Link} to="/appointment"
                         >
-                                консультація
+                                консультації
                         </Nav.Link>
                         <Nav.Link 
                             onClick={handleLinkClick} as={Link} to="/event"
                         >
-                            івенти
+                            групові зустрічі
                         </Nav.Link>
                         <Nav.Link 
                             onClick={handleLinkClick} as={Link} to="/contacts"
                         >
                             про мене
                         </Nav.Link>
+                        {isStaff ?
+                            <Nav.Link 
+                                onClick={handleLinkClick} as={Link} to="/admin"
+                            >
+                                адмін панель
+                            </Nav.Link>
+                            : <></>
+                        }
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>
                 <Nav>

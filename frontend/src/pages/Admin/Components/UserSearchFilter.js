@@ -43,11 +43,12 @@ export default function UserSearchFilter({users, setUsers, setSelectedUser}){
 
     return (
         <Container className="p-0" fluid>
-            <Container className="p-0 border-bottom border-muted">
+            <Container className="py-3 border-bottom border-muted">
                 <SearchBar 
                     value={search} 
                     onChange={setSearch} 
                     onSubmit={_handleSearch}
+                    placeholder="Введіть номер тел./юзернейм"
                 />
             </Container>
 

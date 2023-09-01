@@ -1,6 +1,8 @@
 import datetime
 import pytz
 
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -10,33 +12,45 @@ from django.conf import settings
 
 from .models import Event, Participation
 from .serializers import EventSerializer, EventListSerializer, EventDetailSerializer, ParticipationSerializer
+from .filters import EventFilter
 
 
-class EventList(APIView):
+class EventList(generics.ListAPIView):
     permission_classes = []
+    queryset = Event.objects.all()
+    pagination_class = None
+    serializer_class = EventListSerializer
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_class = EventFilter
+    search_fields = ['title']
 
-    def get_queryset(self):
-        status = self.request.query_params.get('status')
 
-        if not status:
-            return Event.objects.all()
+# class EventList(APIView):
+#     permission_classes = []
 
-        tz = pytz.timezone(settings.TIME_ZONE)
-        current_time = datetime.datetime.now(tz=tz)
+#     def get_queryset(self):
+#         status = self.request.query_params.get('status')
 
-        if status == "active":
-            return Event.objects.filter(date__gt=current_time)
-        elif status == "outdated":
-            return Event.objects.filter(date__lt=current_time)
-        else:
-            raise Http404
+#         if not status:
+#             return Event.objects.all()
+
+#         tz = pytz.timezone(settings.TIME_ZONE)
+#         current_time = datetime.datetime.now(tz=tz)
+
+#         if status == "active":
+#             return Event.objects.filter(date__gt=current_time)
+#         elif status == "outdated":
+#             return Event.objects.filter(date__lt=current_time)
+#         else:
+#             raise Http404
             
     
-    def get(self, request):
-        events = self.get_queryset()
-        serializer = EventListSerializer(events, many=True, context = {'request': request})
+#     def get(self, request):
+#         events = self.get_queryset()
+#         serializer = EventListSerializer(events, many=True, context = {'request': request})
         
-        return Response(serializer.data, status.HTTP_200_OK)
+#         return Response(serializer.data, status.HTTP_200_OK)
+    
     
 class EventDetail(APIView):
     permission_classes = []

@@ -2,7 +2,8 @@ import BasePageLayout from "./BasePageLayout";
 import BaseLayoutTitle from "./BaseLayoutTitle";
 import TwoSideLayout from "./TwoSideLayout";
 import UserSearchFilter from "./UserSearchFilter";
-import { FiltersAccordion, FiltersAccordionToggle } from "./FiltersAccordion";
+import SearchBar from "./SearchBar";
+import { Filters, FiltersToggle } from "./Filters";
 
 
-export {BasePageLayout, BaseLayoutTitle, TwoSideLayout, UserSearchFilter, FiltersAccordion, FiltersAccordionToggle}
+export {BasePageLayout, BaseLayoutTitle, TwoSideLayout, SearchBar, UserSearchFilter, Filters, FiltersToggle}

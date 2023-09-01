@@ -4,6 +4,7 @@ import Planning from "./Schedule/Planning/Planning";
 import Users from "./Users/Index/Users";
 import Appointments from "./Appointments/Index/Appointments";
 import Assign from "./Appointments/Assign/Assign";
+import Events from "./Events/Index/Events";
 
 export {
     Admin, 
@@ -11,5 +12,6 @@ export {
     Planning, 
     Users, 
     Appointments,
-    Assign
+    Assign,
+    Events
 }

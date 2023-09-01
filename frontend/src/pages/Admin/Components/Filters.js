@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 
-const FiltersAccordion = ({children}) => {
+const Filters = ({children}) => {
     return (
         <Accordion>
             {children}
@@ -12,7 +12,7 @@ const FiltersAccordion = ({children}) => {
     )
 }
 
-FiltersAccordion.Item = ({children, eventKey}) => {
+Filters.Item = ({children, eventKey}) => {
     return (
         <Accordion.Item
             className="border-0 rounded-0"
@@ -27,7 +27,7 @@ FiltersAccordion.Item = ({children, eventKey}) => {
     )
 }
 
-FiltersAccordion.Body = ({children}) => {
+Filters.Body = ({children}) => {
     return (
         <Accordion.Body className="p-0">
             {children}
@@ -35,7 +35,23 @@ FiltersAccordion.Body = ({children}) => {
     )
 }
 
-const FiltersAccordionToggle = ({children, icon, bordered=true, eventKey}) => {
+Filters.Body.Layout = ({children}) => {
+    return (
+        <Container className="p-0 py-3" fluid>
+            {children}
+        </Container>
+    )
+}
+
+Filters.Body.Title = ({children}) => {
+    return (
+        <p className="m-0 px-3 pb-3 text-muted text-justify fs-5">
+            {children}
+        </p>
+    )
+}
+
+const FiltersToggle = ({children, icon, bordered=true, eventKey}) => {
     const handleClick = useAccordionButton(eventKey)
     
     return (
@@ -55,7 +71,7 @@ const FiltersAccordionToggle = ({children, icon, bordered=true, eventKey}) => {
     )
 }
 
-FiltersAccordionToggle.Title = ({children}) => {
+FiltersToggle.Title = ({children}) => {
     return (
         <p className="m-0 px-3 text-muted fs-4">
             {children}
@@ -64,4 +80,4 @@ FiltersAccordionToggle.Title = ({children}) => {
 }
 
 
-export {FiltersAccordion, FiltersAccordionToggle}
+export {Filters, FiltersToggle}

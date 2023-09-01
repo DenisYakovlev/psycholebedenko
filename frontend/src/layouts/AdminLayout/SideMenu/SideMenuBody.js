@@ -50,8 +50,8 @@ export default function SideMenuBody({onHide=null}){
                 </AccordionToggle>
 
                 <AccordionBody>
-                    <AccordionBodyItem onClick={onHide} to="#">
-                        Список івентів
+                    <AccordionBodyItem onClick={onHide} to="/admin/events">
+                        Список Зустрічей
                     </AccordionBodyItem>
 
                     <AccordionBodyItem onClick={onHide} to="#">

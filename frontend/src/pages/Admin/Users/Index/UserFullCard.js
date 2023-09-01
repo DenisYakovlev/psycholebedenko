@@ -2,8 +2,10 @@ import Card from "react-bootstrap/Card"
 import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
 import CardLayout from "./CardLayout"
+import { Tag } from "../../../../shared"
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPhone } from "@fortawesome/free-solid-svg-icons"
 import { faTelegram } from "@fortawesome/free-brands-svg-icons"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../../contexts"
@@ -66,7 +68,7 @@ export default function UserFullCard({userId}){
                     </Button>
                 </CardLayout.Body.Header>
 
-                <CardLayout.Body.Main>
+                <CardLayout.Body.Stats>
                     <Container 
                         as={Link} 
                         to={appointments.link} 
@@ -91,7 +93,13 @@ export default function UserFullCard({userId}){
                             івентів
                         </Card.Text>
                     </Container>
-                </CardLayout.Body.Main>
+                </CardLayout.Body.Stats>
+
+                <CardLayout.Body.Info>
+                    <Tag icon={faPhone}>
+                        {user.phone_number ? user.phone_number : ""}
+                    </Tag>
+                </CardLayout.Body.Info>
 
                 <Button 
                     as={Link} to={`/admin/appointments/assign?user=${user.id}`} 

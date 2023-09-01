@@ -5,7 +5,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 import { useState } from "react"
 
 
-export default function SearchBar({value, onChange, onSubmit}){
+export default function SearchBar({value, onChange, onSubmit, placeholder=""}){
     const [searchValue, setSearchValue] = useState(value) 
 
     const handleKeyDown = event => {
@@ -15,14 +15,14 @@ export default function SearchBar({value, onChange, onSubmit}){
     }
 
     return (
-        <InputGroup className="m-0 p-5">
+        <InputGroup className="m-0 px-5 py-3">
             <Form.Control
                 value={searchValue}
                 onChange={e => setSearchValue(e.target.value)}
                 className="border-secondary" 
                 onKeyDown={handleKeyDown}
                 type="search"
-                placeholder="Введіть номер тел./юзернейм"
+                placeholder={placeholder}
             />
             <InputGroup.Text 
                 style={{cursor: "pointer"}}

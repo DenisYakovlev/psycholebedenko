@@ -1,13 +1,14 @@
 import Container from "react-bootstrap/Container"
 import Form from "react-bootstrap/Form"
+import { Filters } from "../../Components"
 
 
 export default function DateFilters({outdated, setOutdated}){
     return (
-        <Container className="p-0 py-3" fluid>
-            <p className="m-0 px-3 pb-3 text-muted text-justify fs-5">
+        <Filters.Body.Layout>
+            <Filters.Body.Title>
                 Показувати минулі консультації?
-            </p>
+            </Filters.Body.Title>
 
             <Form className="px-5">
                 <Form.Check >
@@ -34,6 +35,6 @@ export default function DateFilters({outdated, setOutdated}){
                     <Form.Check.Label htmlFor="state-outdated-false">Ні</Form.Check.Label>
                 </Form.Check>
             </Form>
-        </Container>
+        </Filters.Body.Layout>
     )
 }
