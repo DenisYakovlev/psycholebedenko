@@ -34,7 +34,7 @@ services:
     ports:
       - "81:8000"
     environment:
-      - DEBUG=0
+      - DEBUG=1
       - TELEGRAM_BOT_API_KEY=6159160252:AAF1wkp3scOkCDnOoah8y_s9IcYIhWwxlUY
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
