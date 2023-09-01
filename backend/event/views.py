@@ -19,37 +19,13 @@ class EventList(generics.ListAPIView):
     permission_classes = []
     queryset = Event.objects.all()
     pagination_class = None
-    serializer_class = EventListSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     filterset_class = EventFilter
     search_fields = ['title']
 
 
-# class EventList(APIView):
-#     permission_classes = []
-
-#     def get_queryset(self):
-#         status = self.request.query_params.get('status')
-
-#         if not status:
-#             return Event.objects.all()
-
-#         tz = pytz.timezone(settings.TIME_ZONE)
-#         current_time = datetime.datetime.now(tz=tz)
-
-#         if status == "active":
-#             return Event.objects.filter(date__gt=current_time)
-#         elif status == "outdated":
-#             return Event.objects.filter(date__lt=current_time)
-#         else:
-#             raise Http404
-            
-    
-#     def get(self, request):
-#         events = self.get_queryset()
-#         serializer = EventListSerializer(events, many=True, context = {'request': request})
-        
-#         return Response(serializer.data, status.HTTP_200_OK)
+    def get_serializer_class(self):
+        return EventDetailSerializer if self.request.user.is_staff else EventListSerializer
     
     
 class EventDetail(APIView):
