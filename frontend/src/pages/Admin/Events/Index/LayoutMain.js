@@ -2,7 +2,7 @@ import { BaseLayoutTitle } from "../../Components";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import { EventCard } from "../../../../shared";
+import EventCard from "./EventCard";
 
 
 export default function LayoutMain({events}){
@@ -17,7 +17,7 @@ export default function LayoutMain({events}){
                     {events.map((event, idx) => {
                         return(
                             <Col key={idx} className="m-0 p-0 px-5 d-flex justify-content-center">
-                                <EventCard event={event} idx={idx}/>
+                                <EventCard event={event}/>
                             </Col>
                         )
                     })}

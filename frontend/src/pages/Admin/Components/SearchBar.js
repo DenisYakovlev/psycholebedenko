@@ -17,7 +17,7 @@ export default function SearchBar({value, onChange, onSubmit, placeholder=""}){
     return (
         <InputGroup className="m-0 px-5 py-3">
             <Form.Control
-                value={searchValue}
+                value={searchValue ? searchValue : ""}
                 onChange={e => setSearchValue(e.target.value)}
                 className="border-secondary" 
                 onKeyDown={handleKeyDown}

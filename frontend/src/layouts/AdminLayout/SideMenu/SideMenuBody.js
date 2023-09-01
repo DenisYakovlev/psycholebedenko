@@ -58,7 +58,7 @@ export default function SideMenuBody({onHide=null}){
                         Створити
                     </AccordionBodyItem>
 
-                    <AccordionBodyItem onClick={onHide} to="#">
+                    <AccordionBodyItem onClick={onHide} to="/admin/events/update">
                         Редагування
                     </AccordionBodyItem>
                 </AccordionBody>

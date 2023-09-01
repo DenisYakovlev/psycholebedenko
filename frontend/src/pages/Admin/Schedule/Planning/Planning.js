@@ -129,6 +129,7 @@ export default function Planning(){
     // that formats json type date to "2050-06-30"
     const _setDate = calendarDate => {
         const _date = formatCalendarDate(calendarDate)
+        dateIsFree.current = false
         setTime(null)
         setDate(_date)
     }

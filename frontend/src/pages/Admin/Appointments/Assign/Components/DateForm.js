@@ -11,7 +11,7 @@ export default function DateForm({date, setDate}){
             <DatePicking sumbitDate={setDate}/>
 
             {date ? 
-                <Card.Text className="p-0 text-dark fs-6 text-justify">
+                <Card.Text className="p-0 mt-3 text-dark fs-6 text-justify">
                     {`Обрана дата: ${formatDate(date.date)}`}
                 </Card.Text>
                 :

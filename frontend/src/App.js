@@ -16,7 +16,8 @@ import {
   Users,
   Appointments,
   Assign,
-  Events
+  Events,
+  EventsUpdate
 } from './pages';
 
 import { BotLayout, MainLayout, AdminLayout } from './layouts';
@@ -75,6 +76,7 @@ export default function App(){
 
                   <Route path="events">
                     <Route index element={<Events />}/>
+                    <Route path="update" element={<EventsUpdate />}/>
                   </Route>
 
                   <Route path="appointments">

@@ -5,6 +5,7 @@ import Users from "./Users/Index/Users";
 import Appointments from "./Appointments/Index/Appointments";
 import Assign from "./Appointments/Assign/Assign";
 import Events from "./Events/Index/Events";
+import EventsUpdate from "./Events/Update/EventsUpdate";
 
 export {
     Admin, 
@@ -13,5 +14,6 @@ export {
     Users, 
     Appointments,
     Assign,
-    Events
+    Events,
+    EventsUpdate
 }

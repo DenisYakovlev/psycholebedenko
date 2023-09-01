@@ -26,7 +26,7 @@ export default function UserCard({user, setSelectedUser}){
                             {`${user.first_name ? user.first_name : ""} ${user.last_name ? user.last_name : ""}`}
                         </Card.Text>
                         <Card.Text className="m-0 p-0 fs-6 text-muted">
-                            {`${user.username ? "@" + user.username : ""}`}
+                            {`${user.username ? "@" + user.username : "@"}`}
                         </Card.Text>
                     </Container>
                     <FontAwesomeIcon 
