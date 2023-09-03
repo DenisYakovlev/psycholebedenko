@@ -13,11 +13,11 @@ export default function LayoutMain({events}){
             </BaseLayoutTitle>
 
             {events ?
-                <Row sm={1} xs={1} className="m-0 p-0 w-100 px-0 py-5 gap-3">
+                <Row sm={1} xs={1} className="m-0 p-0 w-100 px-0 py-5 gap-5">
                     {events.map((event, idx) => {
                         return(
                             <Col key={idx} className="m-0 p-0 px-5 d-flex justify-content-center">
-                                <EventCard event={event}/>
+                                <EventCard event={event} editable={true}/>
                             </Col>
                         )
                     })}

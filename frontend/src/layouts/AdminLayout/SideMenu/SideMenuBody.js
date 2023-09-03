@@ -54,7 +54,7 @@ export default function SideMenuBody({onHide=null}){
                         Список Зустрічей
                     </AccordionBodyItem>
 
-                    <AccordionBodyItem onClick={onHide} to="#">
+                    <AccordionBodyItem onClick={onHide} to="/admin/events/create">
                         Створити
                     </AccordionBodyItem>
 

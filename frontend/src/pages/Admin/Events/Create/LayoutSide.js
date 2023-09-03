@@ -1,16 +1,16 @@
 import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
 import { BaseLayoutTitle } from "../../Components"
-import TitleForm from "./Forms/TitleForm"
-import ThumbnailTextForm from "./Forms/ThumbnailTextForm"
-import MainTextForm from "./Forms/MainTextForm"
-import DurationForm from "./Forms/DurationForm"
-import OnlineForm from "./Forms/OnlineForm"
-import AddressForm from "./Forms/AddressForm"
-import ZoomForm from "./Forms/ZoomForm"
-import DateForm from "./Forms/DateForm"
-import TimeForm from "./Forms/TimeForm"
-import ImgForm from "./Forms/ImgForm"
+import TitleForm from "../Update/Forms/TitleForm"
+import ThumbnailTextForm from "../Update/Forms/ThumbnailTextForm"
+import MainTextForm from "../Update/Forms/MainTextForm"
+import DurationForm from "../Update/Forms/DurationForm"
+import OnlineForm from "../Update/Forms/OnlineForm"
+import AddressForm from "../Update/Forms/AddressForm"
+import ZoomForm from "../Update/Forms/ZoomForm"
+import DateForm from "../Update/Forms/DateForm"
+import TimeForm from "../Update/Forms/TimeForm"
+import ImgForm from "../Update/Forms/ImgForm"
 import ResultModal from "./ResultModal"
 import { useContext, useState } from "react"
 import { backend_url } from "../../../../constants"
@@ -28,8 +28,8 @@ export default function LayoutSide({event, setEvent}){
     }
 
     const handleClick = () => {
-        authFetch(`${backend_url}/event/${event.id}/manage`, {
-            method: "PUT",
+        authFetch(`${backend_url}/event/create`, {
+            method: "POST",
             headers: {
                 "Content-type": "Application/json"
             },
@@ -42,7 +42,7 @@ export default function LayoutSide({event, setEvent}){
                 return response.json()
             }
 
-            throw new Error("Admin event update put error")
+            throw new Error("Admin event create post error")
         })
         .catch(error => {
             setResultType("conflict")
@@ -103,7 +103,7 @@ export default function LayoutSide({event, setEvent}){
 
                 <Container className="p-0 my-5 d-flex justify-content-center align-items-center">
                     <Button onClick={handleClick} variant="outline-dark" size="lg">
-                        Зберегти
+                        Створити
                     </Button>
                 </Container>
             </Container>

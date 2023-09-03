@@ -1,9 +1,10 @@
 import Form from "react-bootstrap/Form"
+import Container from "react-bootstrap/esm/Container"
 
 
 export default function TypeForm({type, setType}){
     return (
-        <Form>
+        <Container>
             <Form.Check>
                 <Form.Check.Input 
                     value={true} 
@@ -29,6 +30,6 @@ export default function TypeForm({type, setType}){
                     Оффлайн
                 </Form.Check.Label>
             </Form.Check>
-        </Form>
+        </Container>
     )
 }

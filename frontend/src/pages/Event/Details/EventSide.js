@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container"
 import { Tag } from "../../../shared"
 import Card from "react-bootstrap/Card"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faClock, faUserGroup, faWifi, faArrowUpRightFromSquare, faLocationDot } from "@fortawesome/free-solid-svg-icons"
+import { faClock, faUserGroup, faWifi, faUsers, faArrowUpRightFromSquare, faLocationDot } from "@fortawesome/free-solid-svg-icons"
 import { formatDate } from "../../utils"
 
 
@@ -17,15 +17,15 @@ export default function EventSide({event}){
         <Container style={{width: "fit-content"}} className="m-0 mt-md-5 mt-3 px-md-3 px-sm-5 px-5 d-flex flex-column justify-content-start  gap-2">
             <Tag icon={faClock}>
                 <p className="m-0 px-1">
-                    {event.duration + "хв."}
+                    {event.duration ? event.duration + "хв." : "не вказано"}
                 </p>
             </Tag>
             <Tag icon={faUserGroup}>
                 <p className="m-0 px-1">
-                    {`${event.participants_count} чол. вже записалось`}
+                    {`${event.participants_count ? event.participants_count : "0 "} чол. вже записалось`}
                 </p>
             </Tag>
-            <Tag icon={faWifi}>
+            <Tag icon={event.online ? faWifi : faUsers}>
                 <p className="m-0 px-1">
                     {event.online ? "онлайн" : "офлайн"}
                 </p>
@@ -39,7 +39,7 @@ export default function EventSide({event}){
                 :
                 <Tag icon={faLocationDot}>
                     <p className="m-0 px-1">
-                        {event.address}
+                        {event.address ? event.address : "адреса не вказана"}
                     </p>
                 </Tag>
             }

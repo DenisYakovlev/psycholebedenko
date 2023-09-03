@@ -1,16 +1,17 @@
 import Modal from "react-bootstrap/Modal"
 import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
+import { useNavigate } from "react-router"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons"
 
-
 export default function ResultModal({show, hide, resultType}){
+    let navigate = useNavigate()
 
     const hadnleClick = () => {
         if(resultType == "success"){
             hide()
-
+            navigate('/admin/events')
         }
         else if(resultType == "conflict"){
             hide()
@@ -30,7 +31,7 @@ export default function ResultModal({show, hide, resultType}){
                     resultType == "success" ?
                         <Container style={{ fontSize: "36px"}} className="m-0 mt-3 p-0 d-flex text-success d-row gap-3 align-items-center justify-content-center">
                             <FontAwesomeIcon icon={faCircleCheck} />
-                            Записано!
+                            Створено!
                         </Container>
                         :
                         <Container style={{ fontSize: "36px"}} className="m-0 mt-3 p-0 d-flex text-danger d-row gap-3 align-items-center justify-content-center">
@@ -40,7 +41,7 @@ export default function ResultModal({show, hide, resultType}){
                 }
                 <Container className="p-0 m-0">
                     <p className="p-0 text-muted text-center fs-5">
-                        Перегляньте інформацію про консультацію у відповідному розділі панелі
+                        Перегляньте інформацію про івенти у відповідному розділі панелі
                     </p>
                 </Container>
                 <Container className="p-0 mt-5 mb-3 d-flex justify-content-center">

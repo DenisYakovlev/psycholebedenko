@@ -14,7 +14,7 @@ export default function EventMain({event}){
             </Card.Text>
             <hr className="event-card-line m-0 mb-3 p-0"/>
             <Container className="p-0 m-0 ">
-                <Card.Text className="m-0 fs-6 pe-md-5 pe-0 text-muted text-justify">
+                <Card.Text style={{whiteSpace: "break-spaces"}} className="m-0 fs-6 pe-md-5 pe-0 text-muted text-justify">
                     {event.main_text}
                 </Card.Text>
             </Container>

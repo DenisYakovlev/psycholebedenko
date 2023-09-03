@@ -14,7 +14,7 @@ import { AuthModalContext, UserContext } from "../../../contexts"
 import "./styles.css"
 
 export default function EventDetails(){
-    const {title} = useParams()
+    const {id} = useParams()
     const [isLoading, setIsLoading] = useState(false)
     const {user, authFetch, publicFetch} = useContext(UserContext)
     const {showAuthModal} = useContext(AuthModalContext)
@@ -29,7 +29,7 @@ export default function EventDetails(){
 
     const fetchEvent = async () => {
         setIsLoading(true)
-        await publicFetch(`${backend_url}/event/${title}`, {
+        await publicFetch(`${backend_url}/event/${id}`, {
             method: "GET"
         })
         .then(response => response.json())
@@ -49,7 +49,7 @@ export default function EventDetails(){
     }, [])
 
     const handleAddParticipation = () => {
-        authFetch(`${backend_url}/event/${title}/participate`, {
+        authFetch(`${backend_url}/event/${id}/participate`, {
             method: "POST"
         })
         .then(response => {
@@ -62,7 +62,7 @@ export default function EventDetails(){
     }
 
     const handleRemoveParticipation = () => {
-        authFetch(`${backend_url}/event/${event.title}/participate`, {
+        authFetch(`${backend_url}/event/${id}/participate`, {
             method: "DELETE"
         })
         .then(response => {

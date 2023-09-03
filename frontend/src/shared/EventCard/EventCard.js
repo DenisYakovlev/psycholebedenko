@@ -39,7 +39,7 @@ export default function EventCard({event, idx}){
                     <Card.Text className="m-0 fs-6 text-muted text-truncate">
                         <FontAwesomeIcon icon={faClock} /> {event?.duration + " хв."}
                     </Card.Text>
-                    <Button as={Link} to={`/event/${event.title}`} variant="outline-dark" className="">
+                    <Button as={Link} to={`/event/${event.id}`} variant="outline-dark" className="">
                         Перейти
                     </Button>
                 </Container>

@@ -4,8 +4,6 @@ import { formatDate } from "../../../../utils";
 
 
 export default function DateForm({date, setDate}){
-    console.log(date)
-
     return (
         <>
             <DatePicking sumbitDate={setDate}/>

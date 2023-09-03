@@ -2,7 +2,7 @@ import Home from "./Home/Home";
 import { Appointment, AppointmentCreate } from "./Appointment";
 import Event from "./Event/index/Event";
 import EventDetails from "./Event/Details/EventDetails";
-import { Admin, ScheduleCalendar, Planning, Users, Appointments, Assign, Events, EventsUpdate } from "./Admin";
+import { Admin, ScheduleCalendar, Planning, Users, Appointments, Assign, Events, EventsCreate, EventsUpdate } from "./Admin";
 import Contacts from "./Contacts/Contacts";
 import { User, Exit } from "./User";
 import Bot from "./Bot/Bot";
@@ -24,5 +24,6 @@ export {
     Appointments,
     Assign,
     Events,
+    EventsCreate,
     EventsUpdate
 }

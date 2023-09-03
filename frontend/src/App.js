@@ -17,6 +17,7 @@ import {
   Appointments,
   Assign,
   Events,
+  EventsCreate,
   EventsUpdate
 } from './pages';
 
@@ -45,7 +46,7 @@ export default function App(){
 
                   <Route path="event">
                     <Route index element={<Event />} />
-                    <Route path=":title" element={<EventDetails />} />
+                    <Route path=":id" element={<EventDetails />} />
                   </Route>
                   
                   <Route path="contacts" element={<Contacts />}/>
@@ -76,6 +77,7 @@ export default function App(){
 
                   <Route path="events">
                     <Route index element={<Events />}/>
+                    <Route path="create" element={<EventsCreate />}/>
                     <Route path="update" element={<EventsUpdate />}/>
                   </Route>
 

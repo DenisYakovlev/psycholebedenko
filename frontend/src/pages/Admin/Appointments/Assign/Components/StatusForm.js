@@ -1,9 +1,10 @@
 import Form from "react-bootstrap/Form"
+import Container from "react-bootstrap/Container"
 
 
 export default function StatusForm({status, setStatus}){
     return (
-        <Form>
+        <Container>
             <Form.Check >
                 <Form.Check.Input 
                     value="pending"
@@ -37,6 +38,6 @@ export default function StatusForm({status, setStatus}){
                 />
                 <Form.Check.Label htmlFor="status-create-complete">виконано</Form.Check.Label>
             </Form.Check>
-        </Form>
+        </Container>
     )
 }
