@@ -11,7 +11,7 @@ def set_default_random_img():
     return s3bucket_url
 
 class Event(models.Model):
-    title = models.CharField(max_length=512, blank=False, null=False, unique=True)
+    title = models.CharField(max_length=512, blank=False, null=False)
     thumbnail_text = models.CharField(max_length=512, blank=True)
     main_text = models.CharField(max_length=10000, blank=True)
     img_url = models.URLField(default=set_default_random_img(), blank=True, null=True)

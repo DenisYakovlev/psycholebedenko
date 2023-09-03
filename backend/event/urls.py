@@ -5,7 +5,7 @@ urlpatterns = [
     path('', EventList.as_view()),
     path('create', EventCreate.as_view()),
     path('images', EventImages.as_view()),
-    re_path(r"(?P<title>[a-zA-Z0-9 _\-]+)$", EventDetail.as_view()),
-    re_path(r"(?P<title>[a-zA-Z0-9 _\-]+)/manage$", EventManagement.as_view()),
-    re_path(r"(?P<title>[a-zA-Z0-9 _\-]+)/participate$", ParticipationManagement.as_view()),
+    re_path(r"(?P<pk>[0-9]+)$", EventDetail.as_view()),
+    re_path(r"(?P<pk>[0-9]+)/manage$", EventManagement.as_view()),
+    re_path(r"(?P<pk>[0-9]+)/participate$", ParticipationManagement.as_view()),
 ]

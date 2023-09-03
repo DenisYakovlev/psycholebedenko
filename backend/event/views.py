@@ -31,8 +31,8 @@ class EventList(generics.ListAPIView):
 class EventDetail(APIView):
     permission_classes = []
     
-    def get(self, request, title):
-        event = Event.objects.get(title=title)
+    def get(self, request, pk):
+        event = Event.objects.get(id=pk)
         serializer = EventDetailSerializer(event, context = {'request': request})
         
         return Response(serializer.data, status.HTTP_200_OK)
@@ -54,14 +54,14 @@ class EventCreate(APIView):
 class EventManagement(APIView):
     permission_classes = [IsAdminUser]
     
-    def get_event(self, title):
+    def get_event(self, pk):
         try:
-            return Event.objects.get(title=title)
+            return Event.objects.get(id=pk)
         except:
             raise Http404
     
-    def put(self, request, title):
-        event = self.get_event(title)
+    def put(self, request, pk):
+        event = self.get_event(pk)
         serializer = EventSerializer(instance=event, data=request.data, partial=True,
                                          context = {"request": request})
         
@@ -71,8 +71,8 @@ class EventManagement(APIView):
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request, title):
-        event = self.get_event(title)
+    def delete(self, request, pk):
+        event = self.get_event(pk)
         event.delete()
         
         return Response(status=status.HTTP_200_OK)
@@ -81,14 +81,14 @@ class EventManagement(APIView):
 class ParticipationManagement(APIView):
     permission_classes = [IsAuthenticated]
     
-    def get_event(self, title):
+    def get_event(self, pk):
         try:
-            return Event.objects.get(title=title)
+            return Event.objects.get(id=pk)
         except:
             raise Http404
     
-    def post(self, request, title):
-        event = self.get_event(title)
+    def post(self, request, pk):
+        event = self.get_event(pk)
         
         if Participation.objects.filter(user=request.user.id, event=event.id).exists():
             return Response({"msg": "already participated"}, status.HTTP_409_CONFLICT)
@@ -101,8 +101,8 @@ class ParticipationManagement(APIView):
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request, title):
-        event = self.get_event(title)
+    def delete(self, request, pk):
+        event = self.get_event(pk)
         participation = Participation.objects.filter(user=request.user.id, event=event.id)
         participation.delete()
         
