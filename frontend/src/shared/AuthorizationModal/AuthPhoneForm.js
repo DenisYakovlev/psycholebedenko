@@ -33,7 +33,7 @@ export default function AuthPhoneForm({handleSubmit, setIndex}){
                     Номер телефона
                 </p>
                 <p className="p-0 m-0 fs-6 text-muted text-center w-75">
-                    Текст про подключение номера телефона 
+                    Додайте свій номер телефона для зв'язку з психологом
                 </p>
             </Container>
             <Container className="px-5 my-4 d-flex flex-column gap-3">

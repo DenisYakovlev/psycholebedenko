@@ -100,9 +100,9 @@ export default function NavBar(){
                             групові зустрічі
                         </Nav.Link>
                         <Nav.Link 
-                            onClick={handleLinkClick} as={Link} to="/contacts"
+                            onClick={handleLinkClick} as={Link} to="/tests"
                         >
-                            про мене
+                            тести
                         </Nav.Link>
                         {isStaff ?
                             <Nav.Link 

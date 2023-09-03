@@ -52,7 +52,7 @@ export default function TypeSelection({setOnline, nextSlide}){
                 </Container>
                 <Card.Body className="px-3 py-2 pb-1 m-0 d-flex flex-row align-items-center justify-content-start gap-3">
                     <Tag style={{fontSize: "12px"}} icon={faTag}>
-                        Ціна: від ...
+                        Ціна: 800 грн.
                     </Tag>
                     <Tag style={{fontSize: "12px"}} icon={faClock}>
                         60 хв
@@ -78,7 +78,7 @@ export default function TypeSelection({setOnline, nextSlide}){
                 </Container>
                 <Card.Body className="px-3 py-2 pb-1 m-0 d-flex flex-row align-items-center justify-content-start gap-3">
                     <Tag style={{fontSize: "12px"}} icon={faTag}>
-                        Ціна: від ...
+                        Ціна: 800 грн.
                     </Tag>
                     <Tag style={{fontSize: "12px"}} icon={faClock}>
                         60 хв

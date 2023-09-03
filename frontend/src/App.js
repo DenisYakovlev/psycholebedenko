@@ -6,7 +6,7 @@ import {
   AppointmentCreate, 
   Event, 
   EventDetails, 
-  Contacts, 
+  Tests, 
   User, 
   Exit, 
   Bot, 
@@ -49,7 +49,8 @@ export default function App(){
                     <Route path=":id" element={<EventDetails />} />
                   </Route>
                   
-                  <Route path="contacts" element={<Contacts />}/>
+                  <Route path="tests" element={<Tests />}/>
+
                   <Route path="user">
                     <Route index element={<User />}/>
                     <Route path="exit" element={<Exit />}/>

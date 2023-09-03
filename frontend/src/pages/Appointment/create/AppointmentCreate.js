@@ -1,6 +1,7 @@
 import Container from "react-bootstrap/Container"
 import Card from "react-bootstrap/Card"
 import Carousel from "react-bootstrap/Carousel"
+import { Helmet } from "react-helmet"
 import { useState, useContext } from "react"
 import { UserContext, AuthModalContext } from "../../../contexts"
 import { backend_url } from "../../../constants"
@@ -86,6 +87,10 @@ export default function AppointmentCreate(){
             style={{backgroundColor: "#f4f4f4", height: "fit-content", minHeight: "80vh"}} 
             className="p-0 m-0 d-flex justify-content-center align-items-start" fluid
         >
+            <Helmet>
+                <title>Записатись на консультацію</title>
+            </Helmet>
+
             <Card 
                 style={styles.card} bg="light" data-bs-theme="light" 
                 className= 

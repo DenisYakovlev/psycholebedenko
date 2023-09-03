@@ -11,7 +11,7 @@ export default function AuthTelegramForm({authCallback}){
                         Авторизація
                     </p>
                     <p className="p-0 m-0 fs-6 text-muted text-center w-75">
-                        Текст про подключение через телегу 
+                        Під'єднайте Свій телеграм акаунт до застосунку 
                     </p>
                 </Container>
                 <Container fluid className="p-0 mb-5 mt-3 d-flex flex-column justify-content-center align-items-center gap-3" >

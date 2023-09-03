@@ -7,7 +7,7 @@ export default function NotesForm({nextSlide, notes, setNotes}){
     return (
         <Container className="px-3 mt-3 d-flex flex-column gap-1">
             <p className="p-0 m-0 mb-0 text-muted text-center fs-6">
-                Розкажіть про себе(или что-то другое)
+                Розкажіть про себе
             </p>
 
             <Form className="m-0 p-0">

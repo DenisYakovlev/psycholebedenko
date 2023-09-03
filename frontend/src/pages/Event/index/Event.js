@@ -1,6 +1,7 @@
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import { Helmet } from "react-helmet"
 import {LoadSpinner} from "../../../shared"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../contexts/UserContext"
@@ -15,7 +16,7 @@ export default function Event(){
 
     const fetchEvents = async () => {
         setIsLoading(true)
-        await publicFetch(`${backend_url}/event/`, {
+        await publicFetch(`${backend_url}/event/?status=active`, {
             method: "GET"
         })
         .then(response => response.json())
@@ -41,6 +42,10 @@ export default function Event(){
 
     return (
         <Container id="events" style={{minHeight: "100vh", paddingBottom: "15vh", backgroundColor: "#f4f4f4"}} className="m-0 py-5 px-0 positiion-relative" fluid>
+            <Helmet>
+                <title>Групові зустрічі</title>
+            </Helmet>
+
             <Container fluid style={{height: "10vh"}} className="m-0 p-0 d-flex flex-column justify-content-end align-items-center">
                 <h1 className="text-dark text-center text-justify">
                     Групові зустрічі

@@ -1,5 +1,6 @@
 import Container from "react-bootstrap/Container"
 import Card from "react-bootstrap/Card"
+import { Helmet } from "react-helmet"
 import { LoadSpinner } from "../../../shared"
 import { backend_url } from "../../../constants"
 import { useContext, useEffect, useState } from "react"
@@ -67,6 +68,10 @@ export default function User(){
             style={{backgroundColor: "#f4f4f4", height: "fit-content", minHeight: "100vh"}} 
             className="p-0 m-0 d-flex justify-content-center align-items-start" fluid
         >
+            <Helmet>
+                <title>Особиста сторінка</title>
+            </Helmet>
+            
             <Card 
                 style={styles.card} bg="light" data-bs-theme="light" 
                 className= 

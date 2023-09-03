@@ -13,7 +13,7 @@ export default function Events(){
     const [events, setEvents] = useState([])
 
     const fetchEvents = () => {
-        publicFetch(`${backend_url}/event/`, {
+        publicFetch(`${backend_url}/event/?status=active`, {
             method: "GET"
         })
         .then(response => response.json())

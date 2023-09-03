@@ -41,7 +41,7 @@ export default function ResultModal({show, hide, resultType}){
                 }
                 <Container className="p-0 m-0">
                     <p className="p-0 text-muted text-center fs-5">
-                        Какой-то текст про запись
+                        {resultType == "success" ? "Перегляньте свій запис на сторінці консультацій" : "Виникла помилка"}
                     </p>
                 </Container>
                 <Container className="p-0 mt-5 mb-3 d-flex justify-content-center">

@@ -6,6 +6,10 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons"
 
 
 export default function AppointmentCreateCard({date}){
+    if(!date){
+        return 
+    }
+
     return (
         <Container className="p-0 d-flex justify-content-center align-items-center" fluid>
             <Card 

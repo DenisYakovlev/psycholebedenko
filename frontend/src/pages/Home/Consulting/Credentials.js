@@ -20,6 +20,7 @@ const SocialLinkCol = ({link, children, ...props}) => {
         <Col 
             onClick={e => handleClick(e)}
             {...props}
+            style={{cursor: "pointer"}}
             className={
                 `m-0 d-flex flex-column justify-content-center align-items-center \
                 gap-2 main-icon ${props.className ? props.className : ""}`

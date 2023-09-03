@@ -8,11 +8,13 @@ import { formatDate } from "../../../utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from "react-router"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import ConfirmModal from "./ConfirmModal"
 
 
 export default function EventCard({event, editable=false}){
     let navigate = useNavigate()
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
 
     useEffect(() => {
         window.scroll(0, 0)
@@ -28,6 +30,8 @@ export default function EventCard({event, editable=false}){
             className="bg-gradient shadow border-0 fade-in-card"
             bg="white" data-bs-theme="light"
         >
+            <ConfirmModal show={showConfirmModal} hide={() => setShowConfirmModal(false)} event={event}/>
+
             <p className="m-0 px-3 pt-5 pb-3 text-center fs-1 fw-bold">
                 {event.title ? event.title : "Назва не вказана"}
             </p>
@@ -63,9 +67,13 @@ export default function EventCard({event, editable=false}){
                         </Container>
 
                         {editable ?
-                            <Container className="mt-5 p-0 d-flex justify-content-center align-items-center">
+                            <Container className="mt-5 p-0 d-flex justify-content-center align-items-center gap-3">
                                 <Button onClick={handleRedirect} variant="outline-dark" size="lg">
                                     Редагувати
+                                </Button>
+
+                                <Button onClick={() => setShowConfirmModal(true)} variant="outline-dark" size="lg">
+                                    Відмінити
                                 </Button>
                             </Container>
                             :

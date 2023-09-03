@@ -4,6 +4,7 @@ import Card from "react-bootstrap/Card"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
+import { Helmet } from "react-helmet"
 import { backend_url } from "../../../constants"
 import {  useContext, useEffect, useState } from "react"
 import EventMain from "./EventMain"
@@ -83,6 +84,15 @@ export default function EventDetails(){
             style={{height: "fit-content", minHeight: "100vh", backgroundColor:"#f4f4f4"}} 
             className="m-0 p-0 py-md-5 py-0 pb-5 d-flex flex-column align-items-center" fluid
         >
+            <Helmet>
+                <title>{event.title ? event.title : "Групова зустріч"}</title>
+                <meta name="description" 
+                    content={event.thumbnail_text ? 
+                    event.thumbnail_text 
+                    : "Відвідайте безкоштовку групову зустріч та запишіться на особости консультацію"} 
+                />
+            </Helmet>
+
             <Card
                 className="bg-gradient shadow border-0 event-details-card"
                 // style={{width: "1200px", maxWidth: "90vw", minWidth: "350px"}}

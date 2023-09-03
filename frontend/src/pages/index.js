@@ -3,7 +3,7 @@ import { Appointment, AppointmentCreate } from "./Appointment";
 import Event from "./Event/index/Event";
 import EventDetails from "./Event/Details/EventDetails";
 import { Admin, ScheduleCalendar, Planning, Users, Appointments, Assign, Events, EventsCreate, EventsUpdate } from "./Admin";
-import Contacts from "./Contacts/Contacts";
+import Tests from "./Tests/Tests";
 import { User, Exit } from "./User";
 import Bot from "./Bot/Bot";
 
@@ -13,7 +13,7 @@ export {
     AppointmentCreate, 
     Event, 
     EventDetails, 
-    Contacts, 
+    Tests, 
     User, 
     Exit, 
     Bot,
