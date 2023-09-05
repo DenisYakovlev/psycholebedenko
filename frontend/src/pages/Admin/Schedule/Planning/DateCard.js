@@ -9,11 +9,13 @@ import { UserContext } from "../../../../contexts"
 export default function DateCard({date, onChange, onSelect}){
     const {authFetch} = useContext(UserContext)
 
+    // change selected date and scroll to it position
     const handleSelect = event => {
         event.target = document.getElementById(`admin-date-card-${date.time}`)
         onSelect(event, date)
     }
 
+    // activate date and allow asignment to it
     const handleActivate = async () => {
         await authFetch(`${backend_url}/schedule/create`, {
             method: "POST",
@@ -35,6 +37,7 @@ export default function DateCard({date, onChange, onSelect}){
         .catch(error => console.log(error))
     }
 
+    // deactivate date
     const handleDeactivate = async () => {
         await authFetch(`${backend_url}/schedule/${date.schedule.id}`, {
             method: "DELETE",
@@ -48,6 +51,16 @@ export default function DateCard({date, onChange, onSelect}){
             throw new Error("Admin schedule delete error")
         })
         .catch(error => console.log(error))
+    }
+
+    const _handleActivate = e => {
+        handleSelect(e)
+        handleActivate()
+    }
+
+    const _handleDeactivate = e => {
+        handleSelect(e)
+        handleDeactivate()
     }
 
     return (
@@ -74,7 +87,7 @@ export default function DateCard({date, onChange, onSelect}){
                     </Card.Text>
                     {date.schedule ?
                         <Button 
-                            onClick={handleDeactivate}
+                            onClick={_handleDeactivate}
                             variant="outline-dark align-self-center" 
                             size="sm" disabled={date.schedule?.appointment}
                         >
@@ -82,7 +95,7 @@ export default function DateCard({date, onChange, onSelect}){
                         </Button>
                         :
                         <Button 
-                            onClick={handleActivate}
+                            onClick={_handleActivate}
                             variant="outline-dark align-self-center" size="sm"
                         >
                             Активувати
