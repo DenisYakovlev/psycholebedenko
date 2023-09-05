@@ -17,10 +17,12 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from .models import TelegramUser
 from .serializers import TelegramUserSerializer, TelegramUserUpdateSerializer
+from .filters import UserAppointmentsFilters
 from appointment.serializers import AppointmentSerializer, AppointmentListSerializer
 from appointment.models import Appointment
 from event.models import Event, Participation
 from event.serializers import EventListSerializer
+
 
 
 class UserList(generics.ListAPIView):
@@ -80,28 +82,19 @@ class UserFull(APIView):
         return Response(self.get_object(id), status.HTTP_200_OK)
     
 
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def UserAppointments(request):
-    try:
-        queryset = Appointment.objects.order_by('date__date').filter(user=request.user)
+class UserAppointments(generics.ListAPIView):
+    serializer_class = AppointmentSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = UserAppointmentsFilters
+    pagination_class = None
 
-        if 'status' in request.query_params:
-            _status = request.query_params.get('status').split(',')
-            queryset = queryset.filter(status__in=_status)
-        if 'outdated' in request.query_params:
-            _outdated = request.query_params.get('outdated') == "true"
-            tz = pytz.timezone(settings.TIME_ZONE)
-            now = datetime.now(tz=tz)
-
-            if not _outdated:
-                queryset = queryset.filter(date__date__gt=now)
-
-    except:
-        return Response({}, status.HTTP_200_OK)
-    
-    serializer = AppointmentSerializer(queryset, many=True)
-    return Response(serializer.data, status.HTTP_200_OK)
+    def get_queryset(self):
+        try:
+            return Appointment.objects.order_by('date__date', 'status').filter(user=self.request.user)
+        except:
+            raise Http404
+        
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

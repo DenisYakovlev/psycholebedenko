@@ -8,7 +8,7 @@ urlpatterns = [
     path('info/<str:id>', UserFull.as_view()),
     path('me', UserInfo.as_view()),
     path('photo', UserPhoto),
-    path('appointments', UserAppointments),
+    path('appointments', UserAppointments.as_view()),
     path('events', UserEvents),
     path('phone', UserPhone),
 ]

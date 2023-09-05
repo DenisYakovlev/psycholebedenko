@@ -54,8 +54,8 @@ class AppointmentList(APIView):
             # user = TelegramUser.objects.filter(phone_number=user_phone).first()
             # request.data['user'] = user
 
-            # only 5 pending appointments are allowed
-            if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).count() > 5:
+            # only 10 pending appointments are allowed
+            if Appointment.objects.filter(user=request.data["user"], status=Appointment.Status.PENDING).count() > 10:
                 return Response({"msg": "Pending appointments limit exceeded"}, status.HTTP_409_CONFLICT)
         except:
             return Response({"msg": "user not found"}, status.HTTP_404_NOT_FOUND)
@@ -78,7 +78,7 @@ class AppointmentCreate(APIView):
             data = request.data
             data['user'] = self.request.user
 
-            # only 5 pending appointments are allowed
+            # only 10 pending appointments are allowed
             if Appointment.objects.filter(user=request.user, status=Appointment.Status.PENDING).count() > 10:
                 return Response({"msg": "Pending appointments limit exceeded"}, status.HTTP_409_CONFLICT)
 
