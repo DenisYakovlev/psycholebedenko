@@ -1,5 +1,14 @@
 version: '3.8'
 
+x-common-variables: &common-variables
+  DEBUG: 1
+  TELEGRAM_BOT_API_KEY: 6159160252:AAF1wkp3scOkCDnOoah8y_s9IcYIhWwxlUY
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_HOST: db
+  SSL_HEADER: https
+
 services:
   frontend:
     build:
@@ -35,13 +44,7 @@ services:
     ports:
       - "81:8000"
     environment:
-      - DEBUG=1
-      - TELEGRAM_BOT_API_KEY=6159160252:AAF1wkp3scOkCDnOoah8y_s9IcYIhWwxlUY
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST=db
-      - SSL_HEADER=https
+      *common-variables
     depends_on:
       db:
         condition: service_healthy
@@ -85,6 +88,8 @@ services:
   worker:
     image: backend-img
     container_name: worker
+    environment:
+      *common-variables
     command: >
       sh -c "celery -A app worker -l info"
     depends_on:
