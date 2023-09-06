@@ -98,11 +98,11 @@ export default function Appointment(){
             </BaseTitle>
 
             <Filters 
-                        state={state}
-                        setState={setState}
-                        status={status}
-                        setStatus={setStatus}
-                    />
+                state={state}
+                setState={setState}
+                status={status}
+                setStatus={setStatus}
+            />
 
             {isLoading ?
                 <LoadSpinner />
