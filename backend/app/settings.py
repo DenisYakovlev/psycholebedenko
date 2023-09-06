@@ -61,7 +61,18 @@ INSTALLED_APPS = [
     'appointment',
     'bot',
     'schedule',
+    'server',
 ]
+
+RABBITMQ = {
+    "PROTOCOL": "amqp", # in prod change with "amqps"
+    "HOST": "rabbit",
+    "PORT": 5672,
+    "USER": "admin",
+    "PASSWORD": "admin",
+}
+
+CELERY_BROKER_URL = f"{RABBITMQ['PROTOCOL']}://{RABBITMQ['USER']}:{RABBITMQ['PASSWORD']}@{RABBITMQ['HOST']}:{RABBITMQ['PORT']}"
 
 AUTHENTICATION_BACKENDS = [
     # default auth with username and password

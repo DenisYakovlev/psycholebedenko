@@ -2,6 +2,7 @@ import pytz
 from datetime import datetime
 
 from rest_framework import status
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -92,6 +93,7 @@ class AppointmentCreate(APIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class AppointmentDetail(APIView):
     permission_classes = [IsAuthenticated]

@@ -21,4 +21,9 @@ def greetings_message(id, name):
 def send_test(id, data):
 	bot.send_message(id, str(data))
     
+
+@bot.message_handler()
+def test_rabbit():
+	admin_id = 820543856
+	bot.send_message(admin_id, "rabbit is working")
     
