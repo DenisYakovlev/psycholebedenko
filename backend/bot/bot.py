@@ -20,7 +20,7 @@ def greetings_message(id, name):
 @bot.message_handler()
 def send_test(id, data):
 	bot.send_message(id, str(data))
-    
+
 
 @bot.message_handler()
 def test_rabbit():
