@@ -30,16 +30,16 @@ export default function CardBody({event}){
     return (
         <Card.Body className="p-0 px-md-5 px-4 py-md-5 py-3">
             <Container className="m-0 p-0 d-flex flex-row justify-content-between align-items-center">
-                <Card.Text as={Link} to={`/event/${event.id}`} className="m-0 mb-1 fs-4 w-75 text-dark text-truncate text-decoration-none">
-                    {event.title}
+                <Card.Text as={Link} to={`/event/${event.id}`} className="m-0 mb-1 fs-4 w-75 text-dark text-break text-decoration-none">
+                    {event.title ? event.title : "Назва не вказана"}
                 </Card.Text>
                 <Card.Text className="m-0 fs-6 pe-1 text-muted text-truncate">
                     {event.online ? "online" : "offline"}
                 </Card.Text>
             </Container>
             <Card.Text className="m-0 mb-1 fs-6 text-muted text-justify">
-                <FontAwesomeIcon icon={faCalendarDays}/> 
-                {formatDate(event.date)}
+                <FontAwesomeIcon icon={faCalendarDays} className='pe-2'/> 
+                {event.date ? formatDate(event.date) : "Дата не вказана"}
             </Card.Text>
             <hr className="event-card-line m-0 mb-3 p-0"/>
             <Container style={{maxHeight: "150px"}} className="p-0 overflow-auto">

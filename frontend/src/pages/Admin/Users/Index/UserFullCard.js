@@ -102,7 +102,7 @@ export default function UserFullCard({userId}){
                 </CardLayout.Body.Info>
 
                 <Button 
-                    as={Link} to={`/admin/appointments/assign?user=${user.id}`} 
+                    as={Link} to={`/admin/appointments/assign?user=${encodeURIComponent(JSON.stringify(user))}`} 
                     variant="outline-dark" size="md" 
                     className="text-decoration-none"
                 >

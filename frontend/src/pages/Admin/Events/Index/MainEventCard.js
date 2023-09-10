@@ -12,7 +12,7 @@ import { useEffect, useState } from "react"
 import ConfirmModal from "./ConfirmModal"
 
 
-export default function EventCard({event, editable=false}){
+export default function MainEventCard({event, editable=false}){
     let navigate = useNavigate()
     const [showConfirmModal, setShowConfirmModal] = useState(false)
 
@@ -41,7 +41,7 @@ export default function EventCard({event, editable=false}){
                     <Col sm={12} xs={12}  className="m-0 px-md-5 px-0">
                         <EventSide event={event}/>
                     </Col>
-                    <Col sm={12} xs={12} className="m-0 px-5 pt-3 pb-5 overflow-auto">
+                    <Col sm={12} xs={12} className="m-0 px-md-5 px-3 pt-3 pb-5 overflow-auto">
                         <Card.Text className="m-0 mb-1 fs-6 text-muted text-justify">
                             <FontAwesomeIcon icon={faCalendarDays} className="pe-2"/> 
                             {event.date ? formatDate(event.date) : "Дата не вказана"}
@@ -57,6 +57,7 @@ export default function EventCard({event, editable=false}){
                             </Card.Text>
                         </Container>
 
+                        {editable ?
                         <Container className="mt-3 p-0" fluid>
                             <Card.Text className="m-0 p-0 fs-5 text-muted fw-bold text-justify">
                                 Другорядний текст
@@ -64,7 +65,8 @@ export default function EventCard({event, editable=false}){
                             <Card.Text style={{height: "fit-content", whiteSpace: "break-spaces"}} className="m-0 fs-6 pe-0 text-muted text-justify">
                                 {event.thumbnail_text}
                             </Card.Text>
-                        </Container>
+                        </Container> : <></>
+                        }
 
                         {editable ?
                             <Container className="mt-5 p-0 d-flex justify-content-center align-items-center gap-3">

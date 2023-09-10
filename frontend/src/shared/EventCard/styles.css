@@ -1,11 +1,24 @@
 .event-card{
-    width: 1200px;
-    max-width: 80vw;
+    container-name: event-card-layout;
+    container-type: inline-size;
+    width: 90%;
+    max-width: 1200px;
     min-width: 350px;
     height: fit-content;
     min-height: 300px;
     animation-name: card-fade-in;
     animation-duration: 0.75s;
+}
+
+.event-card-layout-normal{
+    display: flex;
+    flex-direction: row;
+}
+
+
+.event-card-layout-reverse{
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .event-card-body{
@@ -38,16 +51,24 @@
     }
 }
 
-@media (max-width: 768px) {
+@container event-card-layout (width <= 791px) {
+    .event-card-layout-normal{
+        flex-direction: column-reverse !important;
+    }
+
+    .event-card-layout-reverse{
+        flex-direction: column-reverse !important;
+    }
+
     .event-card-body{
         min-width: 100%;
-        height: 350px !important;
+        height: 400px !important;
     }
 
     .event-card-img{
         width: 100% !important;
         min-width: 100%;
-        height: 200px;
+        height: 250px;
     }
 
     .event-card-footer{

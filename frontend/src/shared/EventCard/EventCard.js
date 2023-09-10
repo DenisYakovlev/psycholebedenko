@@ -26,25 +26,28 @@ export default function EventCard({event, idx}){
     }
 
     // switch image position between left and right on large screens
-    const cardDirection = idx % 2 ? "flex-md-row-reverse": "flex-md-row"
+    const cardDirection = idx % 2
+
 
     return (
         <Card style={{minWidth: "320px"}} 
-            className={"event-card bg-gradient shadow my-4 d-flex " + cardDirection + " flex-column-reverse event-card"} 
+            className={"event-card bg-gradient shadow my-4 d-flex" + " event-card"} 
             bg="light" data-bs-theme="white"
         >
-            <Container className="event-card-body p-0 m-0 d-flex flex-column justify-content-between">
-                <CardBody event={event}/>
-                <Container className="event-card-footer p-0 m-0 px-md-5 px-4 pb-4 d-flex justify-content-between align-items-center">
-                    <Card.Text className="m-0 fs-6 text-muted text-truncate">
-                        <FontAwesomeIcon icon={faClock} /> {event?.duration + " хв."}
-                    </Card.Text>
-                    <Button as={Link} to={`/event/${event.id}`} variant="outline-dark" className="">
-                        Перейти
-                    </Button>
+            <Card.Body className={`${cardDirection ? "event-card-layout-reverse" : "event-card-layout-normal"}` + ' p-0'}>
+                <Container className="event-card-body p-0 m-0 d-flex flex-column justify-content-between">
+                    <CardBody event={event}/>
+                    <Container className="event-card-footer p-0 m-0 px-md-5 px-4 pb-4 d-flex justify-content-between align-items-center">
+                        <Card.Text className="m-0 fs-6 text-muted text-truncate">
+                            <FontAwesomeIcon icon={faClock} /> {event?.duration ? event.duration + " хв." : "Тривалість не вказана"}
+                        </Card.Text>
+                        <Button as={Link} to={`/event/${event.id}`} variant="outline-dark" className="">
+                            Перейти
+                        </Button>
+                    </Container>
                 </Container>
-            </Container>
-            <Card.Img as={Container} style={styles.cardImg} className="event-card-img p-0 m-0"/>
+                <Card.Img as={Container} style={styles.cardImg} className="event-card-img p-0 m-0"/>
+            </Card.Body>
         </Card> 
     )
 }

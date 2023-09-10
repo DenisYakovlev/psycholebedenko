@@ -1,27 +1,37 @@
 import { useEffect, useState } from "react"
 import { BasePageLayout, TwoSideLayout } from "../../Components"
-import { useQueryParam, JsonParam, StringParam } from "use-query-params"
 import LayoutSide from "./LayoutSide"
 import LayoutMain from "./LayoutMain"
+import { BooleanParam, JsonParam, StringParam, useQueryParams, withDefault } from "use-query-params"
 
 
 export default function Assign(){
-    const [users, setUsers] = useState()
-    const [selectedUser, setSelectedUser] = useQueryParam('user', StringParam)
+    const [virtualCard, setVirtualCard] = useQueryParams({
+        user: JsonParam,
+        address: StringParam,
+        online: withDefault(BooleanParam, true),
+        create_zoom_link: withDefault(BooleanParam, true),
+        status: withDefault(StringParam, "pending"),
+        date: JsonParam,
+        notes: StringParam
+    })
+
 
     return (
         <BasePageLayout>
             <TwoSideLayout>
                 <TwoSideLayout.Side>
                     <LayoutSide 
-                        users={users}
-                        setUsers={setUsers}
-                        setSelectedUser={user => setSelectedUser(user.id)}
+                        card={virtualCard}
+                        setCard={setVirtualCard}
                     />
                 </TwoSideLayout.Side>
 
-                <TwoSideLayout.Main>
-                    <LayoutMain user={selectedUser}/>
+                <TwoSideLayout.Main sticky>
+                    <LayoutMain 
+                        card={virtualCard}
+                        setCard={setVirtualCard}
+                    />
                 </TwoSideLayout.Main>
             </TwoSideLayout>
         </BasePageLayout>
