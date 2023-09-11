@@ -87,3 +87,13 @@ services:
       sh -c "celery -A app worker -l info"
     depends_on:
       - rabbitmq
+
+  celery-beat:
+    image: backend-img
+    container_name: celery-beat
+    environment:
+      *common-variables
+    command: >
+      sh -c "celery -A app beat -l info"
+    depends_on:
+      - rabbitmq

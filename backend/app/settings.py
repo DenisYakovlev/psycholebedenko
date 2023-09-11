@@ -72,9 +72,6 @@ RABBITMQ = {
     "PASSWORD": "admin",
 }
 
-CELERY_BROKER_URL = f"{RABBITMQ['PROTOCOL']}://{RABBITMQ['USER']}:{RABBITMQ['PASSWORD']}@{RABBITMQ['HOST']}:{RABBITMQ['PORT']}"
-CELERY_IGNORE_RESULT = True
-
 AUTHENTICATION_BACKENDS = [
     # default auth with username and password
     'django.contrib.auth.backends.ModelBackend',
@@ -197,3 +194,10 @@ MEDIA_URL = 'media/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CELERY_BROKER_URL = f"{RABBITMQ['PROTOCOL']}://{RABBITMQ['USER']}:{RABBITMQ['PASSWORD']}@{RABBITMQ['HOST']}:{RABBITMQ['PORT']}"
+
+CELERY_IGNORE_RESULT = True
+
+CELERY_TIMEZONE = TIME_ZONE

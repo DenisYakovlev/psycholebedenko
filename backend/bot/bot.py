@@ -27,3 +27,7 @@ def test_rabbit():
 	admin_id = 820543856
 	bot.send_message(admin_id, "rabbit is working")
     
+@bot.message_handler()
+def test_beat_():
+	admin_id = 605099201
+	bot.send_message(admin_id, "ПИШИ ТЕКСТ, ПИДОР")
