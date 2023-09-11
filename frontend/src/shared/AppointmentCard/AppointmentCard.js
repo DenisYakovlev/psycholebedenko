@@ -14,7 +14,7 @@ export default function AppointmentCard({appointment, onChange, onDelete}){
                 <CardHeader appointment={appointment} onChange={onChange} onDelete={onDelete}/>
                 <CardBody appointment={appointment}/>
             </Card.Body>
-            <CardFooter appointment={appointment}/>
+            <CardFooter appointment={appointment} />
         </Card>
     )
 }

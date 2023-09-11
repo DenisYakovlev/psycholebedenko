@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container"
 import Accordion from "react-bootstrap/Accordion"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../contexts"
 import { backend_url } from "../../constants"
 
@@ -10,6 +10,11 @@ import { backend_url } from "../../constants"
 export default function CardFooter({appointment}){
     const {authFetch} = useContext(UserContext)
     const [notes, setNotes] = useState(appointment.notes)
+
+
+    useEffect(() => {
+        setNotes(appointment.notes)
+    }, [appointment])
 
     const handleClick = () => {
         authFetch(`${backend_url}/appointment/${appointment.id}`, {

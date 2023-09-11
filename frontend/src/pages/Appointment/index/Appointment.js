@@ -110,10 +110,6 @@ export default function Appointment(){
                 <PageLayout>
 
                     <PageLayout.CardTable>
-                        <PageLayout.CardCell>
-                            <CreateCard />
-                        </PageLayout.CardCell>
-
                         {appointments.map(appointment => 
                             <PageLayout.CardCell key={appointment.id}>
                                 <AppointmentCard 
@@ -123,6 +119,10 @@ export default function Appointment(){
                                 />
                             </PageLayout.CardCell>
                         )}
+
+                        <PageLayout.CardCell>
+                            <CreateCard />
+                        </PageLayout.CardCell>
                     </PageLayout.CardTable>
                 </PageLayout>
             }
