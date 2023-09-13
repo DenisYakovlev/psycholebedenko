@@ -123,3 +123,19 @@ class EventImages(APIView):
             "https://psycholebedenko-backend.s3.amazonaws.com/event_img_3.jpg",
             "https://psycholebedenko-backend.s3.amazonaws.com/event_img_4.jpg"
         }, status.HTTP_200_OK)
+
+
+class EventParticipants(generics.RetrieveAPIView):
+    permission_classes = [IsAdminUser]
+    queryset = Participation.objects.all()
+    serializer_class = ParticipationSerializer
+    pagination_class = None
+    
+    def get(self, request, pk):
+        queryset = self.get_queryset().filter(event=pk)
+
+        serializer = self.serializer_class(queryset, many=True)
+        data = [item["user"] for item in serializer.data]
+        
+        return Response(data, status.HTTP_200_OK)
+    

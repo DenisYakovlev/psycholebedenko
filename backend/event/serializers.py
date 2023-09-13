@@ -2,7 +2,9 @@ import datetime
 import pytz
 from django.conf import settings
 from rest_framework import serializers
+
 from .models import Event, Participation
+from user.serializers import TelegramUserSerializer
 
 class EventSerializer(serializers.ModelSerializer):
     
@@ -61,6 +63,7 @@ class EventDetailSerializer(EventListSerializer):
     
     
 class ParticipationSerializer(serializers.ModelSerializer):
+    user = TelegramUserSerializer()
     class Meta:
         model = Participation
         fields = ['user', 'event']
