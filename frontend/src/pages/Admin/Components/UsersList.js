@@ -13,7 +13,7 @@ export default function UsersList({users, handleSearch, setSelectedUser}){
         }
 
         selectedCard.current = event.target
-        selectedCard.current.style.setProperty("color", "var(--bs-success)", "important")
+        // selectedCard.current.style.setProperty("color", "var(--bs-success)", "important")
         
         setSelectedUser(user)
     }

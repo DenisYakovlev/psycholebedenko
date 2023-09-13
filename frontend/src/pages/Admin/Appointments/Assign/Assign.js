@@ -11,7 +11,7 @@ export default function Assign(){
         address: StringParam,
         online: withDefault(BooleanParam, true),
         create_zoom_link: withDefault(BooleanParam, true),
-        status: withDefault(StringParam, "pending"),
+        status: withDefault(StringParam, "appointed"),
         date: JsonParam,
         notes: StringParam
     })

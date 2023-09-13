@@ -8,6 +8,7 @@ import {
   EventDetails, 
   Tests, 
   User, 
+  UserEvents,
   Exit, 
   Bot, 
   Admin,
@@ -74,6 +75,7 @@ export default function App(){
 
                   <Route path="users">
                     <Route index element={<Users />}/>
+                    <Route path="participation" element={<UserEvents />}/>
                   </Route>
 
                   <Route path="events">

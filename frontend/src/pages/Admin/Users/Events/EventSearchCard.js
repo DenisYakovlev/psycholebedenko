@@ -2,34 +2,34 @@ import Card from "react-bootstrap/Card"
 import Container from "react-bootstrap/Container"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons"
+import { formatDate } from "../../../utils"
 
 
-export default function UserCard({user, setSelectedUser, props}){
+export default function EventSearchCard({event, setSelectedEvent}){
     return (
         <Card
-            {...props}
             bg="light" data-bs-theme="theme"
-            className="m-0 p-3 rounded-0 border-0 border-bottom border-muted w-100"
+            className="m-0 p-3 rounded-0 border-0 border-bottom border-muted"
         >
             <Card.Body className="m-0 p-0 d-flex gap-2">
-                <Card.Img src={user.photo_url} style={{width: "56px", height: "56px"}} alt="user picture"/>
+                <Card.Img src={event.img_url} style={{width: "56px", height: "56px"}} alt="event picture"/>
 
                 <Container
-                    onClick={(e) => setSelectedUser(e, user)}
                     style={{cursor: "pointer"}}
                     className="p-0 d-flex justify-content-between align-items-center"
+                    onClick={(e) => setSelectedEvent(e, event)} 
                 >
                     <Container className="m-0 px-2 d-flex flex-column">
                         <Card.Text 
-                            className="m-0 p-0 fs-5 text-dark fw-semibold"
+                            className="m-0 p-0 fs-6 text-dark fw-semibold text-break"
                         >
-                            {`${user.first_name ? user.first_name : ""} ${user.last_name ? user.last_name : ""}`}
+                            {`${event.title ? event.title : "Назва не вказана"}`}
                         </Card.Text>
                         <Card.Text className="m-0 p-0 fs-6 text-muted">
-                            {`${user.username ? "@" + user.username : "@"}`}
+                            {`${event.date ? formatDate(event.date) : "Дата не вказана"}`}
                         </Card.Text>
                     </Container>
-                    <FontAwesomeIcon  
+                    <FontAwesomeIcon 
                         icon={faChevronRight} 
                         className="fs-3"
                     />
