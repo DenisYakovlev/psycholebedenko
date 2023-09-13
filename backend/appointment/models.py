@@ -6,7 +6,10 @@ from schedule.models import Schedule
 # Create your models here.
 
 def set_default_title():
-    return f"Appointment #{Appointment.objects.latest('id').id}"
+    try:
+        return f"Appointment #{Appointment.objects.latest('id').id}"
+    except Appointment.DoesNotExist:
+        return f"Appointment #0"
 
 def set_default_address():
     return "Ще не визначено"

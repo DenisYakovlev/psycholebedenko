@@ -12,10 +12,10 @@ x-common-variables: &common-variables
 services:
   frontend:
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       context: ./frontend/
     command: >
-      sh -c "npx serve -l 3000 -s -n build"
+      sh -c "npm start"
     container_name: frontend
     volumes:
       - /app/node_modules

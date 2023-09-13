@@ -29,5 +29,15 @@ def test_rabbit():
     
 @bot.message_handler()
 def test_beat_():
-	admin_id = 605099201
-	bot.send_message(admin_id, "ПИШИ ТЕКСТ, ПИДОР")
+	admin_id = 820543856
+	bot.send_message(admin_id, "beat is working")
+
+
+@bot.message_handler()
+def appointment_notification(appointment, admin_id):
+	bot.send_message(appointment.user.id, "user msg")
+	bot.send_message(admin_id, "admin msg")
+
+@bot.message_handler()
+def appointment_notification_fail(admin_id):
+	bot.send_message(admin_id, 'appointment notification failure')

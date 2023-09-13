@@ -10,11 +10,16 @@ app = Celery('app')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.conf.beat_schedule = {
-    'test': {
-        'task': 'server.tasks.test_beat',
-        'schedule': crontab(),
-        'args': ()
-    },
+    # 'test': {
+    #     'task': 'server.tasks.test_beat',
+    #     'schedule': crontab(minute='55', hour='*'),
+    #     'args': ()
+    # },
+    # 'appointment_notifications': {
+    #     'task': 'appointment.tasks.appoinment_notifications',
+    #     'schedule': crontab(minute="*"),
+    #     'args': ()
+    # }
 }
 
 app.autodiscover_tasks()

@@ -1,6 +1,5 @@
 from celery import shared_task
-from bot.bot import test_rabbit
-
+from bot.bot import test_rabbit, test_beat_
 
 @shared_task
 def test():
@@ -9,5 +8,5 @@ def test():
 
 @shared_task
 def test_beat():
-    print("Running")
+    test_beat_()
     return 

@@ -64,6 +64,8 @@ INSTALLED_APPS = [
     'server',
 ]
 
+ADMIN_ID = 820543856
+
 RABBITMQ = {
     "PROTOCOL": "amqp", # in prod change with "amqps"
     "HOST": "rabbit",
