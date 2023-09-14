@@ -203,3 +203,28 @@ CELERY_BROKER_URL = f"{RABBITMQ['PROTOCOL']}://{RABBITMQ['USER']}:{RABBITMQ['PAS
 CELERY_IGNORE_RESULT = True
 
 CELERY_TIMEZONE = TIME_ZONE
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    "formatters": {
+        "verbose": {
+            "format": "[{name} {levelname} {asctime} {module}] {message}",
+            "style": "{",
+        },
+    },
+    'handlers': {
+        'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            "formatter": "verbose",
+        },
+    },
+    'loggers': {
+        'bot_logs': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        }
+    }
+}

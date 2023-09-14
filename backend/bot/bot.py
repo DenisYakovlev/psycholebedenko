@@ -1,43 +1,23 @@
 from django.conf import settings
 import telebot
-import json
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton
+import logging
+
+logger = logging.getLogger('bot_logs')
 
 token = settings.TELEGRAM_BOT_API_KEY
+admin_id = settings.ADMIN_ID
+
 bot = telebot.TeleBot(token)
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['start', 'test'])
 def start_message(message):
-	bot.send_message(message.chat.id, 'hello' + str(message.chat.id))
-
-@bot.message_handler(commands=['test'])
-def test_message(message):
-	bot.send_message(message.chat.id,'Test')
-    
-@bot.message_handler()
-def greetings_message(id, name):
-    bot.send_message(id, f"Hello, {name}")
-    
-@bot.message_handler()
-def send_test(id, data):
-	bot.send_message(id, str(data))
+	markup = ReplyKeyboardMarkup(resize_keyboard=True)
+	markup.row("hui", "pizda")
+	logger.debug("test call")
+	bot.send_message(message.from_user.id, "hello", reply_markup=markup)
 
 
-@bot.message_handler()
-def test_rabbit():
-	admin_id = 820543856
-	bot.send_message(admin_id, "rabbit is working")
-    
-@bot.message_handler()
-def test_beat_():
-	admin_id = 820543856
-	bot.send_message(admin_id, "beat is working")
-
-
-@bot.message_handler()
-def appointment_notification(appointment, admin_id):
-	bot.send_message(appointment.user.id, "user msg")
-	bot.send_message(admin_id, "admin msg")
-
-@bot.message_handler()
-def appointment_notification_fail(admin_id):
-	bot.send_message(admin_id, 'appointment notification failure')
+@bot.message_handler(regexp="hui")
+def response(message):
+	bot.send_message(message.from_user.id, "da")

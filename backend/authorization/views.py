@@ -7,7 +7,6 @@ from .serializers import AuthWidgetTelegramUserSerializer, AuthBotAppTelegramUse
 from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
 
-from bot.bot import send_test
 
 class AuthWidgetTelegramUser(APIView):
     permission_classes = []
