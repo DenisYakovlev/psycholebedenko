@@ -63,7 +63,14 @@ class EventDetailSerializer(EventListSerializer):
     
     
 class ParticipationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Participation
+        fields = ['user', 'event']
+
+
+class ParticipationInfoSerializer(serializers.ModelSerializer):
     user = TelegramUserSerializer()
+    
     class Meta:
         model = Participation
         fields = ['user', 'event']

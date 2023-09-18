@@ -11,7 +11,7 @@ from django.http import Http404
 from django.conf import settings
 
 from .models import Event, Participation
-from .serializers import EventSerializer, EventListSerializer, EventDetailSerializer, ParticipationSerializer
+from .serializers import EventSerializer, EventListSerializer, EventDetailSerializer, ParticipationSerializer, ParticipationInfoSerializer
 from .filters import EventFilter
 
 
@@ -128,7 +128,7 @@ class EventImages(APIView):
 class EventParticipants(generics.RetrieveAPIView):
     permission_classes = [IsAdminUser]
     queryset = Participation.objects.all()
-    serializer_class = ParticipationSerializer
+    serializer_class = ParticipationInfoSerializer
     pagination_class = None
     
     def get(self, request, pk):
