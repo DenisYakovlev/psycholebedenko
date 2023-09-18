@@ -24,7 +24,7 @@ services:
     ports:
       - "80:3000"
     environment:
-      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
     depends_on:
       - backend
     stdin_open: true
@@ -97,3 +97,13 @@ services:
       sh -c "celery -A app beat -l info"
     depends_on:
       - rabbitmq
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    command: redis-server
+    hostname: redis
+    volumes:
+      - ./redis:/var/lib/redis
+    ports:
+      - 6379:6379
