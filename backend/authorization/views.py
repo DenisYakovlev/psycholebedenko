@@ -3,9 +3,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from django.core.cache import cache
 from .serializers import AuthWidgetTelegramUserSerializer, AuthBotAppTelegramUserSerializer, PasswordlessTokenObtainPairSerializer
 from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
+from .utils import generatePhoneVerificationTokens
+from bot import bot
 
 
 class AuthWidgetTelegramUser(APIView):
@@ -24,7 +27,16 @@ class AuthWidgetTelegramUser(APIView):
             # create jwt tokens
             tokens_serializer = PasswordlessTokenObtainPairSerializer(data=serializer.validated_data)
             if tokens_serializer.is_valid():
-                return Response(tokens_serializer.validated_data, status.HTTP_201_CREATED)
+                bot.webAppDrivenAuthorization(user.id, user.first_name, first_authorization=False)
+
+                wsToken, confirmToken = generatePhoneVerificationTokens(user.id, user.auth_date)
+                bot.handlePhoneVerification(user.id, wsToken, confirmToken)
+                
+                return Response({
+                    **tokens_serializer.validated_data,
+                    "phoneVerificationToken": wsToken
+                }, 
+                status.HTTP_201_CREATED)
             
             return Response(tokens_serializer.errors, status.HTTP_409_CONFLICT)
         else:
@@ -45,7 +57,16 @@ class AuthWidgetTelegramUser(APIView):
             # create jwt tokens
             tokens_serializer = PasswordlessTokenObtainPairSerializer(data=serializer.validated_data)
             if tokens_serializer.is_valid():
-                return Response(tokens_serializer.validated_data, status.HTTP_201_CREATED)
+                bot.webAppDrivenAuthorization(request.data['id'], request.data['first_name'], first_authorization=True)
+
+                wsToken, confirmToken = generatePhoneVerificationTokens(request.data['id'], request.data['auth_date'])
+                bot.handlePhoneVerification(request.data['id'], wsToken, confirmToken)
+
+                return Response({
+                    **tokens_serializer.validated_data,
+                    "phoneVerificationToken": wsToken
+                }
+                , status.HTTP_201_CREATED)
             
             return Response(tokens_serializer.errors, status.HTTP_409_CONFLICT)
             
@@ -68,3 +89,29 @@ class AuthBotAppTelegramUser(APIView):
             return Response(tokens_serializer.errors, status.HTTP_409_CONFLICT)
         
         return Response(serializer.errors, status.HTTP_409_CONFLICT)
+    
+
+class PhoneVerificationRetry(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        wsToken, confirmToken = generatePhoneVerificationTokens(request.user.id, request.user.auth_date)
+        bot.handlePhoneVerification.delay(request.user.id, wsToken, confirmToken, forceStart=True)
+
+        return Response({"phoneVerificationToken": wsToken}, status.HTTP_200_OK)
+    
+
+class PhoneVerificationCheck(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            wsToken, confirmToken = request.data["wsToken"], request.data["confirmToken"]
+            cached_confirmToken = cache.get(wsToken)
+
+            if not cached_confirmToken or confirmToken != cached_confirmToken:
+                return Response({"msg": "Wrong Token"}, status.HTTP_409_CONFLICT)
+            
+            return Response(status.HTTP_204_NO_CONTENT)
+        except:
+            return Response({"msg": "Token is wrong or expired"}, status.HTTP_409_CONFLICT)

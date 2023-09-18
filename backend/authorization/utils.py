@@ -4,6 +4,7 @@ import hmac
 import requests
 import hashlib
 from hashlib import sha256
+from django.conf import settings
 
 
 def confirmTelegramWidgetHash(data, secret_key):
@@ -56,3 +57,11 @@ def validateIMGURL(url):
     req = requests.get(url)
     return req.ok
     
+
+def generatePhoneVerificationTokens(user_id, auth_date):
+    secret_key = settings.TELEGRAM_BOT_API_KEY
+    string_to_encode = str(user_id) + " " + str(auth_date)
+
+    wsToken = hmac.new(secret_key.encode(), string_to_encode.encode(), hashlib.sha256).hexdigest()
+    confirmToken = hmac.new(secret_key.encode(), wsToken.encode(), hashlib.sha256).hexdigest()
+    return wsToken, confirmToken
