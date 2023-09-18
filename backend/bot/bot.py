@@ -56,6 +56,7 @@ def webAppDrivenAuthorization(user_id, first_name, first_authorization=True):
 @shared_task
 def handlePhoneVerification(user_id, wsToken, confirmToken, forceStart=False):
 	logger.debug("handlePhoneVerification")
+	logger.debug(f"ws: {wsToken}\nconfirm: {confirmToken}")
 
 	if not forceStart:
 		# check if token already exists and doesn't need to refresh
