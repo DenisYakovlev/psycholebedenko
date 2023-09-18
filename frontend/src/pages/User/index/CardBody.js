@@ -4,11 +4,17 @@ import Button from "react-bootstrap/Button"
 import { Link } from "react-router-dom"
 import { formatUnixDate } from "../../utils"
 import { useContext } from "react"
-import { AuthModalContext } from "../../../contexts"
+import { AuthModalContext, UserContext } from "../../../contexts"
 
 
 export default function CardBody({user}){
+    const {setUser} = useContext(UserContext)
     const {showAuthModal} = useContext(AuthModalContext)
+
+    const handleExit = () => {
+        localStorage.removeItem('tokens')
+        setUser(null)
+    }
 
     return (
         <Card.Body style={{height: "fit-content"}} className="mb-3 px-5 d-flex flex-column gap-3">
@@ -53,8 +59,8 @@ export default function CardBody({user}){
                 <Button onClick={showAuthModal} variant="outline-dark" className="w-75" size="lg">
                     Оновити
                 </Button>
-                <Card.Text as={Link} to="exit" className="m-0 p-0 text-center text-muted hover-text">
-                    Як вийти?
+                <Card.Text onClick={handleExit} className="m-0 p-0 text-center text-muted hover-text">
+                    вийти
                 </Card.Text>
             </Container>
         </Card.Body>

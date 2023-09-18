@@ -34,16 +34,8 @@ export default function User(){
 
         await authFetch.get('user/me').then(data => setUserData(data))
 
-
         setIsLoading(false)
     }
-
-    // useEffect(() => {
-    //     if(!user){
-    //         navigate("/")
-    //         return
-    //     }
-    // }, [])
 
     useEffect(() => {
         if(!user){
