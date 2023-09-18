@@ -31,6 +31,5 @@ def rabbit_test(request):
     appointment = Appointment.objects. \
         filter(date__date__gt=start, date__date__lt=end).first()
 
-    print(appointment.date.date)
     
     return Response({"msg": "working"}, status.HTTP_200_OK)
