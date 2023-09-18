@@ -11,7 +11,7 @@ export default function ZoomForm({onChange}){
             </FormTitle>
 
             <Container className="px-3">
-            <Form.Check>
+                <Form.Check>
                     <Form.Check.Input
                         value={true}
                         onClick={onChange}

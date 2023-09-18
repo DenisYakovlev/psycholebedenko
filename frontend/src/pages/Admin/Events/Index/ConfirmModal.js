@@ -4,24 +4,15 @@ import Button from "react-bootstrap/Button"
 import { backend_url } from "../../../../constants"
 import { useContext } from "react"
 import { UserContext } from "../../../../contexts"
+import useApi from "../../../../hooks/useApi"
 
 
 export default function ConfirmModal({show, hide, event}){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {authFetch} = useApi()
 
     const hadnleClick = () => {
-        authFetch(`${backend_url}/event/${event.id}/manage`, {
-            method: "DELETE"
-        })
-        .then(response => {
-            if(response.ok){
-                hide()
-                return
-            }
-
-            throw new Error("Admin event delete error")
-        })
-        .catch(error => console.log(error))
+        authFetch.delete(`event/${event.id}/manage`).then(data => hide())
     }
 
     return (

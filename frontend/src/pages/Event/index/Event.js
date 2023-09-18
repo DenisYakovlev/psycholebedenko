@@ -7,22 +7,20 @@ import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../contexts/UserContext"
 import { EventCard } from "../../../shared"
 import { backend_url } from "../../../constants"
+import useApi from "../../../hooks/useApi"
 
 
 export default function Event(){
-    const {user, publicFetch} = useContext(UserContext)
+    const {user} = useContext(UserContext)
+    const {publicFetch} = useApi()
     const [events, setEvents] = useState([])
     const [isLoading, setIsLoading] = useState(false)
 
     const fetchEvents = async () => {
         setIsLoading(true)
-        await publicFetch(`${backend_url}/event/?status=active`, {
-            method: "GET"
-        })
-        .then(response => response.json())
-        .then(data => {
-            setEvents([...data])
-        })
+
+        await publicFetch.get(`event/?status=active`).then(data => setEvents([...data]))
+
         setIsLoading(false)
     }
     // fetch events if user not authorized

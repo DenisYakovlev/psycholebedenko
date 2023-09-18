@@ -4,10 +4,12 @@ import Button from "react-bootstrap/Button"
 import { backend_url } from "../../../../constants"
 import { useContext, useState } from "react"
 import { UserContext } from "../../../../contexts"
+import useApi from "../../../../hooks/useApi"
 
 
 export default function DateCard({date, onChange, onSelect}){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {authFetch} = useApi()
 
     // change selected date and scroll to it position
     const handleSelect = event => {
@@ -17,40 +19,19 @@ export default function DateCard({date, onChange, onSelect}){
 
     // activate date and allow asignment to it
     const handleActivate = async () => {
-        await authFetch(`${backend_url}/schedule/create`, {
-            method: "POST",
+        await authFetch.post(`schedule/create`, {
             body: JSON.stringify([{
                 date: date.date
             }]),
             headers: {
                 "Content-type": "Application/json"
             }
-        })
-        .then(response => {
-            if(response.ok){
-                onChange()
-                return 
-            }
-
-            throw new Error("Admin schedule create error")
-        })
-        .catch(error => console.log(error))
+        }).then(data => onChange())
     }
 
     // deactivate date
     const handleDeactivate = async () => {
-        await authFetch(`${backend_url}/schedule/${date.schedule.id}`, {
-            method: "DELETE",
-        })
-        .then(response => {
-            if(response.ok){
-                onChange()
-                return 
-            }
-
-            throw new Error("Admin schedule delete error")
-        })
-        .catch(error => console.log(error))
+        await authFetch.delete(`schedule/${date.schedule.id}`).then(data => onChange())
     }
 
     const _handleActivate = e => {

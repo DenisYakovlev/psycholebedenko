@@ -15,10 +15,12 @@ import ResultModal from "./ResultModal"
 import { useContext, useState } from "react"
 import { backend_url } from "../../../../constants"
 import { UserContext } from "../../../../contexts"
+import useApi from "../../../../hooks/useApi"
 
 
 export default function LayoutSide({event, setEvent}){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {baseAuthFetch} = useApi()
     const [showResult, setShowResult] = useState(false)
     const [resultType, setResultType] = useState(null)
 
@@ -28,8 +30,7 @@ export default function LayoutSide({event, setEvent}){
     }
 
     const handleClick = () => {
-        authFetch(`${backend_url}/event/${event.id}/manage`, {
-            method: "PUT",
+        baseAuthFetch.put(`event/${event.id}/manage`, {
             headers: {
                 "Content-type": "Application/json"
             },

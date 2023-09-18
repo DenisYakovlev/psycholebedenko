@@ -9,6 +9,7 @@ import CardHeader from "./CardHeader"
 import { useNavigate } from "react-router-dom";
 import CardBody from "./CardBody"
 import "../styles.css"
+import useApi from "../../../hooks/useApi"
 
 
 const styles = {
@@ -23,28 +24,26 @@ const styles = {
 
 export default function User(){
     const navigate = useNavigate()
-    const {user, authFetch} = useContext(UserContext)
+    const {user} = useContext(UserContext)
+    const {authFetch} = useApi()
     const [userData, setUserData] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
 
     const fetchUser = async () => {
         setIsLoading(true)
 
-        await authFetch(`${backend_url}/user/me`, {
-            method: "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
+        await authFetch.get('user/me').then(data => setUserData(data))
 
-            throw new Error("User data fetch error")
-        })
-        .then(data => setUserData(data))
-        .catch(error => console.log(error))
 
         setIsLoading(false)
     }
+
+    // useEffect(() => {
+    //     if(!user){
+    //         navigate("/")
+    //         return
+    //     }
+    // }, [])
 
     useEffect(() => {
         if(!user){
@@ -52,10 +51,6 @@ export default function User(){
             return
         }
 
-        fetchUser()
-    }, [])
-
-    useEffect(() => {
         fetchUser()
     }, [user])
 

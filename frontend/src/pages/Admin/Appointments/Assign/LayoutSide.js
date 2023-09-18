@@ -13,20 +13,21 @@ import ResultModal from "./ResultModal"
 import { useContext, useState } from "react"
 import { backend_url } from "../../../../constants"
 import { UserContext } from "../../../../contexts"
+import useApi from "../../../../hooks/useApi"
 
 
 export default function LayoutSide({card, setCard}){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
     const [showResult, setShowResult] = useState(false)
     const [resultType, setResultType] = useState(null)
+    const {baseAuthFetch} = useApi()
 
     const handleChange = (key, value) => {
         setCard({...card, [key] : value})
     }
 
     const handleClick = () => {
-        authFetch(`${backend_url}/appointment/`, {
-            method: "POST",
+        baseAuthFetch.post('appointment/', {
             headers: {
                 "Content-type": "Application/json"
             },
@@ -41,7 +42,7 @@ export default function LayoutSide({card, setCard}){
             })
         })
         .then(response => {
-            if(response.status == 201){
+            if(response.ok){
                 setResultType("success")
                 setShowResult(true)
                 return response.json()

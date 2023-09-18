@@ -4,9 +4,12 @@ import Card from "react-bootstrap/Card"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClock, faUserGroup, faWifi, faUsers, faArrowUpRightFromSquare, faLocationDot } from "@fortawesome/free-solid-svg-icons"
 import { formatDate } from "../../utils"
+import { useNavigate } from "react-router"
 
 
 export default function EventSide({event}){
+    let navigate = useNavigate()
+
     const handleZoomRedirect = () => {
         if(event.zoom_link){
             window.open(event.zoom_link)

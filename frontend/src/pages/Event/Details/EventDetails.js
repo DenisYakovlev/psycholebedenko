@@ -13,11 +13,13 @@ import EventSide from "./EventSide"
 import ResultModal from "./ResultModal"
 import { AuthModalContext, UserContext } from "../../../contexts"
 import "./styles.css"
+import useApi from "../../../hooks/useApi"
 
 export default function EventDetails(){
     const {id} = useParams()
     const [isLoading, setIsLoading] = useState(false)
-    const {user, authFetch, publicFetch} = useContext(UserContext)
+    const {user} = useContext(UserContext)
+    const {authFetch, publicFetch} = useApi()
     const {showAuthModal} = useContext(AuthModalContext)
     const [showResult, setShowResult] = useState(false)
     const [resultType, setResultType] = useState("")
@@ -30,13 +32,9 @@ export default function EventDetails(){
 
     const fetchEvent = async () => {
         setIsLoading(true)
-        await publicFetch(`${backend_url}/event/${id}`, {
-            method: "GET"
-        })
-        .then(response => response.json())
-        .then(data => {
-            setEvent(data)
-        })
+
+        await publicFetch.get(`event/${id}`).then(data => setEvent(data))
+
         setIsLoading(false)
     }
 
@@ -50,28 +48,18 @@ export default function EventDetails(){
     }, [])
 
     const handleAddParticipation = () => {
-        authFetch(`${backend_url}/event/${id}/participate`, {
-            method: "POST"
-        })
-        .then(response => {
-            if(response.status == 200){
-                setParticipated(true)
-                setResultType("success")
-                setShowResult(true)
-            }
+        authFetch.post(`event/${id}/participate`).then(data => {
+            setParticipated(true)
+            setResultType("success")
+            setShowResult(true)
         })
     }
 
     const handleRemoveParticipation = () => {
-        authFetch(`${backend_url}/event/${id}/participate`, {
-            method: "DELETE"
-        })
-        .then(response => {
-            if(response.status == 200){
-                setParticipated(false)
-                setResultType("success")
-                setShowResult(true)
-            }
+        authFetch.delete(`event/${id}/participate`).then(data => {
+            setParticipated(false)
+            setResultType("success")
+            setShowResult(true)
         })
     }
 

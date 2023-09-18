@@ -6,20 +6,16 @@ import { UserContext } from "../../../contexts/UserContext"
 import { EventCard } from "../../../shared"
 import { backend_url } from "../../../constants"
 import MainText from "./MainText"
+import useApi from "../../../hooks/useApi"
 
 
 export default function Events(){
-    const {user, publicFetch} = useContext(UserContext)
+    const {user} = useContext(UserContext)
+    const {publicFetch} = useApi()
     const [events, setEvents] = useState([])
 
     const fetchEvents = () => {
-        publicFetch(`${backend_url}/event/?status=active`, {
-            method: "GET"
-        })
-        .then(response => response.json())
-        .then(data => {
-            setEvents([...data])
-        })
+        publicFetch.get(`event/?status=active`).then(data => setEvents([...data]))
     }
     // fetch events if user not authorized
     useEffect(() => {

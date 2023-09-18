@@ -11,11 +11,13 @@ import DateCard from "./DateCard"
 import AppointmentContainer from "./AppointmentContainer"
 import AppointmentCreateCard from "./AppointmentCreateCard"
 import "./styles.css"
+import useApi from "../../../../hooks/useApi"
 const moment = require("moment")
 
 
 export default function Planning(){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {authFetch} = useApi()
     const [options, setOptions] = useState([])
     const [dateSchedule, setDateSchedule] = useState(null)
     const [selectedAppointment, setSelectedAppointment] = useState(null)
@@ -26,18 +28,7 @@ export default function Planning(){
 
     // fetch schedule
     const fetchSchedule = async () => {
-        return await authFetch(`${backend_url}/schedule`, {
-            method: "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("admin fetch schedule error")
-        })
-        .then(data => setOptions(data))
-        .catch(error => console.error(error))
+        return await authFetch.get(`schedule`).then(data => setOptions(data))
     }
 
     // fetch schedule for specific date
@@ -46,18 +37,7 @@ export default function Planning(){
             return
         }
 
-        return await authFetch(`${backend_url}/schedule/calendar?date=${date}`, {
-            method: "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("Admin date schedule fetch error")
-        })
-        .then(data => setDateSchedule(data))
-        .catch(error => console.log(error))
+        return await authFetch.get(`schedule/calendar?date=${date}`).then(data => setDateSchedule(data))
     }
 
     // if time is specified, than show related appointment for that date and time

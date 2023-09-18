@@ -5,35 +5,27 @@ import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../contexts"
 import { backend_url } from "../../../constants"
 import { useQueryParam, StringParam } from "use-query-params"
+import useApi from "../../../hooks/useApi"
 
 
 export default function UserSearchFilter({users, setUsers, setSelectedUser}){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {authFetch} = useApi()
     const [search, setSearch] = useQueryParam('search', StringParam)
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSearch = async url => {
         setIsLoading(true)
 
-        await authFetch(url, {
-            method: "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("Admin User list fetch error")
-        })
+        await authFetch.get(url)
         .then(data => setUsers(data))
-        .catch(error => console.log(error))
 
         setIsLoading(false)
     }
 
     const _handleSearch = _search => {
         setSearch(_search)
-        handleSearch(`${backend_url}/user?search=${_search ? _search : ""}`)
+        handleSearch(`user?search=${_search ? _search : ""}`)
     }
 
     useEffect(() => {

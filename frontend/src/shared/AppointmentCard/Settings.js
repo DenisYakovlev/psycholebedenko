@@ -9,14 +9,17 @@ import DeleteModal from "./DeleteModal"
 import UpdateModal from "./UpdateModal"
 import StatusModal from "./StatusModal"
 import jwt_decode from "jwt-decode";
+import useApi from "../../hooks/useApi"
 
 
 export default function Settings({appointment, onChange, onDelete}){
-    const {authFetch, user} = useContext(UserContext)
+    const {user} = useContext(UserContext)
+    const {authFetch} = useApi()
     const [isStaff, setIsStaff] = useState(false)
     const [deleteModalShow, setDeleteModalShow] = useState(false)
     const [updateModalShow, setUpdateModalShow] = useState(false)
     const [statusModalShow, setStatusModalShow] = useState(false)
+
 
     useEffect(() => {
         if(!user){
@@ -28,41 +31,23 @@ export default function Settings({appointment, onChange, onDelete}){
     }, [])
 
     const handleDelete = () => {
-        authFetch(`${backend_url}/appointment/${appointment.id}`, {
-            method: "PUT",
+        authFetch.put(`appointment/${appointment.id}`, {
             body: JSON.stringify({status: "denied", date: ""}),
             headers: {
                 "Content-type": "Application/json"
             }
         })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("Appointment delete error")
-        })
         .then(data => onDelete(data))
-        .catch(error => console.log(error))
     }
 
     const handleUpdate = body => {
-        authFetch(`${backend_url}/appointment/${appointment.id}`, {
-            method: "PUT",
+        authFetch.put(`appointment/${appointment.id}`, {
             body: JSON.stringify(body),
             headers: {
                 "Content-type": "Application/json"
             }
         })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("Appointment update error")
-        })
         .then(data => onChange(data))
-        .catch(error => console.log(error))
     }
 
     const _handleDelete = () =>{

@@ -9,11 +9,13 @@ import { backend_url } from "../../../../constants"
 import { UserContext } from "../../../../contexts"
 import { TwoSideLayout, BasePageLayout, BaseLayoutTitle } from "../../Components"
 import { useQueryParam, StringParam} from 'use-query-params';
+import useApi from "../../../../hooks/useApi"
 const moment = require("moment")
 
 
 export default function ScheduleCalendar(){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {authFetch} = useApi()
     const [date , setDate] = useQueryParam('date', StringParam)
     const [options, setOptions] = useState([])
     const [dateOptions, setDateOptions] = useState([])
@@ -21,18 +23,7 @@ export default function ScheduleCalendar(){
 
     // fetch schedule
     const fetchSchedule = async () => {
-        return await authFetch(`${backend_url}/schedule/?status=appointed`, {
-            method: "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("admin fetch schedule error")
-        })
-        .then(data => setOptions(data))
-        .catch(error => console.error(error))
+        return await authFetch.get(`schedule/?status=appointed`).then(data => setOptions(data))
     }
 
     // filter full schedule and get appointments that share

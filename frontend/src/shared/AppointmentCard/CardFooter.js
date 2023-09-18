@@ -5,11 +5,13 @@ import Form from "react-bootstrap/Form"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../contexts"
 import { backend_url } from "../../constants"
+import useApi from "../../hooks/useApi"
 
 
 export default function CardFooter({appointment}){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
     const [notes, setNotes] = useState(appointment.notes)
+    const {authFetch} = useApi()
 
 
     useEffect(() => {
@@ -17,8 +19,7 @@ export default function CardFooter({appointment}){
     }, [appointment])
 
     const handleClick = () => {
-        authFetch(`${backend_url}/appointment/${appointment.id}`, {
-            method: "PUT",
+        authFetch.put(`appointment/${appointment.id}`, {
             headers: {
                 "Content-type": "Application/json"
             },
@@ -26,14 +27,6 @@ export default function CardFooter({appointment}){
                 notes: notes
             })
         })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("appointment update error")
-        })
-        .catch(error => console.log(error))
     }
 
     return (
@@ -47,7 +40,7 @@ export default function CardFooter({appointment}){
                         <Form className="mt-3">
                             <Form.Group>
                             <Form.Control 
-                                value={notes} onChange={e => setNotes(e.target.value)}
+                                value={notes ? notes : ""} onChange={e => setNotes(e.target.value)}
                                 style={{height: "250px", resize: "none"}} as="textarea" placeholder="Можна не заповнювати"
                             />
                             </Form.Group>

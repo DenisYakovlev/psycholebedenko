@@ -10,17 +10,24 @@ import { faTelegram } from "@fortawesome/free-brands-svg-icons"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../../contexts"
 import { backend_url } from "../../../../constants"
+import useApi from "../../../../hooks/useApi"
 
 
 export default function UserFullCard({userId}){
     const {authFetch} = useContext(UserContext)
     const [userData, setUserData] = useState(null) 
+    const {api} = useApi()
 
 
     const handleTelegramRedirect = () => {
         const url = `https://t.me/${user.phone_number}`
         window.open(url, "_blank")
     }
+
+    // useEffect(() => {
+    //     api.auth.get(`user/info/${userId}`)
+    //     .then(data => setUserData(data))
+    // }, [userId])
 
     useEffect(() => {
         authFetch(`${backend_url}/user/info/${userId}`, {

@@ -5,30 +5,21 @@ import EventSearchList from "./EventSearchList"
 import { useContext, useEffect } from "react"
 import { UserContext } from "../../../../contexts"
 import { backend_url } from "../../../../constants"
+import useApi from "../../../../hooks/useApi"
 
 
 export default function EventSearchFilter({events, setEvents, setSelectedEvent}){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {authFetch} = useApi()
     const [search, setSearch] = useQueryParam('search', StringParam)
 
     const handleSearch = async url => {
-        await authFetch(url, {
-            method: "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("Admin User search Events fetch error")
-        })
-        .then(data => setEvents(data))
-        .catch(error => console.log(error))
+        await authFetch.get(url).then(data => setEvents(data))
     }
 
     const _handleSearch = _search => {
         setSearch(_search)
-        handleSearch(`${backend_url}/event?search=${_search ? _search : ""}`)
+        handleSearch(`event?search=${_search ? _search : ""}`)
     }
 
     useEffect(() => {

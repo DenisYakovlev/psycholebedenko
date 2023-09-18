@@ -7,63 +7,49 @@ import AuthFinalForm from "./AuthFinalForm";
 import { UserContext } from "../../contexts";
 import LoadSpinner from "../Base/LoadSpinner"
 import { backend_url } from "../../constants"
+import useApi from "../../hooks/useApi";
 
 
 // used in auth context to authorize user
 export default function AuthorizationModal({
-    show, hide, 
-    index, setIndex, 
+    show, 
+    hide, 
+    index, 
+    setIndex, 
 }){
-    const {user, setUser, authFetch} = useContext(UserContext)
+    const {user, setUser} = useContext(UserContext)
     const [userData, setUserData] = useState(null)
+    const {authFetch, baseAuthFetch, publicFetch} = useApi()
 
     const handleSelect = selectedIndex => setIndex(selectedIndex)
 
     const saveUser = () => {
-        if(userData?.tokens && userData?.extra){
+        if(userData && userData.verified){
             // delay between modal hide and user update
             // without delay hide animation is skipped
             setTimeout(() => {
-                setUser(userData.tokens)
-                localStorage.setItem('tokens', JSON.stringify(userData.tokens))
+                const _user = {
+                    access: userData.access,
+                    refresh: userData.refresh
+                }
+
+                setUser(_user)
+                localStorage.setItem('tokens', JSON.stringify(_user))
             }, 200)
         }
     }
 
     const handleAuthorization = async response => {
-        await fetch(`${backend_url}/auth/telegram/widget`, {
-            method: "POST",
+        await publicFetch.post(`auth/telegram/widget`, {
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(response)
         })
-        .then(response => response.json())
         .then(data => {
-            setUserData({...userData, tokens: data})
+            setUserData({...userData, ...data})
             setIndex(1)
         })
-        .catch(error => console.log(error))
-    }
-
-    const handleExtraDataSubmit = async data =>{
-        const url = `${backend_url}/user/me`
-        const params = {
-            method: "PUT",
-            headers: {
-                "Content-type": "Application/json"
-            },
-            body: JSON.stringify(data)
-        }
-
-        // If user is signed in and have tokens use authFetch
-        // to refresh tokens if needed. If he is not signed in,
-        // then function needs to provide token from previous step
-        const response = await (user ? authFetch(url, params) : 
-                                fetch(url, {...params, headers: { ...params.headers, "Authorization": `Bearer ${userData.tokens.access}`}}))
-
-        const _response = await response.json()
-        setUserData({...userData, extra: {data}})
     }
 
     const exit = () =>{
@@ -72,32 +58,34 @@ export default function AuthorizationModal({
     }
 
     return (
-        <Suspense fallback={<LoadSpinner />}>
-            <Modal 
-                backdropClassName="m-0 p-0 w-100 h-100" 
-                className="m-0 p-0"
-                size="md" show={show} onHide={hide} 
-                animation={true} centered
-                onExited={exit}
-            >
-                <Modal.Body className="p-0 m-0">
-                    <Carousel 
-                        activeIndex={index} onSelect={handleSelect}
-                        controls={false} indicators={false} 
-                        interval={null} touch={false}
-                    >
-                        <Carousel.Item className="p-0">
-                            <AuthTelegramForm authCallback={handleAuthorization}/>
-                        </Carousel.Item>
-                        <Carousel.Item className="p-0">
-                            <AuthPhoneForm handleSubmit={handleExtraDataSubmit} setIndex={setIndex}/>
-                        </Carousel.Item>
-                        <Carousel.Item className="p-0">
-                            <AuthFinalForm exit={hide} />
-                        </Carousel.Item>
-                    </Carousel>
-                </Modal.Body>
-            </Modal>
-        </Suspense>
+        <Modal 
+            backdropClassName="m-0 p-0 w-100 h-100" 
+            className="m-0 p-0"
+            size="md" show={show} onHide={hide} 
+            animation={true} centered
+            onExited={exit}
+        >
+            <Modal.Body className="p-0 m-0">
+                <Carousel 
+                    activeIndex={index} onSelect={handleSelect}
+                    controls={false} indicators={false} 
+                    interval={null} touch={false}
+                >
+                    <Carousel.Item className="p-0">
+                        <AuthTelegramForm authCallback={handleAuthorization}/>
+                    </Carousel.Item>
+                    <Carousel.Item className="p-0">
+                        {userData ?
+                            <AuthPhoneForm setIndex={setIndex} userData={userData} setUserData={setUserData}/>
+                            :
+                            <></>
+                        }
+                    </Carousel.Item>
+                    <Carousel.Item className="p-0">
+                        <AuthFinalForm exit={hide} />
+                    </Carousel.Item>
+                </Carousel>
+            </Modal.Body>
+        </Modal>
     )
 }

@@ -11,46 +11,39 @@ import '../styles.css'
 import Filters from "./Filters"
 import { StringParam, useQueryParam, withDefault } from "use-query-params"
 import qs from "query-string"
+import useApi from "../../../hooks/useApi"
 
 
 const statusFilterParam = withDefault(CommaArrayParam, [])
 
 export default function Appointment(){
-    const {user, authFetch} = useContext(UserContext)
+    const {user} = useContext(UserContext)
     const [isLoading, setIsLoading] = useState(false)
     const [appointments, setAppointments] = useState([])
     const [status, setStatus] = useQueryParam('status', statusFilterParam)
     const [state, setState] = useQueryParam('state', StringParam)
+    const { authFetch } = useApi()
 
     // fetch user appointemnt
-    const fetchData = async () => {
+    const fetchData = async() => {
         setIsLoading(true)
         const query = qs.stringify({status: status, state: state})
 
-        await authFetch(`${backend_url}/user/appointments?${query}`, {
-            method: "GET"
+        authFetch.get(`user/appointments?${query}`)
+        .then(data => {
+            setAppointments(data)
+            setIsLoading(false)
         })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
 
-            throw new Error("user appointment fetch error")
-        })
-        .then(data => setAppointments(data))
-        .catch(error => console.log(error))
-
-        setIsLoading(false)
     }
 
-    // fetch user appointments on page load
     useEffect(() => {
         if(!user){
             return
         }
 
         fetchData()
-    }, [])
+    }, [user])
 
     // refetch on state & status change
     useEffect(() => {

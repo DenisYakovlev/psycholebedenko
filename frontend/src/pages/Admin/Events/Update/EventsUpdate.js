@@ -6,28 +6,19 @@ import { StringParam, useQueryParam } from "use-query-params"
 import { backend_url } from "../../../../constants"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../../contexts"
+import useApi from "../../../../hooks/useApi"
 
 
 export default function EventsUpdate(){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {authFetch} = useApi()
     const [virtualEvent, setVirtualEvent] = useState(null)
     const [eventId, setEventId] = useQueryParam('event', StringParam)
     let navigate = useNavigate()
 
 
     const fetchEvent = () => {
-        authFetch(`${backend_url}/event/${eventId}`, {
-            method: "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("Admin event update fetch error")
-        })
-        .then(data => setVirtualEvent(data))
-        .catch(error => console.log(error))
+        authFetch.get(`event/${eventId}`).then(data => setVirtualEvent(data))
     }
 
 

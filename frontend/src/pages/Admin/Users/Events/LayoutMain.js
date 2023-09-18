@@ -5,11 +5,13 @@ import { UserContext } from "../../../../contexts"
 import { backend_url } from "../../../../constants"
 import { useNavigate } from "react-router"
 import UserCard from "../../Components/UserCard"
+import useApi from "../../../../hooks/useApi"
 
 
 export default function LayoutMain({selectedEvent}){
     let navigate = useNavigate()
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {authFetch} = useApi()
     const [users, setUsers] = useState([])
 
     useEffect(() => {
@@ -17,18 +19,7 @@ export default function LayoutMain({selectedEvent}){
             return
         }
 
-        authFetch(`${backend_url}/event/${selectedEvent}/participants`, {
-            method: "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("Admin Event Participants fetch error")
-        })
-        .then(data => setUsers(data))
-        .catch(error => console.log(error))
+        authFetch.get(`event/${selectedEvent}/participants`).then(data => setUsers(data))
     }, [selectedEvent])
 
     

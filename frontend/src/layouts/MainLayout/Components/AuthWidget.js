@@ -6,15 +6,16 @@ import { Link } from 'react-router-dom'
 import {LoadSpinner} from '../../../shared'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { backend_url } from '../../../constants'
+import useApi from '../../../hooks/useApi'
 
 
 const userPhotoSize = "40px"
 
 export default function AuthWidget(){
-    const {user, authFetch} = useContext(UserContext)
+    const {user} = useContext(UserContext)
     const {showAuthModal} = useContext(AuthModalContext)
     const [userPhoto, setUserPhoto] = useState("")
+    const { authFetch } = useApi()
 
     // set user photo
     useEffect(() => {
@@ -22,12 +23,7 @@ export default function AuthWidget(){
             return
         }
 
-        authFetch(`${backend_url}/user/photo`, {
-            method: "GET"
-        })
-        .then(response => response.json())
-        .then(data => setUserPhoto(data.photo_url))
-        .catch(error => console.log(error))
+        authFetch.get('user/photo').then(data => setUserPhoto(data.photo_url))
     }, [user])
 
     return (

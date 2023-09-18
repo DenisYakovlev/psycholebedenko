@@ -7,10 +7,12 @@ import { useContext, useEffect } from "react"
 import { UserContext } from "../../../../contexts"
 import { useState } from "react"
 import qs from "query-string"
+import useApi from "../../../../hooks/useApi"
 
 
 export default function Events(){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {authFetch} = useApi()
     const [status, setStatus] = useQueryParam('status', StringParam)
     const [title, setTitle] = useQueryParam('search', StringParam)
     const [events, setEvents] = useState(null)
@@ -18,18 +20,7 @@ export default function Events(){
     const fetchEvents = () => {
         const query = {status: status, search: title}
 
-        authFetch(`${backend_url}/event?${qs.stringify(query)}`, {
-            method: "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-           
-            throw new Error("Admin fetch events error")
-        })
-        .then(data => setEvents(data))
-        .catch(error => console.log(error))
+        authFetch.get(`event?${qs.stringify(query)}`).then(data => setEvents(data))
     }
 
     useEffect(() => {

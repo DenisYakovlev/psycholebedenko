@@ -6,12 +6,14 @@ import { useQueryParam, StringParam, BooleanParam, withDefault } from "use-query
 import { useContext, useEffect, useState } from "react"
 import { backend_url } from "../../../../constants"
 import { UserContext } from "../../../../contexts"
+import useApi from "../../../../hooks/useApi"
 
 
 const statusFilterParam = withDefault(CommaArrayParam, [])
 
 export default function Appointments(){
-    const {authFetch} = useContext(UserContext)
+    // const {authFetch} = useContext(UserContext)
+    const {authFetch} = useApi()
     const [users, setUsers] = useState(null)
     const [selectedUser, setSelectedUser] = useQueryParam('user', StringParam)
     const [selectedStatus, setSelectedStatus] = useQueryParam('status', statusFilterParam)
@@ -29,25 +31,9 @@ export default function Appointments(){
     const fetchAppointments = async () => {
         const queryParams = getQueryParams()
 
-        await authFetch(`${backend_url}/appointment?${queryParams}`,{
-            method: "GET"
-        })
-        .then(response => {
-            if(response.ok){
-                return response.json()
-            }
-
-            throw new Error("Admin appointment fetch error")
-        })
-        .then(data => {
-            setAppointments(data)
-        })
-        .catch(error => console.log(error))
+        await authFetch.get(`appointment?${queryParams}`)
+        .then(data => setAppointments(data))
     }
-
-    useEffect(() => {
-        fetchAppointments()
-    }, [])
 
     useEffect(() => {
         fetchAppointments()

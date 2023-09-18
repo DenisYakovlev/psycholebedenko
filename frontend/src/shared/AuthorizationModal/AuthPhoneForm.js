@@ -1,30 +1,59 @@
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form"
-import Button from "react-bootstrap/Button"
-import { useState, useEffect } from "react";
+import Container from "react-bootstrap/Container"
+import { useState, useEffect } from "react"
+import useWebSocket, { ReadyState } from 'react-use-websocket'
+import { backend_ws_url, backend_url } from "../../constants"
 
 
-export default function AuthPhoneForm({handleSubmit, setIndex}){
-    const [phone, setPhone] = useState("")
-    const [phoneIsValid, setPhoneIsValid] = useState(true)
-    const [notify, setNotify] = useState(false)
+export default function AuthPhoneForm({setIndex, userData, setUserData}){
+    // const { lastMessage } = 
+    //     useWebSocket(`${backend_ws_url}/ws/bot/verification/${userData?.phoneVerificationToken}`,{
+    //         shouldReconnect: (closeEvent) => true,
+    //         reconnectAttempts: 10,
+    //         reconnectInterval: 1000
+    //     })
+    // const nextSlide = () => setIndex(2)
 
-    useEffect(() => {
-        const phoneRegex = /^\+\d{12}$/
-        setPhoneIsValid(phoneRegex.test(phone))
-    }, [phone])
+    // const verifyPhone = async (confirmToken) => {
+    //     await fetch(`${backend_url}/auth/phone/verify`, {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-type": "Application/json",
+    //             "Authorization": `Bearer ${userData?.access}`
+    //         },
+    //         body: JSON.stringify({
+    //             "wsToken": userData?.phoneVerificationToken,
+    //             "confirmToken": confirmToken
+    //         })
+    //     })
+    //     .then(response => {
+    //         if(response.ok){
+    //             setUserData({...userData, verified: true})
+    //             nextSlide()
+    //             return
+    //         }
 
-    const nextSlide = () => setIndex(2)
+    //         throw new Error("Phone verification error")
+    //     })
+    //     .catch(error => console.log(error))
+    // }
 
-    const _handleSubmit = () => {
-        const data = {
-            phone_number: phone,
-            notifications_on: notify
-        }
+    // useEffect(() => {
+    //     const checkMsg = async () => {
+    //         try{
+    //             let data = JSON.parse(lastMessage.data)
+    
+    //             if(data.message?.confirmToken){
+    //                 await verifyPhone(data.message.confirmToken)
+    //             }
+    //         }
+    //         catch(e){
+    //             console.log("Waiting for message")
+    //         }
+    //     }
 
-        handleSubmit(data)
-        nextSlide()
-    }
+    //     checkMsg()
+    // }, [lastMessage])
+
 
     return (
         <Container style={{height: "380px"}} className="m-0 p-0">
@@ -36,29 +65,10 @@ export default function AuthPhoneForm({handleSubmit, setIndex}){
                     Додайте свій номер телефона для зв'язку з психологом
                 </p>
             </Container>
-            <Container className="px-5 my-4 d-flex flex-column gap-3">
-                <Form>
-                    <Form.Group>
-                        <Form.Label className="text-dark">
-                            Номер телефона
-                        </Form.Label>
-                        <Form.Control 
-                            required type="text" isInvalid={!phoneIsValid}
-                            placeholder="+380" value={phone} 
-                            onChange={e => setPhone(e.target.value)} />
-                        <Form.Check
-                            className="mt-3" type="switch"
-                            label="Сповіщати мене про початок заходів"
-                            value={notify}
-                            onChange={() => setNotify(!notify)}
-                        />
-                    </Form.Group>
-                </Form>
-            </Container>
-            <Container className="mb-4 px-5 d-flex flex-row justify-content-end gap-3">
-                <Button disabled={!phoneIsValid} variant="outline-dark" size="md" onClick={_handleSubmit}>
-                    Підтвердити
-                </Button>
+            <Container className="px-5 my-4 d-flex flex-column align-items-center justify-content-center">
+                <p className="m-0 p-0 text-center fs-4 fw-bold">
+                    check tg please
+                </p>
             </Container>
         </Container>
     )

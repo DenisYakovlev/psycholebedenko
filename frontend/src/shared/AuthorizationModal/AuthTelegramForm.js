@@ -3,6 +3,7 @@ import TelegramLoginButton from 'telegram-login-button'
 
 
 export default function AuthTelegramForm({authCallback}){
+
     return (
         <>
             <Container style={{height: "380px"}} className="m-0 p-0 d-flex flex-column justify-content-center align-items-center">
