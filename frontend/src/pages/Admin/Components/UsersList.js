@@ -18,6 +18,11 @@ export default function UsersList({users, handleSearch, setSelectedUser}){
         setSelectedUser(user)
     }
 
+    const _handleSearch = url => {
+        const _url = new URL(url)
+        handleSearch('user' + _url.search)
+    }
+
     return (
         <Container className="p-0">
             {users ?
@@ -27,8 +32,8 @@ export default function UsersList({users, handleSearch, setSelectedUser}){
                     )}
 
                     <Pagination className="p-3 d-flex justify-content-center gap-2" size="sm">
-                        <Pagination.Prev onClick={() => handleSearch(users.previous)} disabled={!users.previous}/>
-                        <Pagination.Next onClick={() => handleSearch(users.next)} disabled={!users.next}/>
+                        <Pagination.Prev onClick={() => _handleSearch(users.previous)} disabled={!users.previous}/>
+                        <Pagination.Next onClick={() => _handleSearch(users.next)} disabled={!users.next}/>
                     </Pagination>
                 </Container>
                 :

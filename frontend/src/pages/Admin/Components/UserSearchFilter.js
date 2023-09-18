@@ -17,8 +17,7 @@ export default function UserSearchFilter({users, setUsers, setSelectedUser}){
     const handleSearch = async url => {
         setIsLoading(true)
 
-        await authFetch.get(url)
-        .then(data => setUsers(data))
+        await authFetch.get(url).then(data => setUsers(data))
 
         setIsLoading(false)
     }
