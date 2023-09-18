@@ -1,7 +1,8 @@
 FROM node:16-alpine 
 WORKDIR /app
+COPY package.json .
+RUN npm install 
 COPY . .
 ENV REACT_APP_BOT_NAME=psycholebedenko_test_bot
 ENV REACT_APP_BACKEND_URL=http://localhost:81
 ENV REACT_APP_BACKEND_WS_URL=ws://localhost:81
-RUN npm install 
