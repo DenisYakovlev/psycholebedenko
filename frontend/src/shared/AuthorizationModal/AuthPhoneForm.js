@@ -5,54 +5,54 @@ import { backend_ws_url, backend_url } from "../../constants"
 
 
 export default function AuthPhoneForm({setIndex, userData, setUserData}){
-    // const { lastMessage } = 
-    //     useWebSocket(`${backend_ws_url}/ws/bot/verification/${userData?.phoneVerificationToken}`,{
-    //         shouldReconnect: (closeEvent) => true,
-    //         reconnectAttempts: 10,
-    //         reconnectInterval: 1000
-    //     })
-    // const nextSlide = () => setIndex(2)
+    const { lastMessage } = 
+        useWebSocket(`${backend_ws_url}/ws/bot/verification/${userData?.phoneVerificationToken}`,{
+            shouldReconnect: (closeEvent) => true,
+            reconnectAttempts: 10,
+            reconnectInterval: 1000
+        })
+    const nextSlide = () => setIndex(2)
 
-    // const verifyPhone = async (confirmToken) => {
-    //     await fetch(`${backend_url}/auth/phone/verify`, {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-type": "Application/json",
-    //             "Authorization": `Bearer ${userData?.access}`
-    //         },
-    //         body: JSON.stringify({
-    //             "wsToken": userData?.phoneVerificationToken,
-    //             "confirmToken": confirmToken
-    //         })
-    //     })
-    //     .then(response => {
-    //         if(response.ok){
-    //             setUserData({...userData, verified: true})
-    //             nextSlide()
-    //             return
-    //         }
+    const verifyPhone = async (confirmToken) => {
+        await fetch(`${backend_url}/auth/phone/verify`, {
+            method: "POST",
+            headers: {
+                "Content-type": "Application/json",
+                "Authorization": `Bearer ${userData?.access}`
+            },
+            body: JSON.stringify({
+                "wsToken": userData?.phoneVerificationToken,
+                "confirmToken": confirmToken
+            })
+        })
+        .then(response => {
+            if(response.ok){
+                setUserData({...userData, verified: true})
+                nextSlide()
+                return
+            }
 
-    //         throw new Error("Phone verification error")
-    //     })
-    //     .catch(error => console.log(error))
-    // }
+            throw new Error("Phone verification error")
+        })
+        .catch(error => console.log(error))
+    }
 
-    // useEffect(() => {
-    //     const checkMsg = async () => {
-    //         try{
-    //             let data = JSON.parse(lastMessage.data)
+    useEffect(() => {
+        const checkMsg = async () => {
+            try{
+                let data = JSON.parse(lastMessage.data)
     
-    //             if(data.message?.confirmToken){
-    //                 await verifyPhone(data.message.confirmToken)
-    //             }
-    //         }
-    //         catch(e){
-    //             console.log("Waiting for message")
-    //         }
-    //     }
+                if(data.message?.confirmToken){
+                    await verifyPhone(data.message.confirmToken)
+                }
+            }
+            catch(e){
+                console.log("Waiting for message")
+            }
+        }
 
-    //     checkMsg()
-    // }, [lastMessage])
+        checkMsg()
+    }, [lastMessage])
 
 
     return (
