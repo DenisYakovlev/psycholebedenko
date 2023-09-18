@@ -43,13 +43,14 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", os.getenv('SSL_HEADER'))
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
@@ -64,7 +65,30 @@ INSTALLED_APPS = [
     'server',
 ]
 
+ASGI_APPLICATION = "app.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ["redis://redis:6379"],
+        },
+    },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
 ADMIN_ID = 820543856
+
+PHONE_VERIFICATION_TIMEOUT_SECS = 300
 
 RABBITMQ = {
     "PROTOCOL": "amqp", # in prod change with "amqps"
