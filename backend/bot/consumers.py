@@ -29,7 +29,6 @@ class PhoneVerificationConsumer(WebsocketConsumer):
             self.channel_name
         )
 
-        print(self.token)
         self.accept()
 
         # send acception message
