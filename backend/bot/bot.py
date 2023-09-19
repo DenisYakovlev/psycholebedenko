@@ -1,3 +1,5 @@
+from datetime import datetime
+import pytz
 import telebot
 from telebot.types import Contact
 from channels.layers import get_channel_layer
@@ -64,8 +66,15 @@ def handlePhoneVerification(user_id, wsToken, confirmToken, forceStart=False):
 		if token:
 			return
 
-	cache.set(wsToken, confirmToken, settings.PHONE_VERIFICATION_TIMEOUT_SECS)
 	bot.send_message(user_id, "Надайте номер телефона", reply_markup=phone_verification_markup)
+
+	# set up timestamps of start and timeout of verification
+	tz = pytz.timezone(settings.TIME_ZONE)
+	verification_start = int(datetime.now(tz=tz).timestamp())
+	verification_end = verification_start + settings.PHONE_VERIFICATION_TIMEOUT_SECS
+
+	cache.set(wsToken, confirmToken, settings.PHONE_VERIFICATION_TIMEOUT_SECS)
+	return verification_start, verification_end
 
 
 @bot.message_handler(content_types=['contact']) 
@@ -97,10 +106,11 @@ def handle_contact(message):
 
 	data = {
 		"id": user.id,
-		"phone_number": '+' + message.contact.phone_number
+		"phone_number": message.contact.phone_number
 	}
 
 	serializer = TelegramUserSerializer(instance=user, data=data, partial=True)
+	
 	if serializer.is_valid():
 		serializer.save()
 
@@ -121,7 +131,7 @@ def handle_contact(message):
 
 		bot.send_message(message.chat.id, "all good", reply_markup=phone_verification_markup)
 	else:
-		bot.send_message(message.chat.id, "error ocured", reply_markup=phone_verification_markup)
+		bot.send_message(message.chat.id, f"error ocured: {serializer.errors}", reply_markup=phone_verification_markup)
 
 @bot.message_handler(regexp="hui")
 def response(message):

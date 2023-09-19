@@ -1,6 +1,7 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from django.core.cache import cache
+from django.conf import settings
 from asgiref.sync import async_to_sync
 
 
@@ -38,6 +39,7 @@ class PhoneVerificationConsumer(WebsocketConsumer):
                 'type': 'client_message',
                 'message': {
                     "state": "connected"
+
                 }
             }
         )

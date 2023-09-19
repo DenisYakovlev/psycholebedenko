@@ -30,13 +30,15 @@ class AuthWidgetTelegramUser(APIView):
                 # check if user needs phone update and verification
                 if not user.phone_number:
                     wsToken, confirmToken = generatePhoneVerificationTokens(user.id, user.auth_date)
-                    bot.handlePhoneVerification(user.id, wsToken, confirmToken)
-                
+                    verification_start, verification_end = bot.handlePhoneVerification(request.data['id'], wsToken, confirmToken)
+
                     return Response({
                         **tokens_serializer.validated_data,
-                        "phoneVerificationToken": wsToken
-                    }, 
-                    status.HTTP_201_CREATED)
+                        "phoneVerificationToken": wsToken,
+                        "phoneVerificationStartTime": verification_start,
+                        "phoneVerificationExpireTime": verification_end
+                    }
+                    , status.HTTP_201_CREATED)
                 
                 # rerturn jwt tokens on default if phone is verified
                 return Response({**tokens_serializer.validated_data}, status.HTTP_201_CREATED)
@@ -64,13 +66,14 @@ class AuthWidgetTelegramUser(APIView):
                 bot.webAppDrivenAuthorization(request.data['id'], request.data['first_name'], first_authorization=True)
 
                 wsToken, confirmToken = generatePhoneVerificationTokens(request.data['id'], request.data['auth_date'])
-                bot.handlePhoneVerification(request.data['id'], wsToken, confirmToken)
+                verification_start, verification_end = bot.handlePhoneVerification(request.data['id'], wsToken, confirmToken)
 
                 return Response({
                     **tokens_serializer.validated_data,
-                    "phoneVerificationToken": wsToken
-                }
-                , status.HTTP_201_CREATED)
+                    "phoneVerificationToken": wsToken,
+                    "phoneVerificationStartTime": verification_start,
+                    "phoneVerificationExpireTime": verification_end
+                }, status.HTTP_201_CREATED)
             
             return Response(tokens_serializer.errors, status.HTTP_409_CONFLICT)
             
@@ -108,9 +111,13 @@ class PhoneVerificationRetry(APIView):
             return Response({"msg": "Connection token is not provided"}, status.HTTP_409_CONFLICT)
             
         wsToken, confirmToken = generatePhoneVerificationTokens(request.user.id, request.user.auth_date)
-        bot.handlePhoneVerification.delay(request.user.id, wsToken, confirmToken, forceStart=True)
+        verification_start,verification_end = bot.handlePhoneVerification(request.user.id, wsToken, confirmToken, forceStart=True)
 
-        return Response({"phoneVerificationToken": wsToken}, status.HTTP_200_OK)
+        return Response({
+            "phoneVerificationToken": wsToken,
+            "phoneVerificationStartTime": verification_start,
+            "phoneVerificationExpireTime": verification_end
+        }, status.HTTP_200_OK)
     
 
 class PhoneVerificationCheck(APIView):
