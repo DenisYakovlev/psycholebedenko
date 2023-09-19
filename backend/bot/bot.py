@@ -104,9 +104,11 @@ def handle_contact(message):
 		bot.send_message(message.chat.id, "Timeout", reply_markup=menu_markup)
 		return 
 
+	phone_number = message.contact.phone_number
+
 	data = {
 		"id": user.id,
-		"phone_number": message.contact.phone_number
+		"phone_number": phone_number if phone_number.startswith('+') else '+' + phone_number
 	}
 
 	serializer = TelegramUserSerializer(instance=user, data=data, partial=True)
