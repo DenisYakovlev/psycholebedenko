@@ -1,10 +1,12 @@
 import Container from "react-bootstrap/Container"
+import Button from "react-bootstrap/Button"
 import { useState, useEffect } from "react"
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 import { backend_ws_url, backend_url } from "../../constants"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPhoneVolume } from "@fortawesome/free-solid-svg-icons"
+import { faTelegram } from "@fortawesome/free-brands-svg-icons"
 
 import CountdownTimer from "./CountdownTimer"
 
@@ -12,12 +14,12 @@ import CountdownTimer from "./CountdownTimer"
 export default function AuthPhoneForm({setIndex, userData, setUserData}){
     const countdownStartValue = 300
 
-    const [countdown, setCountdown] = useState()
+    // const [countdown, setCountdown] = useState()
     const { lastMessage } = 
         useWebSocket(`${backend_ws_url}/ws/bot/verification/${userData?.tokens.phoneVerificationToken}`,{
-            onOpen: (openEvent) => setCountdown(countdownStartValue),
+            // onOpen: (openEvent) => setCountdown(countdownStartValue),
             shouldReconnect: (closeEvent) => true,
-            reconnectAttempts: 10,
+            reconnectAttempts: 3,
             reconnectInterval: 1000
         })
 
@@ -84,15 +86,27 @@ export default function AuthPhoneForm({setIndex, userData, setUserData}){
         })
         .then(response => {
             if(response.ok){
-                setCountdown(countdownStartValue)
-                return
+                return response.json()
             }
 
             throw new Error("Phone verification restart error")
         })
+        .then(data => {
+            setUserData({
+                ...userData, 
+                expireDates: {
+                    start: data.phoneVerificationStartTime,
+                    end: data.phoneVerificationExpireTime
+                }
+            })
+        })
         .catch(error => console.log(error))
     }
 
+    const handleTelegramRedirect = () => {
+        const url = `https://t.me/${process.env.REACT_APP_BOT_NAME}`
+        window.open(url, "_blank")
+    }
 
     return (
         <Container style={{height: "380px"}} className="m-0 p-0">
@@ -102,19 +116,36 @@ export default function AuthPhoneForm({setIndex, userData, setUserData}){
                 </p>
 
             </Container>
-            <Container className="my-4 p-0 d-flex flex-column align-items-center justify-content-center gap-3">
+            <Container className="my-4 p-0 d-flex flex-column align-items-center justify-content-center gap-2">
                 <FontAwesomeIcon icon={faPhoneVolume} className="fs-1"/>
 
+                <Button 
+                        onClick={handleTelegramRedirect}
+                        className="mt-3" 
+                        variant="outline-dark" 
+                        size="lg"
+                    >
+                        Відкрити чат с ботом <FontAwesomeIcon icon={faTelegram}/> 
+                    </Button>
+
                 <p className="p-0 m-0 fs-6 text-muted text-center w-75">
-                    Надайте свій номер телефона телеграм боту психолога для зв'язку та отримання допомоги
+                    Надайте свій номер телефона телеграм боту
                 </p>
             </Container>
-            <Container className="p-0 mt-5 d-flex flex-column justify-content-center align-items-center">
-                <CountdownTimer countdown={countdown} setCountdown={setCountdown}/>
+            <Container className="p-0 mt-3 d-flex flex-column justify-content-center align-items-center">
+                <CountdownTimer  
+                    start = {userData.expireDates.start}
+                    end = {userData.expireDates.end}
+                />
 
-                <p onClick={restartVerification} className="p-0 m-0 text-muted text-center hover-text">
+                <Button 
+                    onClick={restartVerification} 
+                    style={{cursor: 'pointer'}}
+                    variant="white" 
+                    className="p-0 m-0 border-0 text-dark text-center hover-text"
+                >
                     повторити
-                </p>
+                </Button>
             </Container>
         </Container>
     )

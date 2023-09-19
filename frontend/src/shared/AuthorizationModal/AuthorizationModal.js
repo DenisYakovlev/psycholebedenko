@@ -56,10 +56,18 @@ export default function AuthorizationModal({
         })
         .then(data => {
             const _data = {
-                tokens : {...data},
+                tokens : {
+                    access: data.access,
+                    refresh: data.refresh,
+                    phoneVerificationToken: data.phoneVerificationToken
+                },
                 verifications: {
                     account: true,
                     phone: data.phoneVerificationToken ? false : true
+                },
+                expireDates: {
+                    start: data.phoneVerificationStartTime,
+                    end: data.phoneVerificationExpireTime
                 }
             }
 
