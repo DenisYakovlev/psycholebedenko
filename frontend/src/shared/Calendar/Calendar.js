@@ -24,7 +24,7 @@ export default function Calendar({
                 currMonth={currMonth} setCurrMonth={setCurrMonth}
             />
             
-            <Table className="text-center fs-6 shadow-sm" bordered={false}>
+            <Table className="text-center align-self-center fs-6 shadow-sm" bordered={false}>
                 <CalendarHeader />
                 <CalendarBody
                     onChange={onChange}
