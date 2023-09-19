@@ -17,20 +17,28 @@ export default function AuthorizationModal({
     index, 
     setIndex, 
 }){
-    const {user, setUser} = useContext(UserContext)
-    const [userData, setUserData] = useState(null)
     const {authFetch, baseAuthFetch, publicFetch} = useApi()
+    const {user, setUser} = useContext(UserContext)
+
+    const [userData, setUserData] = useState({
+        tokens: null,
+        verifications: {
+            account: false,
+            phone: false
+        }
+    })
 
     const handleSelect = selectedIndex => setIndex(selectedIndex)
 
     const saveUser = () => {
-        if(userData && userData.verified){
+        if(userData.verifications.account && userData.verifications.phone){
             // delay between modal hide and user update
             // without delay hide animation is skipped
+
             setTimeout(() => {
                 const _user = {
-                    access: userData.access,
-                    refresh: userData.refresh
+                    access: userData.tokens.access,
+                    refresh: userData.tokens.refresh
                 }
 
                 setUser(_user)
@@ -47,14 +55,23 @@ export default function AuthorizationModal({
             body: JSON.stringify(response)
         })
         .then(data => {
-            setUserData({...userData, ...data})
-            setIndex(1)
+            const _data = {
+                tokens : {...data},
+                verifications: {
+                    account: true,
+                    phone: data.phoneVerificationToken ? false : true
+                }
+            }
+
+            setUserData(_data)
+            setIndex(_data.verifications.phone ? 2 : 1)
         })
     }
 
     const exit = () =>{
         saveUser()
         hide()
+        setIndex(0)
     }
 
     return (
@@ -75,7 +92,7 @@ export default function AuthorizationModal({
                         <AuthTelegramForm authCallback={handleAuthorization}/>
                     </Carousel.Item>
                     <Carousel.Item className="p-0">
-                        {userData ?
+                        {userData.verifications.account && !userData?.verifications.phone ?
                             <AuthPhoneForm setIndex={setIndex} userData={userData} setUserData={setUserData}/>
                             :
                             <></>
@@ -84,7 +101,7 @@ export default function AuthorizationModal({
                     <Carousel.Item className="p-0">
                         <AuthFinalForm exit={hide} />
                     </Carousel.Item>
-                </Carousel>
+            </Carousel>
             </Modal.Body>
         </Modal>
     )
