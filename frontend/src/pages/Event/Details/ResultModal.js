@@ -19,7 +19,7 @@ export default function ResultModal({show, hide, resultType}){
         >
             <Modal.Body className="m-0 px-3">
                 {
-                    resultType == "success" ?
+                    resultType == "success-on" || "success-off" ?
                         <Container style={{ fontSize: "36px"}} className="m-0 mt-3 p-0 d-flex text-success d-row gap-3 align-items-center justify-content-center">
                             <FontAwesomeIcon icon={faCircleCheck} />
                             Успішно!
@@ -32,7 +32,9 @@ export default function ResultModal({show, hide, resultType}){
                 }
                 <Container className="p-0 m-0">
                     <p className="p-0 text-muted text-center fs-5">
-                        {resultType == "success" ? "Вас записано до групової зустрічі" : "Виникла помилка"}
+                        {resultType == "success-on" ? "Ви записались на групову зустріч" 
+                        : resultType == "success-off" ? "Ви відписались від групової зустрічі"
+                        : "Виникла помилка"}
                     </p>
                 </Container>
                 <Container className="p-0 mt-5 mb-3 d-flex justify-content-center">

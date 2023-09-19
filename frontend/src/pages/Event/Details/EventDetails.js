@@ -50,7 +50,7 @@ export default function EventDetails(){
     const handleAddParticipation = () => {
         authFetch.post(`event/${id}/participate`).then(data => {
             setParticipated(true)
-            setResultType("success")
+            setResultType("success-on")
             setShowResult(true)
         })
     }
@@ -58,9 +58,15 @@ export default function EventDetails(){
     const handleRemoveParticipation = () => {
         authFetch.delete(`event/${id}/participate`).then(data => {
             setParticipated(false)
-            setResultType("success")
+            setResultType("success-off")
             setShowResult(true)
         })
+    }
+
+    const handleUnauthorizedParticipation = () => {
+        if(event.zoom_link){
+            window.open(event.zoom_link)
+        }
     }
 
     if(isLoading){
@@ -93,7 +99,9 @@ export default function EventDetails(){
                 <Row md={2} sm={1} xs={1} className="m-0 p-0 d-flex flex-md-row flex-column-reverse">
                     <Col md={8} sm={12} xs={12} className="m-0 py-md-5 py-3">
                         <EventMain event={event}/>
-                        <Container className="m-0 my-3 px-md-5 px-3">
+                        <Container className="m-0 mt-5 mb-3 px-md-5 px-3">
+                        {user ?
+                        <>
                         {participated ?
                             <Button onClick={user ? handleRemoveParticipation : showAuthModal} variant="outline-dark" className="">
                                 Відписатися
@@ -102,6 +110,17 @@ export default function EventDetails(){
                             <Button onClick={user ? handleAddParticipation : showAuthModal} variant="outline-dark" className="">
                                 Записатися
                             </Button>
+                        }
+                        </>
+                        :
+                        <>
+                            <p className="mb-3 p-0 text-justify text-muted fs-6">
+                                При авторизації, ви зможете записатись на зустріч та отримати повідомлення у Телеграмі про початок заходу.
+                            </p>
+                            <Button onClick={handleUnauthorizedParticipation} variant="outline-dark" className="">
+                                Відкрити посилання у Zoom
+                            </Button>
+                        </>
                         }
                         </Container>
                     </Col>
