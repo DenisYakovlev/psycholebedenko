@@ -37,13 +37,13 @@ export default function Appointment(){
 
     }
 
-    useEffect(() => {
-        if(!user){
-            return
-        }
+    // useEffect(() => {
+    //     if(!user){
+    //         return
+    //     }
 
-        fetchData()
-    }, [user])
+    //     fetchData()
+    // }, [user])
 
     // refetch on state & status change
     useEffect(() => {
