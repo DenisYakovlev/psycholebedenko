@@ -30,7 +30,7 @@ export default function DateForm({date, onChange}){
 
             <Container className="px-3">
                 <Form.Control
-                    value={getDate(date)}
+                    value={date ? getDate(date) : ""}
                     onChange={handleChange}
                     type="date"
                 />

@@ -12,7 +12,7 @@ export default function TitleForm({title, onChange}){
 
             <Container className="px-3">
                 <Form.Control
-                    value={title}
+                    value={title ? title : ""}
                     onChange={onChange}
                 />
             </Container>

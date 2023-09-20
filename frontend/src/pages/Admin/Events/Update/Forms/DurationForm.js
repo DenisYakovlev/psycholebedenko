@@ -12,8 +12,9 @@ export default function DurationForm({duration, onChange}){
 
             <Container className="px-3">
                 <Form.Control
-                    value={duration}
+                    value={duration ? duration : ''}
                     onChange={onChange}
+                    type="number"
                 />
             </Container>
         </Container>

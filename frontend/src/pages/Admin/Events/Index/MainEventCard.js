@@ -30,7 +30,7 @@ export default function MainEventCard({event, editable=false}){
             className="bg-gradient shadow border-0 fade-in-card"
             bg="white" data-bs-theme="light"
         >
-            <ConfirmModal show={showConfirmModal} hide={() => setShowConfirmModal(false)} event={event}/>
+            <ConfirmModal show={showConfirmModal} hide={() => setShowConfirmModal(false)} event={event} />
 
             <p className="m-0 px-3 pt-5 pb-3 text-center fs-1 fw-bold">
                 {event.title ? event.title : "Назва не вказана"}

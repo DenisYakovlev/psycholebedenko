@@ -17,7 +17,11 @@ export default function LayoutMain({events}){
                     {events.map((event, idx) => {
                         return(
                             <Col key={idx} className="m-0 p-0 px-lg-5 px-3 d-flex justify-content-center">
-                                <MainEventCard event={event} editable={true}/>
+                                <MainEventCard 
+                                    event={event} 
+                                    editable={true}
+                                    onChange={fetch}
+                                />
                             </Col>
                         )
                     })}

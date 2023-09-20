@@ -9,10 +9,13 @@ import useApi from "../../../../hooks/useApi"
 
 export default function ConfirmModal({show, hide, event}){
     // const {authFetch} = useContext(UserContext)
-    const {authFetch} = useApi()
+    const {baseAuthFetch} = useApi()
 
     const hadnleClick = () => {
-        authFetch.delete(`event/${event.id}/manage`).then(data => hide())
+        baseAuthFetch.delete(`event/${event.id}/manage`).then(data => {
+            hide()
+            window.location.reload()
+        })
     }
 
     return (

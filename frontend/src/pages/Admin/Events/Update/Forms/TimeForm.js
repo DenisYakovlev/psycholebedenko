@@ -30,7 +30,7 @@ export default function TimeForm({date, onChange}){
 
             <Container className="px-3">
                 <Form.Control
-                    value={getTime(date)}
+                    value={date ? getTime(date) : ""}
                     onChange={handleChange}
                     type="time"
                 />
