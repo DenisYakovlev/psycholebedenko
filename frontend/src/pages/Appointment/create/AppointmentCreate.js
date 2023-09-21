@@ -11,6 +11,7 @@ import FinalForm from "./FinalForm"
 import ResultModal from "./ResultModal"
 import DatePicking from "./DatePicking"
 import "../styles.css"
+import useApi from "../../../hooks/useApi"
 
 
 const styles = {
@@ -24,7 +25,9 @@ const styles = {
 }
 
 export default function AppointmentCreate(){
-    const {user, checkPhoneVerification, authFetch} = useContext(UserContext)
+    const {user, checkPhoneVerification} = useContext(UserContext)
+    const {authFetch, baseAuthFetch} = useApi()
+
     const {showAuthModal, setIndex} = useContext(AuthModalContext)
     const [resultShow, setResultShow] = useState(false)
     const [resultType, setResultType] = useState(null)
@@ -53,8 +56,7 @@ export default function AppointmentCreate(){
             return 
         }
 
-        authFetch(`${backend_url}/appointment/create`, {
-            method: "POST",
+        baseAuthFetch.post(`appointment/create`, {
             headers: {
                 "Content-type": "Application/json"
             },

@@ -33,7 +33,15 @@ export default function Events(){
     }, [user])
 
     return (
-        <Container id="events" style={{minHeight: "100vh", height: "fit-content"}} className="mb-5 px-0 positiion-relative" fluid>
+        <Container 
+            id="events" 
+            style={{
+                minHeight: "100vh", 
+                height: "fit-content", 
+                background: "#f4f4f4"
+            }} 
+            className="px-0 pb-5 positiion-relative" fluid
+        >
             <MainText />
             <Row sm={1} xs={1} style={{width: "100%"}} className="m-0 p-0 px-0 py-3 gap-3">
                 {events.map((event, idx) => {

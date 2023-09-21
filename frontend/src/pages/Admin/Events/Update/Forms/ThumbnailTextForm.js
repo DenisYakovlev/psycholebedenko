@@ -27,6 +27,7 @@ export default function ThumbnailTextForm({text, onChange}){
                 <FontAwesomeIcon  
                     className="pe-4 fs-5 text-dark"
                     icon={faExpand}
+                    style={{cursor: "pointer"}}
                     onClick={() => setShowModal(true)}
                 />
             </Container>    
