@@ -6,6 +6,7 @@ import {Helmet} from "react-helmet";
 const Consulting = lazy(() => import("./Consulting/Consulting"))
 const Details = lazy(() => import("./Details/Details"))
 const Events = lazy(() => import("./Events/Events"))
+const Tags = lazy(() => import('./Tags/Tags'))
 const About = lazy(() => import("./About/About"))
 const Contacts = lazy(() => import("./Contacts"))
 
@@ -23,6 +24,7 @@ export default function Home(){
             <Consulting />
             <Details />
             <Events />
+            <Tags />
             {/* <About /> */}
             {/* <Contacts /> */}
         </Container>

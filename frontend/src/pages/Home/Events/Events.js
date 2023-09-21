@@ -38,9 +38,8 @@ export default function Events(){
             style={{
                 minHeight: "100vh", 
                 height: "fit-content", 
-                background: "#f4f4f4"
             }} 
-            className="px-0 pb-5 positiion-relative" fluid
+            className="px-0 pb-5 bg-white positiion-relative" fluid
         >
             <MainText />
             <Row sm={1} xs={1} style={{width: "100%"}} className="m-0 p-0 px-0 py-3 gap-3">

@@ -18,9 +18,15 @@
     z-index: 1000;
 }
 
-.tagcloud-idle:hover {
-    filter: blur(0px)
+.tagcloud-text{
+    animation-name: text-pop-in;
+    animation-duration: 1s;
 }
+
+.tagcloud-idle:hover {
+    filter: blur(0px);
+}
+
 
 @keyframes move-around {
     0%{
@@ -43,9 +49,31 @@
     }
 }
 
+@keyframes text-pop-in {
+    from{
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
 @media screen and (max-width: 768px) {
     .tagcloud-active{
+        font-size: 2em;
+    }
+    
+    .tagcloud-idle{
         font-size: 1.5em;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .tagcloud-active{
+        font-size: 1.5em;
+        font-weight: 600;
     }
     
     .tagcloud-idle{
