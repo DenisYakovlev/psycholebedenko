@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = 'built in telegram bot. On debug mode run with startReloader'
 
     def handle(self, *args, **kwargs):
-        if settings.DEBUG == True:
+        if settings.BOT_DEBUG == True:
             autoreload.run_with_reloader(start_bot, args=None, kwargs=None)
         else:
             start_bot()

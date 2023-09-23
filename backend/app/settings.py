@@ -90,6 +90,8 @@ ADMIN_ID = 820543856
 
 PHONE_VERIFICATION_TIMEOUT_SECS = 300
 
+BOT_DEBUG = int(os.getenv("BOT_DEBUG"))
+
 RABBITMQ = {
     "PROTOCOL": "amqp", # in prod change with "amqps"
     "HOST": "rabbit",
