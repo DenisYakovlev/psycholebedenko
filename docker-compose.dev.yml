@@ -2,6 +2,7 @@ version: '3.8'
 
 x-common-variables: &common-variables
   DEBUG: 1
+  BOT_DEBUG: 1
   TELEGRAM_BOT_API_KEY: 6699782670:AAHq5qoBHxLwCp3prvnj1YbBCdaIswmJ4Lo
   POSTGRES_DB: postgres
   POSTGRES_USER: postgres
@@ -27,6 +28,26 @@ services:
       - WATCHPACK_POLLING=true
     depends_on:
       - backend
+    stdin_open: true
+    tty: true
+
+  tgclient:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./tgclient
+    command: >
+      sh -c "npm start"
+    container_name: tgclient
+    volumes:
+      - /app/node_modules
+      - /app/build
+      - ./tgclient:/app
+    ports:
+      - "82:3000"
+    environment:
+      - WATCHPACK_POLLING=true
+    depends_on:
+      - frontend
     stdin_open: true
     tty: true
 
