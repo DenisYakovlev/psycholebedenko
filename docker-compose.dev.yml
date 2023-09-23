@@ -31,26 +31,6 @@ services:
     stdin_open: true
     tty: true
 
-  tgclient:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./tgclient
-    command: >
-      sh -c "npm start"
-    container_name: tgclient
-    volumes:
-      - /app/node_modules
-      - /app/build
-      - ./tgclient:/app
-    ports:
-      - "82:3000"
-    environment:
-      - WATCHPACK_POLLING=true
-    depends_on:
-      - frontend
-    stdin_open: true
-    tty: true
-
   backend:
     build: 
       dockerfile: Dockerfile
