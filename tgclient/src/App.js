@@ -1,6 +1,9 @@
+import CloseButton from "react-bootstrap/CloseButton"
+
+
 function App() {
   return (
-    <h1>Hey</h1>
+    <CloseButton />
   );
 }
 
