@@ -16,7 +16,7 @@ services:
       dockerfile: Dockerfile.prod
       context: ./frontend/
     command: >
-      sh -c "npx serve -l 3000 -s -n build"
+      sh -c "yes | npx serve -l 3000 -s -n build"
     container_name: frontend
     volumes:
       - /app/node_modules
@@ -36,7 +36,7 @@ services:
       dockerfile: Dockerfile.prod
       context: ./tgclient
     command: >
-      sh -c "npx serve -l 3001 -s -n build"
+      sh -c "yes | npx serve -l 3001 -s -n build"
     container_name: tgclient
     volumes:
       - /app/node_modules
@@ -81,7 +81,7 @@ services:
       - backend
 
   db:
-    image: postgres:latest
+    image: postgres:15.4
     container_name: db
     volumes:
       - ./data/db:/var/lib/postgresql/data
