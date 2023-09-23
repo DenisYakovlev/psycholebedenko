@@ -39,8 +39,8 @@ export default function ResultModal({show, hide, resultType}){
                             Помилка(вже існує)
                         </Container>
                 }
-                <Container className="p-0 m-0">
-                    <p className="p-0 text-muted text-center fs-5">
+                <Container className="p-0 m-0 d-flex justify-content-center">
+                    <p className="m-0 p-0 text-muted text-center fs-5 w-75">
                         {resultType == "success" ? "Перегляньте свій запис на сторінці консультацій" : "Виникла помилка"}
                     </p>
                 </Container>

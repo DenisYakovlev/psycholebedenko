@@ -47,15 +47,6 @@ export default function AppointmentCreate(){
             return 
         }
 
-        const phoneVerified = await checkPhoneVerification()
-
-        if(!phoneVerified){
-            // skip first step of telegram auth and show phone verification form
-            setIndex(1)
-            showAuthModal()
-            return 
-        }
-
         baseAuthFetch.post(`appointment/create`, {
             headers: {
                 "Content-type": "Application/json"

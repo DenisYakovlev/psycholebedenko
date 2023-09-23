@@ -14,7 +14,7 @@ export default function MainAppointments({appointments, onChange}){
 
             {appointments.length > 0 ?
                     <Row
-                        className="m-0 my-3 px-3 justify-content-center"
+                        className="m-0 my-3 px-3 justify-content-center overflow-auto"
                     >
                         {[...appointments].map(appointment => 
                             <Col

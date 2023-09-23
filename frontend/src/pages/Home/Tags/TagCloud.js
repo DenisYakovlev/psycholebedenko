@@ -43,8 +43,8 @@ export default function TagCloud({setActiveTag}){
                 <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "47%", left: "68%"}}>
                     Депресія
                 </p>
-                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "30%", left: "30%"}}>
-                    Ресурс
+                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "35%", left: "32%"}}>
+                    Паніка
                 </p>
                 <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "17%", left: "65%"}}>
                     Відносини

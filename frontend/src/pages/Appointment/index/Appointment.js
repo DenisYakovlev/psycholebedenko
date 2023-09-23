@@ -15,13 +15,14 @@ import useApi from "../../../hooks/useApi"
 
 
 const statusFilterParam = withDefault(CommaArrayParam, [])
+const stateFilterParam = withDefault(StringParam, 'active')
 
 export default function Appointment(){
     const {user} = useContext(UserContext)
     const [isLoading, setIsLoading] = useState(false)
     const [appointments, setAppointments] = useState([])
     const [status, setStatus] = useQueryParam('status', statusFilterParam)
-    const [state, setState] = useQueryParam('state', StringParam)
+    const [state, setState] = useQueryParam('state', stateFilterParam)
     const { authFetch } = useApi()
 
     // fetch user appointemnt
