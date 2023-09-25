@@ -6,8 +6,8 @@ export default function AuthTelegramForm({authCallback}){
 
     return (
         <>
-            <Container style={{height: "380px"}} className="m-0 p-0 d-flex flex-column justify-content-center align-items-center">
-                <Container className="p-0 m-0 mb-3 d-flex flex-column justify-content-center align-items-center">
+            <Container style={{height: "380px"}} className="m-0 p-0 d-flex flex-column align-items-center">
+                <Container className="p-0 my-4 d-flex flex-column justify-content-center align-items-center">
                     <p className="p-0 mt-5 mb-2 fs-2 fw-bold text-center">
                         Авторизація
                     </p>

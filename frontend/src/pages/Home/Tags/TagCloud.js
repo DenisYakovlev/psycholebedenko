@@ -25,28 +25,28 @@ export default function TagCloud({setActiveTag}){
     return (
         <Container className="p-0 position-relative d-flex justify-content-center" fluid>
             <Container style={{height: "25vh", maxWidth: "100vw", width: "1100px", minWidth: "350px"}} className="p-0 position-absolute top-0 left-0 overflow-hidden" fluid>
-                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "10%", left: "35%"}}>
+                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "10%", left: "35%", cursor: "pointer"}}>
                     Тривожність
                 </p>
-                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "20%", left: "15%"}}>
+                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "20%", left: "15%", cursor: "pointer"}}>
                     Стресс
                 </p>
-                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "52%", left: "45%"}}>
+                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "52%", left: "45%", cursor: "pointer"}}>
                     Дистрес
                 </p>
-                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-active" style={{top: "30%", left: "51%"}}>
+                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-active" style={{top: "30%", left: "51%", cursor: "pointer"}}>
                     Залежність
                 </p>
-                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "45%", left: "10%"}}>
+                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "45%", left: "10%", cursor: "pointer"}}>
                     Самооцінка
                 </p>
-                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "47%", left: "68%"}}>
+                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "47%", left: "68%", cursor: "pointer"}}>
                     Депресія
                 </p>
-                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "35%", left: "32%"}}>
+                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "35%", left: "32%", cursor: "pointer"}}>
                     Паніка
                 </p>
-                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "17%", left: "65%"}}>
+                <p onClick={handleActiveChange} className="m-0 p-0 tagcloud-idle" style={{top: "17%", left: "65%", cursor: "pointer"}}>
                     Відносини
                 </p>
             </Container>

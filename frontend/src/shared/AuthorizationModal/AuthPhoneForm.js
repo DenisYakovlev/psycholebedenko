@@ -110,14 +110,13 @@ export default function AuthPhoneForm({setIndex, userData, setUserData}){
 
     return (
         <Container style={{height: "380px"}} className="m-0 p-0">
-            <Container className="p-0 m-0 mb-3 d-flex flex-column justify-content-center align-items-center">
-                <p className="p-0 mt-5 fs-2 fw-bold text-center">
+            <Container className="p-0 my-4 d-flex flex-column justify-content-center align-items-center">
+                <FontAwesomeIcon icon={faPhoneVolume} className="fs-1"/>
+                <p className="p-0 my-3 fs-2 fw-bold text-center">
                     Номер телефона
                 </p>
-
             </Container>
-            <Container className="my-4 p-0 d-flex flex-column align-items-center justify-content-center gap-2">
-                <FontAwesomeIcon icon={faPhoneVolume} className="fs-1"/>
+            <Container className="my-3 p-0 d-flex flex-column align-items-center justify-content-center gap-2">
 
                 <Button 
                         onClick={handleTelegramRedirect}
@@ -132,7 +131,7 @@ export default function AuthPhoneForm({setIndex, userData, setUserData}){
                     Надайте свій номер телефона телеграм боту
                 </p>
             </Container>
-            <Container className="p-0 mt-3 d-flex flex-column justify-content-center align-items-center">
+            <Container className="p-0 mt-5 pt-3 d-flex flex-column justify-content-center align-items-center">
                 <CountdownTimer  
                     start = {userData.expireDates.start}
                     end = {userData.expireDates.end}

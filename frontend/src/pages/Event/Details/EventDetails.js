@@ -97,7 +97,7 @@ export default function EventDetails(){
                 </p>
 
                 <Row md={2} sm={1} xs={1} className="m-0 p-0 d-flex flex-md-row flex-column-reverse">
-                    <Col md={8} sm={12} xs={12} className="m-0 py-md-5 py-3">
+                    <Col md={9} sm={12} xs={12} className="m-0 py-md-5 py-3">
                         <EventMain event={event}/>
                         <Container className="m-0 mt-5 mb-3 px-md-5 px-3">
                         {user ?
@@ -124,7 +124,7 @@ export default function EventDetails(){
                         }
                         </Container>
                     </Col>
-                    <Col md={4} sm={12} xs={12} className="m-0 p-0">
+                    <Col md={3} sm={12} xs={12} className="m-0 p-0">
                         <EventSide event={event}/>
                     </Col>
                 </Row>

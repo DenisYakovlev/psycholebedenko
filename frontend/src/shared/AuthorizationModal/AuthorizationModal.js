@@ -4,6 +4,8 @@ import Carousel from "react-bootstrap/Carousel"
 import AuthTelegramForm from "./AuthTelegramForm";
 import AuthPhoneForm from "./AuthPhoneForm";
 import AuthFinalForm from "./AuthFinalForm";
+import Container from "react-bootstrap/Container"
+import CloseButton from "react-bootstrap/CloseButton";
 import { UserContext } from "../../contexts";
 import LoadSpinner from "../Base/LoadSpinner"
 import { backend_url } from "../../constants"
@@ -90,11 +92,15 @@ export default function AuthorizationModal({
             animation={true} centered
             onExited={exit}
         >
+            <Container className="pe-3 pt-3 d-flex justify-content-end" fluid>
+                <CloseButton onClick={hide}/>
+            </Container>
             <Modal.Body className="p-0 m-0">
                 <Carousel 
                     activeIndex={index} onSelect={handleSelect}
                     controls={false} indicators={false} 
                     interval={null} touch={false}
+                    
                 >
                     <Carousel.Item className="p-0">
                         <AuthTelegramForm authCallback={handleAuthorization}/>

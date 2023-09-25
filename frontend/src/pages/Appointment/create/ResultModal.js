@@ -1,5 +1,6 @@
 import Modal from "react-bootstrap/Modal"
 import Container from "react-bootstrap/Container"
+import CloseButton from "react-bootstrap/CloseButton"
 import Button from "react-bootstrap/Button"
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -26,6 +27,10 @@ export default function ResultModal({show, hide, resultType}){
             animation={true} centered
             onExit={hadnleClick}
         >
+            <Container className="pe-3 pt-3 d-flex justify-content-end" fluid>
+                <CloseButton onClick={hide}/>
+            </Container>
+
             <Modal.Body className="m-0 px-3">
                 {
                     resultType == "success" ?
@@ -44,7 +49,7 @@ export default function ResultModal({show, hide, resultType}){
                         {resultType == "success" ? "Перегляньте свій запис на сторінці консультацій" : "Виникла помилка"}
                     </p>
                 </Container>
-                <Container className="p-0 mt-5 mb-3 d-flex justify-content-center">
+                <Container className="p-0 my-5 d-flex justify-content-center">
                     <Button variant="outline-dark" size="lg" onClick={hadnleClick}>
                         Продовжити
                     </Button>

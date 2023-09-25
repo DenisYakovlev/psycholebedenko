@@ -1,6 +1,7 @@
 import Modal from "react-bootstrap/Modal"
 import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
+import CloseButton from "react-bootstrap/CloseButton"
 import { backend_url } from "../../../../constants"
 import { useContext } from "react"
 import { UserContext } from "../../../../contexts"
@@ -26,13 +27,17 @@ export default function ConfirmModal({show, hide, event}){
             animation={true} centered
             onExit={hide}
         >
+            <Container className="pe-3 pt-3 d-flex justify-content-end" fluid>
+                <CloseButton onClick={hide}/>
+            </Container>
+
             <Modal.Body className="m-0 px-3 py-5">
                 <Container className="p-0 m-0">
                     <p className="p-0 text-muted text-center fs-4">
                         Відмінити групову зустріч?
                     </p>
                 </Container>
-                <Container className="p-0 mt-5 mb-3 d-flex justify-content-center gap-3">
+                <Container className="p-0 my-5 d-flex justify-content-center gap-3">
                     <Button variant="outline-dark" size="lg" onClick={hide}>
                         Ні
                     </Button>

@@ -1,6 +1,7 @@
 import Modal from "react-bootstrap/Modal"
 import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
+import CloseButton from "react-bootstrap/CloseButton"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons"
 
@@ -17,6 +18,10 @@ export default function ResultModal({show, hide, resultType}){
             animation={true} centered
             onExited={handleExit}
         >
+            <Container className="pe-3 pt-3 d-flex justify-content-end" fluid>
+                <CloseButton onClick={hide}/>
+            </Container>
+
             <Modal.Body className="m-0 px-3">
                 {
                     resultType == "success-on" || "success-off" ?
@@ -37,7 +42,7 @@ export default function ResultModal({show, hide, resultType}){
                         : "Виникла помилка"}
                     </p>
                 </Container>
-                <Container className="p-0 mt-5 mb-3 d-flex justify-content-center">
+                <Container className="p-0 my-5 d-flex justify-content-center">
                     <Button variant="outline-dark" size="lg" onClick={handleExit}>
                         Продовжити
                     </Button>
