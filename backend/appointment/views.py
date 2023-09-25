@@ -17,6 +17,22 @@ from user.models import TelegramUser
 from schedule.models import Schedule
 
 
+class AppointmentClosest(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        tz = pytz.timezone(settings.TIME_ZONE)
+        now = datetime.now(tz=tz)
+
+        try:
+            queryset = Appointment.objects.filter(date__date__gt=now).first()
+            serializer = AppointmentListSerializer(queryset)
+
+            return Response(serializer.data, status.HTTP_200_OK)
+        except Appointment.DoesNotExist:
+            return Response({}, status.HTTP_200_OK)
+
+
 class AppointmentList(generics.ListCreateAPIView):
     permission_classes = [IsAdminUser]
     pagination_class = AppointmentPagination

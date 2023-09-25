@@ -30,7 +30,7 @@ class UserList(generics.ListAPIView):
     queryset = TelegramUser.objects.all()
     serializer_class = TelegramUserSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['phone_number', 'username']
+    search_fields = ['phone_number', 'username', 'first_name', 'last_name']
 
 
 class UserInfo(APIView):
@@ -39,6 +39,7 @@ class UserInfo(APIView):
     def get(self, request):
         serializer = TelegramUserSerializer(instance=request.user)
     
+        print(serializer.data)
         return Response(serializer.data, status.HTTP_200_OK)
     
     def put(self, request):
