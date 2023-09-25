@@ -46,7 +46,7 @@ export default function Events(){
                 {events.map((event, idx) => {
                     return(
                         <Col key={idx} className="m-0 p-0 d-flex justify-content-center">
-                            <EventCard event={event} idx={idx}/>
+                            <EventCard event={event} idx={idx} link={`/event/${event.id}`}/>
                         </Col>
                     )
                 })}

@@ -6,13 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons"
 
-export default function ResultModal({show, hide, resultType}){
+export default function ResultModal({show, hide, resultType, source}){
     let navigate = useNavigate()
 
     const hadnleClick = () => {
         if(resultType == "success"){
             hide()
-            navigate("/appointment")
+            navigate(source)
         }
         else if(resultType == "conflict"){
             hide()

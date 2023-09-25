@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 
 
-export default function CreateCard(){
+export default function CreateCard({link}){
     return (
         <Card 
-            as={Link} to="/appointment/create"
+            as={Link} to={link}
             style={{height: "500px", cursor: "pointer", minWidth: "300px", maxWidth: "320px"}} 
             bg="light" data-bs-theme="light" 
             className="m-0 p-0 bg-gradient border-0 shadow rounded"

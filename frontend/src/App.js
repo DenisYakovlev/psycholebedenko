@@ -41,12 +41,12 @@ export default function App(){
                   <Route index element={<Home />}/>
 
                   <Route path="appointment">
-                    <Route index element={<Appointment />}/>
-                    <Route path="create" element={<AppointmentCreate />}/>
+                    <Route index element={<Appointment source="appointment"/>}/>
+                    <Route path="create" element={<AppointmentCreate source={"/appointment"}/>}/>
                   </Route>
 
                   <Route path="event">
-                    <Route index element={<Event />} />
+                    <Route index element={<Event source="event" />} />
                     <Route path=":id" element={<EventDetails />} />
                   </Route>
                   
@@ -62,6 +62,18 @@ export default function App(){
                 <Route path='/bot' element={<BotLayout />}>
                   <Route>
                     <Route index element={<Bot />}/>
+                    <Route path="appointment">
+                      <Route index element={<Appointment source="bot/appointment"/>}/>
+                      <Route path="create" element={<AppointmentCreate source={"/bot/appointment"}/>}/>
+                    </Route>
+
+                    <Route path="event">
+                      <Route index element={<Event source="bot/event"/>}/>
+                      <Route path=":id" element={<EventDetails />} />
+                    </Route>
+
+                    <Route path="tests" element={<Tests />} />
+                    <Route path="user" element={<User />}/>
                   </Route>
                 </Route>
 

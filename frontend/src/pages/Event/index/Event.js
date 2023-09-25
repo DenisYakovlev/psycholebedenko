@@ -10,7 +10,7 @@ import { backend_url } from "../../../constants"
 import useApi from "../../../hooks/useApi"
 
 
-export default function Event(){
+export default function Event({source}){
     const {user} = useContext(UserContext)
     const {publicFetch} = useApi()
     const [events, setEvents] = useState([])
@@ -59,7 +59,7 @@ export default function Event(){
                     {events.map((event, idx) => {
                         return(
                             <Col key={idx} className="m-0 p-0 d-flex justify-content-center">
-                                <EventCard event={event} idx={idx}/>
+                                <EventCard event={event} idx={idx} link={`/${source}/${event.id}`}/>
                             </Col>
                         )
                     })}

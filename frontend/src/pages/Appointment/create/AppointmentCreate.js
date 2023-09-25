@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container"
 import Card from "react-bootstrap/Card"
 import Carousel from "react-bootstrap/Carousel"
 import { Helmet } from "react-helmet"
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 import { UserContext, AuthModalContext } from "../../../contexts"
 import { backend_url } from "../../../constants"
 import TypeSelection from "./TypeSelection"
@@ -24,7 +24,7 @@ const styles = {
     }
 }
 
-export default function AppointmentCreate(){
+export default function AppointmentCreate({source}){
     const {user, checkPhoneVerification} = useContext(UserContext)
     const {authFetch, baseAuthFetch} = useApi()
 
@@ -40,6 +40,10 @@ export default function AppointmentCreate(){
     const handleSelect = selectedIndex => setCarouselIndex(selectedIndex)
 
     const nextSlide = () => setCarouselIndex(carouselIndex + 1)
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
 
     const handleSubmit = async () => {
         if(!user){
@@ -123,7 +127,7 @@ export default function AppointmentCreate(){
                     </Carousel>
                 </Card.Body>
             </Card>
-            <ResultModal show={resultShow} hide={() => setResultShow(false)} resultType={resultType}/> 
+            <ResultModal show={resultShow} hide={() => setResultShow(false)} resultType={resultType} source={source}/> 
         </Container>
     )
 }

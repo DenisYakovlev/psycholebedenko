@@ -17,7 +17,7 @@ import useApi from "../../../hooks/useApi"
 const statusFilterParam = withDefault(CommaArrayParam, [])
 const stateFilterParam = withDefault(StringParam, 'active')
 
-export default function Appointment(){
+export default function Appointment({source=""}){
     const {user} = useContext(UserContext)
     const [isLoading, setIsLoading] = useState(false)
     const [appointments, setAppointments] = useState([])
@@ -115,7 +115,7 @@ export default function Appointment(){
                         )}
 
                         <PageLayout.CardCell>
-                            <CreateCard />
+                            <CreateCard link={`/${source}/create`}/>
                         </PageLayout.CardCell>
                     </PageLayout.CardTable>
                 </PageLayout>
