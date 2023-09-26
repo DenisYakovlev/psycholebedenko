@@ -22,6 +22,9 @@ import {
   EventsUpdate
 } from './pages';
 
+
+import Consulting from "./pages/Home/Consulting/Consulting";
+
 import { BotLayout, MainLayout, AdminLayout } from './layouts';
 import { UserContextProvider, AuthModalContextProvider} from "./contexts";
 import { QueryParamProvider } from "use-query-params";
@@ -61,7 +64,8 @@ export default function App(){
 
                 <Route path='/bot' element={<BotLayout />}>
                   <Route>
-                    <Route index element={<Bot />}/>
+                    <Route index element={<Consulting source="bot"/>}/>
+
                     <Route path="appointment">
                       <Route index element={<Appointment source="bot/appointment"/>}/>
                       <Route path="create" element={<AppointmentCreate source={"/bot/appointment"}/>}/>

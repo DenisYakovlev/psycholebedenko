@@ -1,6 +1,8 @@
 import { BasePageLayout } from "../Components"
-import Container from "react-bootstrap/Container"
+import Layout from "./Layout"
 import { Helmet } from "react-helmet"
+import CurrentEventSection from "./CurrentEventSection"
+import FastNavSection from "./FastNavSection"
 
 
 export default function Admin(){
@@ -10,11 +12,15 @@ export default function Admin(){
                 <title>Адмінська Панель</title>
             </Helmet>
 
-            <Container className="vh-100 p-0 d-flex justify-content-center align-items-center" fluid>
-                <p className="m-0 p-0 fs-1 text-dark fw-semibold text-center">
-                    Тут буде швидка панель
-                </p>
-            </Container>
+            <Layout>
+                <Layout.Section>
+                    <CurrentEventSection />
+                </Layout.Section>
+
+                <Layout.Section>
+                    <FastNavSection />
+                </Layout.Section>
+            </Layout>
         </BasePageLayout>
     )
 }

@@ -4,7 +4,7 @@ import CardBody from "./CardBody"
 import CardFooter from "./CardFooter"
 
 
-export default function AppointmentCard({appointment, onChange, onDelete}){
+export default function AppointmentCard({appointment, onChange=() => {}, onDelete=() => {}}){
     return (
         <Card
             style={{height: "500px", minWidth: "300px", maxWidth: "320px"}} bg="light" data-bs-theme="light" 
