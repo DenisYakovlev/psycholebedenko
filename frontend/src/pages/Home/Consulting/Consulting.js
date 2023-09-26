@@ -11,7 +11,7 @@ import Credentials from "./Credentials"
 import ConsultingButton from "./ConsultingButton"
 
 
-export default function Consulting(){
+export default function Consulting({source=""}){
     const [src, setSrc] = useState(null)
 
     // lazy load background image
@@ -37,7 +37,7 @@ export default function Consulting(){
                     <Col style={{width: "100%"}} className="mb-5 p-0 d-flex flex-column text-light justify-content-end align-items-center">
                         <MainText />
                         <Credentials />
-                        <ConsultingButton />
+                        <ConsultingButton source={source}/>
                     </Col>
                 </Row>
             </Container> 

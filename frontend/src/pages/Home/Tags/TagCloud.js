@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react"
 
 export default function TagCloud({setActiveTag}){
     let activeTagRef = useRef(null)
+    let activeTagRandomChoose = useRef(true)
+
 
     useEffect(() => {
         const el = document.getElementsByClassName("tagcloud-active")[0]
@@ -12,7 +14,32 @@ export default function TagCloud({setActiveTag}){
         setActiveTag(activeTagRef.current.innerHTML)
     }, [])
 
+    
+    useEffect(() => {
+        let _interval = setInterval(() => {
+            if(activeTagRandomChoose.current == false){
+                return () => clearInterval(_interval)
+            }
+
+            activeTagRef.current.classList.remove('tagcloud-active')
+            activeTagRef.current.classList.toggle('tagcloud-idle')
+
+            const tags = document.getElementsByClassName('tagcloud-idle')
+            const randomInt = Math.floor(Math.random() * tags.length)
+
+            activeTagRef.current = tags[randomInt]
+            setActiveTag(activeTagRef.current.innerHTML)
+
+            activeTagRef.current.classList.remove('tagcloud-idle')
+            activeTagRef.current.classList.toggle('tagcloud-active')
+        }, 3000)
+
+        return () => clearInterval(_interval)
+    })
+
     const handleActiveChange = e => {
+        activeTagRandomChoose.current = false
+
         activeTagRef.current.classList.remove('tagcloud-active')
         activeTagRef.current.classList.toggle('tagcloud-idle')
 
