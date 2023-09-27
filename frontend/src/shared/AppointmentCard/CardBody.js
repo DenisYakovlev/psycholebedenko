@@ -1,13 +1,21 @@
 import Card from "react-bootstrap/Card"
 import Container from "react-bootstrap/Container"
+import Overlay from 'react-bootstrap/Overlay';
+import OverlayTrigger from "react-bootstrap/OverlayTrigger"
+import Tooltip from 'react-bootstrap/Tooltip';
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCalendarDays, faClock, faLocationDot, faCircleDot, faArrowUpRightFromSquare, faPhone, faUser } from "@fortawesome/free-solid-svg-icons"
+import { faCalendarDays, faClock, faLocationDot, faCircleDot, faArrowUpRightFromSquare, faPhone, faUser, faCopy } from "@fortawesome/free-solid-svg-icons"
 import { faTelegram } from "@fortawesome/free-brands-svg-icons"
 import { formatOnlyDate, formatTime, setStatusColor, setStatusUkrName } from "../../pages/utils"
+import { useRef, useState } from "react"
+import './style.css'
 
 
 export default function CardBody({appointment}){
+    const [showOverlay, setShowOverlay] = useState(false)
+    const target = useRef(null)
+
     const handleZoomRedirect = () => {
         if(appointment.zoom_link){
             window.open(appointment.zoom_link)
@@ -41,10 +49,33 @@ export default function CardBody({appointment}){
 
                 {
                     appointment.online ? 
-                    <Card.Text onClick={handleZoomRedirect} style={{cursor: "pointer"}} className="m-0 p-0 fs-6 text-dark">
-                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} style={{width: "16px"}} className="pe-2"/>
-                        Посилання на зум 
-                    </Card.Text>
+                    <>
+                        <Container style={{cursor: "pointer"}} className="m-0 p-0 fs-6 text-dark d-flex align-items-center">
+                            <FontAwesomeIcon
+                                onClick={() => setShowOverlay(true)}
+                                ref={target} 
+                                icon={faCopy} 
+                                style={{width: "16px"}} 
+                                className="pe-2"
+                                title="Скопіювати посилання"
+                            />
+                            <Card.Text onClick={handleZoomRedirect} className="m-0 p-0 zoom-text">
+                                Посилання на Zoom 
+                            </Card.Text>
+
+                            <FontAwesomeIcon 
+                                onClick={handleZoomRedirect} 
+                                icon={faArrowUpRightFromSquare} 
+                                style={{width: "16px"}} 
+                                className="ps-2 zoom-arrow"
+                            />
+                        </Container>
+                        <Overlay className="m-0 p-0" rootClose onHide={() => setShowOverlay(false)} target={target.current} show={showOverlay} placement="top">
+                            <Tooltip className="fs-6 text-white" id="zoom-overlay">
+                                Скопійовано
+                            </Tooltip>
+                        </Overlay>
+                    </>
                     :
                     <Card.Text className="m-0 p-0 fs-6 text-dark">
                         <FontAwesomeIcon icon={faLocationDot} style={{width: "16px"}} className="pe-2 "/>

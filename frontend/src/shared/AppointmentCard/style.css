@@ -1,0 +1,7 @@
+.zoom-arrow{
+    display: none;
+}
+
+.zoom-text:hover~.zoom-arrow{
+    display: block;
+}

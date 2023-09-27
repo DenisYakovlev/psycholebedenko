@@ -28,7 +28,6 @@ export default function EventCard({event, idx, link="#"}){
     // switch image position between left and right on large screens
     const cardDirection = idx % 2
 
-
     return (
         <Card style={{minWidth: "320px"}} 
             className={"event-card bg-gradient shadow my-4 d-flex" + " event-card"} 
