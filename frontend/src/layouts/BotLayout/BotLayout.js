@@ -57,8 +57,43 @@ export default function BotLayout(){
             setIsLoading(false)
         }
 
+        const seamlessAuthorize = async (body) => {
+            setIsLoading(true)
+
+            await fetch(`${backend_url}/auth/telegram/seamless`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "Application/json"
+                },
+                body: JSON.stringify(body)
+            })
+            .then(response => {
+                if(response.ok){
+                    return response.json()
+                }
+
+                throw new Error("Bot seamless auth error")
+            })
+            .then(data => {
+                localStorage.setItem('tokens', JSON.stringify(data))
+                setUser(data)
+            })
+            .catch(error => alert(error))
+
+            setIsLoading(false)
+        }
+
         if(window.Telegram.WebApp.initData.length == 0){
-            navigate('/')
+            const params = new URLSearchParams(window.location.search)
+
+            if(params.get("hash") && params.get("id")){
+                seamlessAuthorize({id: params.get("id"), hash: params.get("hash")})
+                return
+            }
+            else{
+                navigate('/')
+                return
+            }
         }
 
         if(!user){
