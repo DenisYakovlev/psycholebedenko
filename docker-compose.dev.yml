@@ -50,16 +50,6 @@ services:
       db:
         condition: service_healthy
 
-  telebot:
-    image: backend-img
-    container_name: telebot
-    environment:
-      *common-variables
-    command: >
-      sh -c "python manage.py runbot"
-    depends_on:
-      - backend
-
   db:
     image: postgres:15.4
     container_name: db
