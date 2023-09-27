@@ -13,6 +13,12 @@ from asgiref.sync import async_to_sync
 from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
 from .markups import gen_menu_markup, gen_settings_markup, phone_verification_markup
+from dotenv import load_dotenv
+import os
+import hmac
+import hashlib
+
+load_dotenv('./.env.dev')
 
 
 bot = telebot.TeleBot(TOKEN)
@@ -152,6 +158,14 @@ def settings(message):
 @bot.message_handler(regexp="📇 Меню")
 def menu(message):
 	bot.send_message(message.from_user.id, "Головне меню", reply_markup=gen_menu_markup(message.from_user.id))
+
+@bot.message_handler(regexp="test_bug")
+def test_bug(message):
+	webapp_url = os.getenv("BOT_WEB_APP_URL")
+	user_id = message.from_user.id
+	hash = hmac.new(settings.TELEGRAM_BOT_API_KEY.encode(), str(user_id).encode(), hashlib.sha256).hexdigest()
+
+	bot.send_message(message.from_user.id, f"{webapp_url}/appointment/create?id={user_id}&hash={hash}", reply_markup=gen_menu_markup(message.from_user.id))
 
 @bot.message_handler(commands=["phone_test"])
 def response(message):

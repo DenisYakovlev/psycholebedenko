@@ -40,6 +40,12 @@ def gen_menu_markup(user_id):
 
     menu_markup.row(
         KeyboardButton(
+           text="test_bug"
+        )
+     )
+
+    menu_markup.row(
+        KeyboardButton(
             text="📝 Записатись на консультацію", 
             web_app=WebAppInfo(f"{webapp_url}/appointment/create?id={user_id}&hash={hash}")
         )
