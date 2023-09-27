@@ -1,13 +1,23 @@
+from time import sleep
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.utils import autoreload
 
 from bot.bot import bot
+from bot import logger
 
 
 def start_bot(*args, **kwars):
     print("Starting bot...\n\n")
-    bot.infinity_polling()		
+
+    # in case connection with telegram fails(Connection aborted error)
+    while True:
+        try:
+            logger.debug('polling')
+            bot.polling(none_stop=True)
+        except Exception as _ex:
+            print(_ex)
+            sleep(15)	
     
 
 class Command(BaseCommand):

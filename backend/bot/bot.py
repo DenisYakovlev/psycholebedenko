@@ -12,7 +12,8 @@ from authorization.utils import generatePhoneVerificationTokens
 from asgiref.sync import async_to_sync
 from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
-from .markups import menu_markup, phone_verification_markup
+from .markups import gen_menu_markup, gen_settings_markup, phone_verification_markup
+
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -33,7 +34,7 @@ def botDrivenAuthorization(message):
 		bot.send_message(
 			chat_id=message.chat.id, 
 			text="saved",
-			reply_markup=menu_markup
+			reply_markup=gen_menu_markup(message.chat.id)
 		)
 	else:
 		# id error occurs if user is already authorized.
@@ -42,7 +43,7 @@ def botDrivenAuthorization(message):
 		bot.send_message(
 			chat_id=message.chat.id, 
 			text="not saved", 
-			reply_markup=menu_markup
+			reply_markup=gen_menu_markup(message.chat.id)
 		)
 
 
@@ -52,11 +53,12 @@ def webAppDrivenAuthorization(user_id, first_name, first_authorization=True):
 	logger.debug("webAppDrivenAuthorization")
 
 	if first_authorization:
-		bot.send_message(user_id, f"hello, {first_name}, first", reply_markup=menu_markup)
+		bot.send_message(user_id, f"hello, {first_name}, first", reply_markup=gen_menu_markup(user_id))
 
 
 @shared_task
 def handlePhoneVerification(user_id, wsToken, confirmToken, forceStart=False):
+	# forceStart omits token check. Used in phone verification restart
 	logger.debug("handlePhoneVerification")
 
 	if not forceStart:
@@ -79,6 +81,8 @@ def handlePhoneVerification(user_id, wsToken, confirmToken, forceStart=False):
 
 @bot.message_handler(content_types=['contact']) 
 def handle_contact(message):	
+	logger.debug('handle_contact')
+
 	# handle errors
 	if message.contact is None:
 		bot.send_message(message.chat.id, "No contact", reply_markup=phone_verification_markup)
@@ -101,7 +105,7 @@ def handle_contact(message):
 			bot.send_message(message.chat.id, "Wrong token")
 			return 
 	except:
-		bot.send_message(message.chat.id, "Timeout", reply_markup=menu_markup)
+		bot.send_message(message.chat.id, "Timeout/Verification is not started", reply_markup=gen_menu_markup(message.chat.id))
 		return 
 
 	phone_number = message.contact.phone_number
@@ -135,6 +139,29 @@ def handle_contact(message):
 	else:
 		bot.send_message(message.chat.id, f"error ocured: {serializer.errors}", reply_markup=phone_verification_markup)
 
-@bot.message_handler(regexp="hui")
+
+@bot.message_handler(regexp="⚙️ Налаштування")
+def settings(message):
+	user = TelegramUser.objects.get(id=message.from_user.id)
+
+	response = f"id: {user.id}\nphone: {user.phone_number}\nnotifications: {user.notifications_on}"
+
+	bot.send_message(message.from_user.id, response, reply_markup=gen_settings_markup(message.from_user.id))
+
+
+@bot.message_handler(regexp="📇 Меню")
+def menu(message):
+	bot.send_message(message.from_user.id, "Головне меню", reply_markup=gen_menu_markup(message.from_user.id))
+
+@bot.message_handler(commands=["phone_test"])
 def response(message):
-	bot.send_message(message.from_user.id, "da")
+	bot.send_message(message.from_user.id, "phone_markup", reply_markup=phone_verification_markup)
+
+@bot.message_handler(commands=["menu_test"])
+def response(message):
+	bot.send_message(message.from_user.id, "menu_markup", reply_markup=gen_menu_markup(message.chat.id))
+
+
+@bot.message_handler(commands=['test'])
+def test(message):
+	bot.send_message(message.from_user.id, "test")
