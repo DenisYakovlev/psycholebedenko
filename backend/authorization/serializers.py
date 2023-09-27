@@ -1,3 +1,5 @@
+import hmac
+import hashlib
 from urllib.parse import unquote 
 import json
 from django.contrib.auth import authenticate, get_user_model
@@ -126,5 +128,18 @@ class AuthBotAppTelegramUserSerializer(serializers.Serializer):
             attrs["user"] = user_data
         except:
             raise serializers.ValidationError({"msg": "user not found"})
+        
+        return super().validate(attrs)
+
+
+class AuthBotAppSeamlessUserSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    hash = serializers.CharField()
+
+    def validate(self, attrs):
+        confirm_hash = hmac.new(settings.TELEGRAM_BOT_API_KEY.encode(), attrs['id'].encode(), hashlib.sha256).hexdigest()
+
+        if confirm_hash != attrs["hash"]:
+            raise serializers.ValidationError({"hash": "Hash is not valid"})
         
         return super().validate(attrs)

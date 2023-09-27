@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.core.cache import cache
-from .serializers import AuthWidgetTelegramUserSerializer, AuthBotAppTelegramUserSerializer, PasswordlessTokenObtainPairSerializer
+from .serializers import AuthWidgetTelegramUserSerializer, AuthBotAppTelegramUserSerializer, PasswordlessTokenObtainPairSerializer, AuthBotAppSeamlessUserSerializer
 from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
 from .utils import generatePhoneVerificationTokens
@@ -97,6 +97,29 @@ class AuthBotAppTelegramUser(APIView):
         
         return Response(serializer.errors, status.HTTP_409_CONFLICT)
     
+
+class AuthBotAppSeamlessUser(APIView):
+    # authorize user from bot without telegram init data
+    # reply keyboard opens client without init data which used
+    # in AuthBotAppTelegramUser. So instead use this
+
+    permission_classes = []
+
+    def post(self, request):
+        serializer = AuthBotAppSeamlessUserSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user = TelegramUser.objects.get(id=serializer.validated_data["id"])
+            user_serializer = TelegramUserSerializer(user)
+
+            tokens_serializer = PasswordlessTokenObtainPairSerializer(data=user_serializer.data)
+
+            if tokens_serializer.is_valid():
+                return Response(tokens_serializer.validated_data, status.HTTP_201_CREATED)
+            
+            return Response(tokens_serializer.errors, status.HTTP_409_CONFLICT)
+        
+        return Response(serializer.errors, status.HTTP_409_CONFLICT)
 
 class PhoneVerificationRetry(APIView):
     permission_classes = [IsAuthenticated]
