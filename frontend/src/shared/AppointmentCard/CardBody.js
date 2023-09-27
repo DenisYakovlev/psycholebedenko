@@ -29,6 +29,13 @@ export default function CardBody({appointment}){
         }
     }
 
+    const handleCopy = () => {
+        if(appointment.zoom_link){
+            setShowOverlay(true)
+            navigator.clipboard.writeText(appointment.zoom_link)
+        }
+    }
+
     return (
         <>
             <Card.Text className="m-0 p-0 text-break fw-bold fs-3">
@@ -52,7 +59,7 @@ export default function CardBody({appointment}){
                     <>
                         <Container style={{cursor: "pointer"}} className="m-0 p-0 fs-6 text-dark d-flex align-items-center">
                             <FontAwesomeIcon
-                                onClick={() => setShowOverlay(true)}
+                                onClick={handleCopy}
                                 ref={target} 
                                 icon={faCopy} 
                                 style={{width: "16px"}} 
