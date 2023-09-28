@@ -83,8 +83,6 @@ export default function BotLayout(){
             setIsLoading(false)
         }
 
-        alert(window.location.href)
-
         if(window.Telegram.WebApp.initData.length == 0){
             const params = new URLSearchParams(window.location.search)
 
