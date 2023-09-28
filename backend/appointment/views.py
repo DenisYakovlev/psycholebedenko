@@ -16,6 +16,8 @@ from .serializers import AppointmentSerializer, AppointmentListSerializer, Appoi
 from user.models import TelegramUser
 from schedule.models import Schedule
 
+from bot import bot
+
 
 class AppointmentClosest(APIView):
     permission_classes = [IsAdminUser]
@@ -56,7 +58,14 @@ class AppointmentList(generics.ListCreateAPIView):
         except Appointment.DoesNotExist:
             return Response({"msg": "user not found"}, status.HTTP_404_NOT_FOUND)
         
-        return super().post(request)
+        serializer = AppointmentCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+            bot.handleAppointmentCreateByAdminNotification.delay(request.data["user"], request.data["date"], request.data["online"], request.data.get("address"))
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
     
 
 class AppointmentCreate(APIView):
@@ -79,6 +88,8 @@ class AppointmentCreate(APIView):
         serializer = AppointmentCreateSerializer(data=data, context={'request': self.request})
         if serializer.is_valid():
             serializer.save()
+
+            bot.handleAppointmentCreateNotification.delay(data['user'].id, data['date'], data['online'], data.get("address"))
             return Response(serializer.data, status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

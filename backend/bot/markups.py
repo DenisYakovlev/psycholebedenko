@@ -2,25 +2,28 @@ from telebot.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
 from django.conf import settings
 import hmac
 import hashlib
-from dotenv import load_dotenv
 import os
-
-load_dotenv('./.env.dev')
 
 from user.models import TelegramUser
 
-
+# settings markup
 def gen_settings_markup(user_id):
     settings_markup = ReplyKeyboardMarkup(resize_keyboard=True)
     user = TelegramUser.objects.get(id=user_id)
     
     settings_markup.row(
         KeyboardButton(
-            text="🔴 Вимкнути сповіщення" if user.notifications_on else "🟢 Включити сповіщення"
+            text="🔴 Вимкнути оповіщення" if user.notifications_on else "🟢 Включити оповіщення"
         ),
         
         KeyboardButton(
-            text="📞 Змінити номер телефона"
+            text="📞 Оновити номер телефона"
+        )
+    )
+
+    settings_markup.row(
+        KeyboardButton(
+            text="📑 Повна інформація"
         )
     )
 
@@ -32,17 +35,43 @@ def gen_settings_markup(user_id):
 
     return settings_markup
 
-
+# main menu markup
 def gen_menu_markup(user_id):
     hash = hmac.new(settings.TELEGRAM_BOT_API_KEY.encode(), str(user_id).encode(), hashlib.sha256).hexdigest()
     menu_markup = ReplyKeyboardMarkup(resize_keyboard=True)
     webapp_url = os.getenv("BOT_WEB_APP_URL")
 
+    user = TelegramUser.objects.get(id=user_id)
+
+    # in case user did not provide his phone number
+    if not user.phone_number:
+        menu_markup.row(
+            KeyboardButton(
+                text="📞 Оновити номер телефона"
+            )
+        )
+
+        menu_markup.row(
+            KeyboardButton(
+                text="👨🏻‍💻 Написати психологу"
+            )
+        )
+
+        menu_markup.row(
+            KeyboardButton(
+                text="📇 Меню"
+            )
+        )
+
+        return menu_markup
+
+    # main menu markup starts here
+     
     menu_markup.row(
         KeyboardButton(
-           text="test_bug"
+            text="👨🏻‍💻 Написати психологу"
         )
-     )
+    )
 
     menu_markup.row(
         KeyboardButton(
@@ -65,7 +94,7 @@ def gen_menu_markup(user_id):
     
     menu_markup.row(
         KeyboardButton(
-            text="✅ Тести",
+            text="🛠 Тести",
             web_app=WebAppInfo(f"{webapp_url}/tests?id={user_id}&hash={hash}")
         ),
         KeyboardButton(
@@ -75,11 +104,11 @@ def gen_menu_markup(user_id):
 
     return menu_markup
 
-
+# phone verificaiton markup
 phone_verification_markup = ReplyKeyboardMarkup(
     resize_keyboard=True,
     row_width=1
 ).add(
-    KeyboardButton("Надати номер телефону", request_contact=True),
-    KeyboardButton("Меню")
+    KeyboardButton("📞 Надати номер телефону", request_contact=True),
+    KeyboardButton("📇 Меню")
 )

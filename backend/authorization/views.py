@@ -63,7 +63,7 @@ class AuthWidgetTelegramUser(APIView):
             tokens_serializer = PasswordlessTokenObtainPairSerializer(data=serializer.validated_data)
             if tokens_serializer.is_valid():
                 # notify user about his first authorization
-                bot.webAppDrivenAuthorization(request.data['id'], request.data['first_name'], first_authorization=True)
+                bot.webAppDrivenAuthorization.delay(request.data['id'], request.data['first_name'], first_authorization=True)
 
                 wsToken, confirmToken = generatePhoneVerificationTokens(request.data['id'], request.data['auth_date'])
                 verification_start, verification_end = bot.handlePhoneVerification(request.data['id'], wsToken, confirmToken)
