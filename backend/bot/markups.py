@@ -47,7 +47,7 @@ def gen_menu_markup(user_id):
     if not user.phone_number:
         menu_markup.row(
             KeyboardButton(
-                text="📞 Оновити номер телефона"
+                text="📞 Надати номер телефона"
             )
         )
 

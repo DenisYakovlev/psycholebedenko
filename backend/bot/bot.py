@@ -13,11 +13,36 @@ from authorization.utils import generatePhoneVerificationTokens
 from asgiref.sync import async_to_sync
 from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
+from appointment.models import Appointment
+from appointment.serializers import AppointmentCreateSerializer
 from schedule.models import Schedule
 from .markups import gen_menu_markup, gen_settings_markup, phone_verification_markup
 
 
 bot = telebot.TeleBot(TOKEN)
+
+
+# refactor to utils
+def format_date(date):
+	tz = pytz.timezone(settings.TIME_ZONE)
+	_date = date.astimezone(tz)
+
+	day_name = day_names[_date.weekday()]
+	month_name = month_names[_date.month]
+	time = _date.strftime("%H:%M")
+
+	return f"{day_name}, {_date.day} {month_name} О {time}"
+
+def format_status(status):
+	formated_status = {
+		"pending": "🟡 в обробці",
+		"appointed": "🟢 назначено",
+		"complete": "🔵 виконано",
+		"denied": "🔴 відмінено"
+	}
+
+	return formated_status[status]
+
 
 # NEED TO REFACTOR ALL THIS
 
@@ -31,25 +56,25 @@ def botDrivenAuthorization(message):
 
 	response= \
 	f"""
-	*🎉 Вітаємо! 🎉*
+	*🎉 Вітаємо, {message.from_user.first_name}! 🎉*
 
-	Ви авторизувались у [веб-застосунку](https://psycholebedenko.online/) практикуючого
+	Ви авторизувались у веб-застосунку практикуючого
 	психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
 
-	Всі ваши записи та налаштування можно переглянути 
-	через мене.
+	Всі ваші записи та налаштування акаунта можна 
+	переглянути через панель керування бота.
 	Нажміть на *меню* щоб відрити веб-застосунок.
 	"""
 
 	response_welcome_back= \
 	f"""
-	*🎉 З поверненням! 🎉*
+	*🎉 З поверненням, {message.from_user.first_name}! 🎉*
 
-	Ви авторизувались у [веб-застосунку](https://psycholebedenko.online/) практикуючого
+	Ви авторизувались у веб-застосунку практикуючого
 	психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
 
-	Всі ваши записи та налаштування можно переглянути 
-	через мене.
+	Всі ваші записи та налаштування акаунта можна 
+	переглянути через панель керування бота.
 	Нажміть на *меню* щоб відрити веб-застосунок.
 	"""
 
@@ -74,13 +99,13 @@ def webAppDrivenAuthorization(user_id, first_name, first_authorization=True):
 
 	response= \
 	f"""
-	*🎉 Вітаємо! 🎉*
+	*🎉 Вітаємо, {first_name}! 🎉*
 
-	Ви авторизувались у [веб-застосунку](https://psycholebedenko.online/) практикуючого
+	Ви авторизувались у веб-застосунку практикуючого
 	психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
 
-	Всі ваши записи та налаштування можно переглянути 
-	через мене.
+	Всі ваші записи та налаштування акаунта можна 
+	переглянути через панель керування бота.
 	Нажміть на *меню* щоб відрити веб-застосунок.
 	"""
 
@@ -104,6 +129,7 @@ def handlePhoneVerification(user_id, wsToken, confirmToken, forceStart=False):
 	f"""
 	*📞 Надання номера телефона*
 
+	
 	Надайте номер телефона через меню. ⬇️⬇️⬇️
 
 	*
@@ -124,26 +150,81 @@ def handlePhoneVerification(user_id, wsToken, confirmToken, forceStart=False):
 
 
 @shared_task
-def handleAppointmentCreateNotification(user_id, date, online, address=None):
+def handleAppointmentUpdateNotification(appointment_id):
+	logger.debug("handleAppointmentUpdateNotification")
+	
+	appointment = Appointment.objects.get(id=appointment_id)
+
+	if appointment.status == Appointment.Status.DENIED:
+		response = \
+		f"""
+		*📝 {appointment.title}*
+
+		Консультація була відмінена
+		"""
+
+		bot.send_message(appointment.user.id, response, parse_mode="Markdown")
+		bot.send_message(settings.ADMIN_ID, response, parse_mode="Markdown",
+			reply_markup=InlineKeyboardMarkup([
+        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={appointment.user.id}')],
+        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={appointment.user.id}')],
+    	]))
+
+		return
+
+	user = TelegramUser.objects.get(id=appointment.user)
+	formated_date = format_date(appointment.date.date)
+
+	response_user = \
+	f"""
+	*📝 {appointment.title}*
+
+	Дані про вашу консультацію були оновлені
+
+	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+	📌 Статус: *{format_status(appointment.status)}*
+	🗓 Дата: *{formated_date}*
+	"""
+
+	response_admin = \
+	f"""
+	*📝 {appointment.title}*
+
+	Дані про консультацію були оновлені
+
+	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+	📌 Статус: *{format_status(appointment.status)}*
+	🗓 Дата: *{formated_date}*
+	👤 Користувач: *{user.first_name}*
+	"""
+
+	bot.send_message(user.id, response_user, parse_mode="Markdown")
+	bot.send_message(settings.ADMIN_ID, response_admin, parse_mode="Markdown",
+		reply_markup=InlineKeyboardMarkup([
+        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user.id}')],
+        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={user.id}')],
+    ]))
+	
+
+@shared_task
+def handleAppointmentCreateNotification(appointment_id):
 	logger.debug("handleAppointmentCreateNotification")
 
-	user = TelegramUser.objects.get(id=user_id)
-	tz = pytz.timezone(settings.TIME_ZONE)
-	_date = Schedule.objects.get(id=date).date.astimezone(tz)
+	appointment = Appointment.objects.get(id=appointment_id)
 
-	day_name = day_names[_date.weekday()]
-	month_name = month_names[_date.month]
-	time = _date.strftime("%H:%M")
+	user = TelegramUser.objects.get(id=appointment.user)
+	formated_date = format_date(appointment.date.date)
 
 	user_response = \
 	f"""
 	*📝 Запис на консультацію*
 
+	
 	Ви створили запис на консультацію.
 
-	📡 Формат: *{"Онлайн" if online else "Офлайн"}*
-	📍 Місце проведення: *{address if address else "Конференція Zoom"}*
-	🗓 Дата: *{day_name}, {_date.day} {month_name} О {time}*
+	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+	📍 Місце проведення: *{appointment.address if appointment.address else "Конференція Zoom"}*
+	🗓 Дата: *{formated_date}*
 
 	*
 	Очікуйте підтвердження психолога.
@@ -154,42 +235,65 @@ def handleAppointmentCreateNotification(user_id, date, online, address=None):
 	f"""
 	*📝 Запис на консультацію*
 
+	
 	Створено новий запит на консультацію.
 
-	📡 Формат: *{"Онлайн" if online else "Офлайн"}*
-	📍 Місце проведення: *{address if address else "Конференція Zoom"}*
-	🗓 Дата: *{day_name}, {_date.day} {month_name} О {time}*
+	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+	📍 Місце проведення: *{appointment.address if appointment.address else "Конференція Zoom"}*
+	🗓 Дата: *{formated_date}*
 	👤 Користувач: *{user.first_name}*
 	"""
 
-	bot.send_message(user_id, user_response, parse_mode="Markdown")
+
+	bot.send_message(user.id, user_response, parse_mode="Markdown")
+
 	bot.send_message(settings.ADMIN_ID, admin_response, parse_mode="Markdown",
 		reply_markup=InlineKeyboardMarkup([
-        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user_id}')],
-        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&status=pending&user={user_id}')],
+        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user.id}')],
+		[InlineKeyboardButton(text='Підтвердити/створити лінк у Zoom', callback_data=str(appointment_id))],
+        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&status=pending&user={user.id}')],
     ]))
 
+
+@bot.callback_query_handler(func=lambda call: True)
+def handle_query(call):
+	logger.debug("callback handle")
+
+	appointment = Appointment.objects.get(id=call.data)
+	_data = {"status": "appointed", "create_zoom_link": True}
+
+
+	serializer = AppointmentCreateSerializer(instance=appointment, data=_data, 
+										partial=True, context={'request': {"data": _data}})
+	
+	if serializer.is_valid():
+		obj = serializer.save()
+
+		handleAppointmentUpdateNotification.delay(obj.id)
+		return
+
+	bot.send_message(settings.ADMIN_ID, f"errors: {serializer.errors}", parse_mode="Markdown")
+
+
 @shared_task
-def handleAppointmentCreateByAdminNotification(user_id, date, online, address=None):
+def handleAppointmentCreateByAdminNotification(appointment_id):
 	logger.debug("handleAppointmentCreateByAdminNotification")
 
-	user = TelegramUser.objects.get(id=user_id)
-	tz = pytz.timezone(settings.TIME_ZONE)
-	_date = Schedule.objects.get(id=date).date.astimezone(tz)
+	appointment = Appointment.objects.get(id=appointment_id)
 
-	day_name = day_names[_date.weekday()]
-	month_name = month_names[_date.month]
-	time = _date.strftime("%H:%M")
+	user = TelegramUser.objects.get(id=appointment.user)
+	formated_date = format_date(appointment.date.date)
 
 	response_user = \
 	f"""
 	*📝 Запис на консультацію*
 
+	
 	Психолог записав вас на консультацію.
 
-	📡 Формат: *{"Онлайн" if online else "Офлайн"}*
-	📍 Місце проведення: *{address if address else "Конференція Zoom"}*
-	🗓 Дата: *{day_name}, {_date.day} {month_name} О {time}*
+	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+	📍 Місце проведення: *{appointment.address if appointment.address else "Конференція Zoom"}*
+	🗓 Дата: *{formated_date}*
 
 	"""
 
@@ -197,20 +301,21 @@ def handleAppointmentCreateByAdminNotification(user_id, date, online, address=No
 	f"""
 	*📝 Запис на консультацію*
 
+	
 	Ви записали користувача на консультацію.
 
-	📡 Формат: *{"Онлайн" if online else "Офлайн"}*
-	📍 Місце проведення: *{address if address else "Конференція Zoom"}*
-	🗓 Дата: *{day_name}, {_date.day} {month_name} О {time}*
+	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+	📍 Місце проведення: *{appointment.address if appointment.address else "Конференція Zoom"}*
+	🗓 Дата: *{formated_date}*
 	👤 Користувач: *{user.first_name}*
 
 	"""
 
-	bot.send_message(user_id, response_user, parse_mode="Markdown")
-	bot.send_message(user_id, response_admin, parse_mode="Markdown",
+	bot.send_message(user.id, response_user, parse_mode="Markdown")
+	bot.send_message(settings.ADMIN_ID, response_admin, parse_mode="Markdown",
 		reply_markup=InlineKeyboardMarkup([
-        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user_id}')],
-        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={user_id}')],
+        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user.id}')],
+        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={user.id}')],
     ]))
 	
 
@@ -443,6 +548,11 @@ def phone_update(message):
 		"""
 
 		bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
+
+
+@bot.message_handler(regexp="📞 Надати номер телефона")
+def phone_set(message):
+	phone_update(message)
 
 
 @bot.message_handler(regexp="📑 Повна інформація")
