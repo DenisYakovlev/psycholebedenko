@@ -60,9 +60,9 @@ class AppointmentList(generics.ListCreateAPIView):
         
         serializer = AppointmentCreateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            obj = serializer.save()
 
-            bot.handleAppointmentCreateByAdminNotification.delay(request.data["user"], request.data["date"], request.data["online"], request.data.get("address"))
+            bot.handleAppointmentCreateByAdminNotification.delay(obj.id)
             return Response(serializer.data, status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -87,9 +87,9 @@ class AppointmentCreate(APIView):
 
         serializer = AppointmentCreateSerializer(data=data, context={'request': self.request})
         if serializer.is_valid():
-            serializer.save()
+            obj = serializer.save()
 
-            bot.handleAppointmentCreateNotification.delay(data['user'].id, data['date'], data['online'], data.get("address"))
+            bot.handleAppointmentCreateNotification.delay(obj.id)
             return Response(serializer.data, status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -121,13 +121,20 @@ class AppointmentDetail(APIView):
         serializer = AppointmentCreateSerializer(instance=appointment, data=request.data, 
                                            partial=True, context={'request': request})
         if serializer.is_valid():
-            serializer.save()
+            obj = serializer.save()
 
             # another serializer is used to serialize nested schedule object
             # and return date instead of date.id to client
             _serializer = AppointmentListSerializer(instance=appointment) \
                             if request.user.is_staff \
                             else AppointmentSerializer(instance=appointment)
+            
+
+            # ignore notifications if notes are changed(this will cause spam issues)
+            # by checking if notes are not empty
+            if not request.data.get("notes"):
+                bot.handleAppointmentUpdateNotification.delay(obj.id)
+
             return Response(_serializer.data, status.HTTP_202_ACCEPTED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

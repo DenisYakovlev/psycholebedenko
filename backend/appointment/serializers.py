@@ -44,7 +44,13 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         try:
-            create_zoom_link = self.context['request'].data['create_zoom_link']
+            # got some issues with getting context from bot
+            # need to refactor create_zoom_link as a serializer field
+            if isinstance(self.context['request'], dict):
+                create_zoom_link = self.context['request']['data']['create_zoom_link']
+            else:
+                create_zoom_link = self.context['request'].data['create_zoom_link']
+
         except KeyError:
             create_zoom_link = False
         
