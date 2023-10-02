@@ -21,9 +21,9 @@ export default function CurrentEventSection(){
         fetchEvent()
     }, [])
 
-    if(isLoading){
-        return <></>
-    }
+    // if(isLoading){
+    //     return <></>
+    // }
 
     return (
         <Container className="p-0 d-flex flex-column justify-content-center align-items-center gap-3" fluid>

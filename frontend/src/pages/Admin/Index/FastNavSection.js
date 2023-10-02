@@ -8,7 +8,7 @@ const moment = require('moment')
 
 const FastNavCard = ({header, text, link}) => {
     return (
-        <Card style={{width: "320px"}} className="bg-white rounded-3 border-muted ">
+        <Card style={{width: "320px"}} className="bg-white rounded-3 border-muted shadow">
             <Card.Body>
                 <Container as={Link} to={link} className="p-0 d-flex justify-content-between align-items-center text-decoration-none" fluid>
                     <Card.Text className="m-0 p-0 text-dark fs-5 fw-bold">

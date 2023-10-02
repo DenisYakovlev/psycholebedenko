@@ -9,7 +9,7 @@ export default function TestCard({test}){
         <Card 
             bg="white" 
             data-bs-theme="light" 
-            className="border-0 shadow text-decoration-none"
+            className="border-0 shadow text-decoration-none fade-in-card"
             as={Link} to={test.id}
         >
             <Card.Body 
