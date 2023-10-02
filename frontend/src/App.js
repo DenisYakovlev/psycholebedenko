@@ -7,6 +7,7 @@ import {
   Event, 
   EventDetails, 
   Tests, 
+  TestPage,
   User, 
   UserEvents,
   Exit, 
@@ -53,7 +54,10 @@ export default function App(){
                     <Route path=":id" element={<EventDetails />} />
                   </Route>
                   
-                  <Route path="tests" element={<Tests />}/>
+                  <Route path="tests">
+                    <Route index element={<Tests />} />
+                    <Route path=":id" element={<TestPage />}/>
+                  </Route>
 
                   <Route path="user">
                     <Route index element={<User />}/>
@@ -76,7 +80,10 @@ export default function App(){
                       <Route path=":id" element={<EventDetails />} />
                     </Route>
 
-                    <Route path="tests" element={<Tests />} />
+                    <Route path="tests">
+                      <Route index element={<Tests />} />
+                      <Route path=":id" element={<TestPage />}/>
+                    </Route>
                     <Route path="user" element={<User />}/>
                   </Route>
                 </Route>
