@@ -166,8 +166,8 @@ def handleAppointmentUpdateNotification(appointment_id):
 		bot.send_message(appointment.user.id, response, parse_mode="Markdown")
 		bot.send_message(settings.ADMIN_ID, response, parse_mode="Markdown",
 			reply_markup=InlineKeyboardMarkup([
-        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={appointment.user.id}')],
-        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={appointment.user.id}')],
+			[InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={appointment.user.id}')],
+			[InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={appointment.user.id}')],
     	]))
 
 		return
