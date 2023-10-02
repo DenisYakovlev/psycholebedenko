@@ -182,6 +182,7 @@ def handleAppointmentUpdateNotification(appointment_id):
 	Дані про вашу консультацію були оновлені
 
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+	📍 Місце проведення: *{appointment.address if appointment.address else appointment.zoom_link}*
 	📌 Статус: *{format_status(appointment.status)}*
 	🗓 Дата: *{formated_date}*
 	"""
@@ -193,6 +194,7 @@ def handleAppointmentUpdateNotification(appointment_id):
 	Дані про консультацію були оновлені
 
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+	📍 Місце проведення: *{appointment.address if appointment.address else appointment.zoom_link}*
 	📌 Статус: *{format_status(appointment.status)}*
 	🗓 Дата: *{formated_date}*
 	👤 Користувач: *{user.first_name}*
@@ -564,7 +566,6 @@ def write_to_admin(message):
 	admin = TelegramUser.objects.get(id=settings.ADMIN_ID)
 
 	bot.send_contact(message.chat.id, admin.phone_number, admin.first_name, admin.last_name, reply_markup=gen_menu_markup(message.chat.id))
-
 
 @bot.message_handler(commands=["phone_test"])
 def response(message):
