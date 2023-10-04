@@ -5,7 +5,7 @@ export default function Tag({children, icon, ...props}){
     return (
         <Container 
             style={{width: "fit-content"}}
-            className="m-0 p-0 text-muted text-truncate d-flex flex-row align-items-center"
+            className="m-0 p-0 text-muted d-flex flex-row align-items-center"
             {...props}
         >
             {icon ?

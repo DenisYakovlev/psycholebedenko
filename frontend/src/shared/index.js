@@ -5,6 +5,7 @@ import TimeOptionPicker from "./TimeOptionPicker/TimeOptionPicker";
 import DatePicker from "./DatePicker/DatePicker";
 import { LoadSpinner, BaseContainer, BaseTitle, CommaArrayParam } from "./Base";
 import AppointmentCard from "./AppointmentCard/AppointmentCard";
+import TextEditingTag from "./TextEditingTag/TextEditingTag";
 import Tag from "./Tag";
 
 
@@ -18,6 +19,7 @@ export {
     Calendar, 
     TimeOptionPicker, 
     DatePicker, 
+    TextEditingTag,
     Tag,
     AppointmentCard
 }
