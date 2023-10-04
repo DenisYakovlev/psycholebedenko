@@ -29,7 +29,7 @@ class Appointment(models.Model):
     date = models.OneToOneField(Schedule, on_delete=models.SET_NULL, null=True, blank=False)
     online = models.BooleanField(default=True)
     zoom_link = models.URLField(blank=True, null=True)
-    address = models.CharField(max_length=512, blank=True, null=True, default=set_default_address)
+    address = models.CharField(max_length=512, blank=True, null=True)
     status = models.TextField(choices=Status.choices, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
