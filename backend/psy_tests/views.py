@@ -26,10 +26,10 @@ class PsychologyTestDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "name"
 
     def get_permissions(self):
-        # only allow retrieve for non staff users
+        # allow only retrieve for non staff users
 
         if self.request.method == "GET":
-            return [IsAuthenticated()]
+            return []
         else:
             return [IsAdminUser()]
         
