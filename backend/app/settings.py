@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'bot',
     'schedule',
     'server',
+    'psy_tests',
 ]
 
 ASGI_APPLICATION = "app.asgi.application"
