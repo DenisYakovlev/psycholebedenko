@@ -1,19 +1,26 @@
 import Container from "react-bootstrap/Container"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
+import { TextEditingTag } from "../../../shared"
+
 
 
 export default function NotesForm({nextSlide, notes, setNotes}){
     return (
         <Container className="px-3 mt-3 d-flex flex-column gap-1">
-            <p className="p-0 m-0 mb-0 text-muted text-center fs-6">
+            <p className="m-0 p-0 text-center text-muted fs-6">
                 Нотатки
             </p>
 
             <Form className="m-0 p-0">
                 <Form.Group>
-                    <Form.Label>
-                    </Form.Label>
+                    <Container className="mb-2 px-1 d-flex justify-content-end">
+                        <TextEditingTag 
+                            text={notes}
+                            onChange={e => setNotes(e.target.value)}
+                        />
+                    </Container>
+
                     <Form.Control 
                         value={notes} onChange={e => setNotes(e.target.value)} 
                         style={{height: "30vh", minHeight: "200px"}} as="textarea" placeholder="Можна не заповнювати"

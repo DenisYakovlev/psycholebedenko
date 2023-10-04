@@ -124,7 +124,7 @@ export default function EventDetails(){
                         }
                         </Container>
                     </Col>
-                    <Col md={3} sm={12} xs={12} className="m-0 p-0 overflow-auto">
+                    <Col md={3} sm={12} xs={12} className="m-0 p-0">
                         <EventSide event={event}/>
                     </Col>
                 </Row>
