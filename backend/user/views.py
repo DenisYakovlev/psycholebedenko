@@ -5,6 +5,7 @@ from datetime import datetime
 
 from django.conf import settings
 from django.http import HttpResponse
+from django.db.models import Subquery, OuterRef
 from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
@@ -18,11 +19,12 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .models import TelegramUser
 from .serializers import TelegramUserSerializer, TelegramUserUpdateSerializer
 from .filters import UserAppointmentsFilters
-from appointment.serializers import AppointmentSerializer, AppointmentListSerializer
+from appointment.serializers import AppointmentSerializer
 from appointment.models import Appointment
 from event.models import Event, Participation
 from event.serializers import EventListSerializer
-
+from psy_tests.models import TestResult
+from psy_tests.serializers import TestResultFullSerializer
 
 
 class UserList(generics.ListAPIView):
@@ -62,6 +64,14 @@ class UserFull(APIView):
             event_ids = Participation.objects.filter(user=user).values('event_id')
             events = Event.objects.filter(id__in=event_ids)
 
+            latest_test_results_id = TestResult.objects.filter(
+                user=OuterRef('user'),
+                test=OuterRef('test')
+            ).order_by('-created_at').values('id')
+
+            latest_test_results = TestResult.objects.filter(user=user.id, id=Subquery(latest_test_results_id[:1]))
+            tests_serializer = TestResultFullSerializer(latest_test_results, many=True)
+
             appointments = Appointment.objects.order_by('date__date').filter(user=user)
 
             return {
@@ -73,7 +83,8 @@ class UserFull(APIView):
                 "appointments": {
                     "link": f"/admin/appointments/?state=1&user={user.id}",
                     "count": appointments.count()
-                }
+                },
+                "tests": tests_serializer.data
             }
         except:
             raise Http404
@@ -136,3 +147,15 @@ def UserPhone(request):
     phone_number = request.user.phone_number or None
     return Response({"phone_number": phone_number}, status.HTTP_200_OK)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def UserTests(request):
+    latest_test_results_id = TestResult.objects.filter(
+        user=OuterRef('user'),
+        test=OuterRef('test')
+    ).order_by('-created_at').values('id')
+
+    latest_test_results = TestResult.objects.filter(user=request.user.id, id=Subquery(latest_test_results_id[:1]))
+    tests_serializer = TestResultFullSerializer(latest_test_results, many=True)
+
+    return Response(tests_serializer.data, status.HTTP_200_OK)

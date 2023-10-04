@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserInfo, SendDefaultUserPhoto, UserAppointments, UserEvents, UserList, UserPhoto, UserPhone, UserFull
+from .views import UserInfo, SendDefaultUserPhoto, UserAppointments, UserEvents, UserList, UserPhoto, UserPhone, UserFull, UserTests
 
 # Create your views here.
 
@@ -11,4 +11,5 @@ urlpatterns = [
     path('appointments', UserAppointments.as_view()),
     path('events', UserEvents),
     path('phone', UserPhone),
+    path('tests', UserTests),
 ]
