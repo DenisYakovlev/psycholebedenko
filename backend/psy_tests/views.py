@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from .models import PsycholyTest, TestResult
-from .serializers import PsycholyTestSerializer, TestResultSerializer, TestResultFullSerializer
+from .serializers import PsycholyTestSerializer, PsycholyTestFullSerializer, TestResultSerializer, TestResultFullSerializer
 from .utils import generateResultHash
 
 # Create your views here.
@@ -15,14 +15,26 @@ from .utils import generateResultHash
 class PsychologyTestList(generics.ListCreateAPIView):
     queryset = PsycholyTest.objects.all()
     pagination_class = None
-    permission_classes = [IsAdminUser]
-    serializer_class = PsycholyTestSerializer
+
+    def get_permissions(self):
+        # allow only retrieve for non staff users
+
+        if self.request.method == "GET":
+            return []
+        else:
+            return [IsAdminUser()]
+        
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return PsycholyTestSerializer
+        else:
+            return PsycholyTestFullSerializer
 
 
 class PsychologyTestDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = PsycholyTest.objects.all()
     pagination_class = None
-    serializer_class = PsycholyTestSerializer
+    serializer_class = PsycholyTestFullSerializer
     lookup_field = "name"
 
     def get_permissions(self):

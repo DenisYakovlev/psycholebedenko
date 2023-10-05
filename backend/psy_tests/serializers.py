@@ -6,8 +6,12 @@ from user.models import TelegramUser
 class PsycholyTestSerializer(serializers.ModelSerializer):
     class Meta:
         model = PsycholyTest
-        fields = "__all__"
+        fields = ["id", "name"]
 
+class PsycholyTestFullSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PsycholyTest
+        fields = "__all__"
 
 class TestResultSerializer(serializers.ModelSerializer):
     class Meta:
