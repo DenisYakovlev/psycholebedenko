@@ -6,8 +6,9 @@ from user.models import TelegramUser
 
 class PsycholyTest(models.Model):
     name = models.CharField(max_length=512, blank=True, null=True)
+    img_url = models.URLField(max_length=512, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     test = models.JSONField(blank=True, null=True)
-
 
 class TestResult(models.Model):
     test = models.ForeignKey(PsycholyTest, on_delete=models.CASCADE)

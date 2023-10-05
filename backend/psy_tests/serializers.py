@@ -6,7 +6,7 @@ from user.models import TelegramUser
 class PsycholyTestSerializer(serializers.ModelSerializer):
     class Meta:
         model = PsycholyTest
-        fields = ["id", "name"]
+        fields = ["id", "name", "img_url"]
 
 class PsycholyTestFullSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,3 +30,5 @@ class TestResultFullSerializer(serializers.ModelSerializer):
 
     def get_test_name(self, obj):
         return obj.test.name
+    
+    

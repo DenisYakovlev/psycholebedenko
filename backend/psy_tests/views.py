@@ -66,8 +66,9 @@ class TestResultCreate(APIView):
 
     def post(self, request):
         try:
+            print(request.data)
             resultHash = generateResultHash(request.user.id, request.data["score"])
-
+            
             data = request.data
             data["user"] = request.user.id
             data["result_hash"] = resultHash
@@ -79,6 +80,6 @@ class TestResultCreate(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        response_serializer = TestResultFullSerializer(serializer.validated_data)
+        response_serializer = TestResultSerializer(serializer.validated_data)
 
         return Response(response_serializer.data, status.HTTP_201_CREATED)
