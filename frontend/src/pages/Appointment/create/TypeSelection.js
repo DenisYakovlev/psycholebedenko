@@ -51,10 +51,10 @@ export default function TypeSelection({setOnline, nextSlide}){
                     }
                 </Container>
                 <Card.Body className="px-3 py-2 pb-1 m-0 d-flex flex-row align-items-center justify-content-start gap-3">
-                    <Tag style={{fontSize: "12px"}} icon={faTag}>
+                    <Tag style={{fontSize: "12px"}} wrap={false} icon={faTag}>
                         Ціна: 800 грн.
                     </Tag>
-                    <Tag style={{fontSize: "12px"}} icon={faClock}>
+                    <Tag style={{fontSize: "12px"}} wrap={false} icon={faClock}>
                         60 хв
                     </Tag>
                     <Tag style={{fontSize: "12px"}} icon={faHouseLaptop}>
@@ -77,13 +77,13 @@ export default function TypeSelection({setOnline, nextSlide}){
                     }
                 </Container>
                 <Card.Body className="px-3 py-2 pb-1 m-0 d-flex flex-row align-items-center justify-content-start gap-3">
-                    <Tag style={{fontSize: "12px"}} icon={faTag}>
+                    <Tag style={{fontSize: "12px"}} wrap={false} icon={faTag}>
                         Ціна: 800 грн.
                     </Tag>
-                    <Tag style={{fontSize: "12px"}} icon={faClock}>
+                    <Tag style={{fontSize: "12px"}} wrap={false} icon={faClock}>
                         60 хв
                     </Tag>
-                    <Tag style={{fontSize: "12px"}} icon={faHouse}>
+                    <Tag style={{fontSize: "12px"}} wrap={false} icon={faHouse}>
                         У кабінеті
                     </Tag>
                 </Card.Body>

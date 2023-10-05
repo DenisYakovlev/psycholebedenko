@@ -12,21 +12,21 @@ export default function NotesForm({nextSlide, notes, setNotes}){
                 Нотатки
             </p>
 
-            <Form className="m-0 p-0">
-                <Form.Group>
-                    <Container className="mb-2 px-1 d-flex justify-content-end">
-                        <TextEditingTag 
-                            text={notes}
-                            onChange={e => setNotes(e.target.value)}
-                        />
-                    </Container>
 
-                    <Form.Control 
-                        value={notes} onChange={e => setNotes(e.target.value)} 
-                        style={{height: "30vh", minHeight: "200px"}} as="textarea" placeholder="Можна не заповнювати"
+            <Form.Group className="py-3">
+                <Container className="mb-2 px-1 d-flex justify-content-end">
+                    <TextEditingTag 
+                        text={notes}
+                        onChange={e => setNotes(e.target.value)}
                     />
-                </Form.Group>
-            </Form>
+                </Container>
+
+                <Form.Control 
+                    value={notes} onChange={e => setNotes(e.target.value)} 
+                    style={{height: "30vh", minHeight: "200px"}} as="textarea" placeholder="Можна не заповнювати"
+                />
+            </Form.Group>
+
             <Button
                 onClick={nextSlide}
                 className="mt-4 mb-3 w-50 align-self-center" variant="outline-dark" size="md"

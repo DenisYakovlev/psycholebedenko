@@ -5,7 +5,11 @@ import Col from "react-bootstrap/Col"
 
 const Layout = ({children}) => {
     return (
-        <Row lg={3} md={2} sm={1} xs={1} className="m-0 p-0 vh-100 justify-content-center align-items-center gap-3">
+        <Row 
+            lg={3} md={2} sm={1} xs={1} 
+            className="m-0 p-0 justify-content-center align-items-center gap-3"
+            style={{minHeight: "100vh", height: "fit-content"}}
+        >
             {children}
         </Row>
     )
