@@ -159,3 +159,25 @@ def UserTests(request):
     tests_serializer = TestResultFullSerializer(latest_test_results, many=True)
 
     return Response(tests_serializer.data, status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def UserTestsByName(request, name):
+    try:
+        latest_test_results_id = TestResult.objects.filter(
+            user=OuterRef('user'),
+            test=OuterRef('test')
+        ).order_by('-created_at').values('id')
+
+        latest_test_results = TestResult.objects.filter(
+            user=request.user.id,
+            test__name=name,
+            id=Subquery(latest_test_results_id[:1])
+        )
+    except TestResult.DoesNotExist:
+        raise Http404
+
+    tests_serializer = TestResultFullSerializer(latest_test_results, many=True)
+
+    return Response(tests_serializer.data, status.HTTP_200_OK)
