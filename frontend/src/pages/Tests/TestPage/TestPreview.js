@@ -9,7 +9,7 @@ export default function TestPreview({testObj, start}){
     return (
         <Container 
             fluid="xl" 
-            className="p-0 d-flex flex-column justify-content-center align-items-center gap-3"
+            className="px-0 py-5 d-flex flex-column justify-content-center align-items-center gap-3"
         >
             <Image 
                 src={img_url} 

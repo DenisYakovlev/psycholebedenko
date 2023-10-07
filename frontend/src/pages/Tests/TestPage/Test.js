@@ -63,10 +63,17 @@ export default function Test({setResult, test}){
     }
 
     return (
-        <BaseContainer >
+        <Container 
+            className="p-0" 
+            style={{
+                minHeight: "100vh",
+                height: "fit-content"
+            }}
+            fluid
+        >
             {isStarted ? (
                 <Container 
-                    className="px-0 d-flex flex-column justify-content-center" 
+                    className="px-0 py-3 d-flex flex-column justify-content-center" 
                     fluid="xl"
                 >
                     <Carousel
@@ -81,7 +88,7 @@ export default function Test({setResult, test}){
                     >
                         {Object.values(test.test).map(question => (
                             <Carousel.Item key={question.id}>
-                                <p className="p-0 pb-3 m-0 fs-1 text-dark fw-semibold text-truncate">
+                                <p className="px-3 pb-3 m-0 fs-1 text-dark fw-semibold text-truncate">
                                     {`${question.id}/${testLenegth}`}
                                 </p>
 
@@ -101,6 +108,6 @@ export default function Test({setResult, test}){
                     start={() => setIsStarted(true)}
                 />
             )}
-        </BaseContainer>
+        </Container>
     )
 }
