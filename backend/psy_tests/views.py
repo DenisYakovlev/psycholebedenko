@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from .models import PsycholyTest, TestResult
-from .serializers import PsycholyTestSerializer, PsycholyTestFullSerializer, TestResultSerializer, TestResultFullSerializer
+from .models import PsycholyTest, TestResult, TestAnswer
+from .serializers import PsycholyTestSerializer, PsycholyTestFullSerializer, TestResultSerializer, TestResultFullSerializer, TestAnswerSerializer
 from .utils import generateResultHash
 
 # Create your views here.
@@ -66,11 +66,18 @@ class TestResultCreate(APIView):
 
     def post(self, request):
         try:
-            print(request.data)
             resultHash = generateResultHash(request.user.id, request.data["score"])
-            
+
             data = request.data
+
+            answer = TestAnswer.objects.filter(
+                test=data["test"], 
+                min_score__lte=data["score"],
+                max_score__gte=data["score"]
+            ).first()
+
             data["user"] = request.user.id
+            data["answer"] = answer.id
             data["result_hash"] = resultHash
         except:
             return Response({"detail": "score is not provided"}, status.HTTP_409_CONFLICT)
@@ -78,8 +85,33 @@ class TestResultCreate(APIView):
         serializer = TestResultSerializer(data=data)
 
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        obj = serializer.save()
 
-        response_serializer = TestResultSerializer(serializer.validated_data)
+        response_serializer = TestResultFullSerializer(obj)
 
         return Response(response_serializer.data, status.HTTP_201_CREATED)
+    
+
+class TestResultCreateAnon(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        try:
+            data = request.data
+
+            answer = TestAnswer.objects.filter(
+                test=data["test"], 
+                min_score__lte=data["score"],
+                max_score__gte=data["score"]
+            ).first()
+
+            answer_serializer = TestAnswerSerializer(answer)
+            data["answer"] = answer_serializer.data
+        except:
+            return Response({"detail": "score is not provided"}, status.HTTP_409_CONFLICT)
+        
+        serializer = TestResultFullSerializer(data=data)
+
+        serializer.is_valid(raise_exception=True)
+
+        return Response(serializer.data, status.HTTP_201_CREATED)

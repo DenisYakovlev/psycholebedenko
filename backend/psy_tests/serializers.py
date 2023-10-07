@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import PsycholyTest, TestResult
+from .models import PsycholyTest, TestResult, TestAnswer
 from user.models import TelegramUser
 
 
@@ -13,6 +13,11 @@ class PsycholyTestFullSerializer(serializers.ModelSerializer):
         model = PsycholyTest
         fields = "__all__"
 
+class TestAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TestAnswer
+        fields = "__all__"
+
 class TestResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestResult
@@ -21,14 +26,17 @@ class TestResultSerializer(serializers.ModelSerializer):
 
 class TestResultFullSerializer(serializers.ModelSerializer):
     test = PsycholyTest()
-    test_name = serializers.SerializerMethodField("get_test_name")
+    test_name = serializers.SerializerMethodField("get_test_name", read_only=True)
+    answer = TestAnswerSerializer()
     user = TelegramUser()
 
     class Meta:
         model = TestResult
-        fields = ["test", "test_name", "user", "score", "result_hash", "created_at"]
+        fields = ["test", "test_name", "user", "score", "answer", "result_hash", "created_at"]
 
     def get_test_name(self, obj):
-        return obj.test.name
-    
+        try:
+            return obj.test.name
+        except:
+            return obj["test"].name
     
