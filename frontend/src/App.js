@@ -8,6 +8,7 @@ import {
   EventDetails, 
   Tests, 
   TestPage,
+  ConstantLinkPage,
   User, 
   UserEvents,
   Exit, 
@@ -53,10 +54,14 @@ export default function App(){
                     <Route index element={<Event source="event" />} />
                     <Route path=":id" element={<EventDetails />} />
                   </Route>
+
+                  <Route path="t">
+                    <Route path=":hash" element={<ConstantLinkPage />}/>
+                  </Route>
                   
                   <Route path="tests">
                     <Route index element={<Tests />} />
-                    <Route path=":id" element={<TestPage />}/>
+                    <Route path=":name" element={<TestPage />}/>
                   </Route>
 
                   <Route path="user">
@@ -82,7 +87,7 @@ export default function App(){
 
                     <Route path="tests">
                       <Route index element={<Tests />} />
-                      <Route path=":id" element={<TestPage />}/>
+                      <Route path=":name" element={<TestPage />}/>
                     </Route>
                     <Route path="user" element={<User />}/>
                   </Route>

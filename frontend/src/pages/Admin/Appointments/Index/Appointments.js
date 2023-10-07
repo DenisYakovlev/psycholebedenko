@@ -4,14 +4,13 @@ import SideFilters from "./SideFilters"
 import MainAppointments from "./MainAppointments"
 import { useQueryParam, StringParam, BooleanParam, withDefault, NumberParam } from "use-query-params"
 import { useContext, useEffect, useState } from "react"
-import { backend_url } from "../../../../constants"
-import { UserContext } from "../../../../contexts"
 import qs from "query-string"
 import useApi from "../../../../hooks/useApi"
 
 
 const statusFilterParam = withDefault(CommaArrayParam, [])
 const stateFilterParam = withDefault(BooleanParam, false)
+const pageFilterParam = withDefault(NumberParam, 1)
 
 export default function Appointments(){
     // const {authFetch} = useContext(UserContext)
@@ -20,16 +19,9 @@ export default function Appointments(){
     const [selectedUser, setSelectedUser] = useQueryParam('user', StringParam)
     const [selectedStatus, setSelectedStatus] = useQueryParam('status', statusFilterParam)
     const [selectedState, setSelectedState] = useQueryParam('state', stateFilterParam)
-    const [page, setPage] = useQueryParam('page', NumberParam)
+    const [page, setPage] = useQueryParam('page', pageFilterParam)
     const [appointments, setAppointments] = useState([])
 
-    const getQueryParams = () => {
-        const user = `${selectedUser ? `user=${selectedUser}&`: ""}`
-        const status = `${selectedStatus.length > 0 ? `status=${[...selectedStatus].join(',')}&` : ""}`
-        const state = `${selectedState != null ? `outdated=${selectedState ? "1" : "0"}&`: ""}`
-        
-        return `${user}${status}${state}`
-    }
 
     const fetchAppointments = async () => {
         const query = {

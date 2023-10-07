@@ -1,0 +1,22 @@
+.fade-in-question{
+    animation-name: fade-in-text;
+    animation-duration: 0.25s;
+    animation-timing-function: ease-in;
+}
+
+.fade-in-answers{
+    animation-name: fade-in-text;
+    animation-duration: 0.30s;
+    animation-timing-function: ease-in;
+}
+
+@keyframes fade-in-text {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}

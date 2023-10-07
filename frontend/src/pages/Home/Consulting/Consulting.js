@@ -29,7 +29,7 @@ export default function Consulting({source=""}){
                 backgroundImage: `linear-gradient(rgba(0, 0 ,0 , 0.25), rgba(0, 0, 0, 1)), url(${src})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                fontFamily: "Cousine",
+                fontFamily: ["Cousine", "Courier"],
                 minHeight: "100vh",
                 height: "fit-content"
             }} className="m-0 p-0 d-flex align-items-end justify-content-center" fluid>

@@ -10,14 +10,14 @@ export default function TestCard({test}){
             bg="white" 
             data-bs-theme="light" 
             className="border-0 shadow text-decoration-none fade-in-card"
-            as={Link} to={test.id}
+            as={Link} to={test.name}
         >
             <Card.Body 
                 className="d-flex flex-row align-items-center justify-content-start gap-3"
             >
                 <Image 
                     style={{width: "70px", height: "70px"}}
-                    src={test.img}
+                    src={test.img_url}
                     alt="test source"
                     roundedCircle
                 />
