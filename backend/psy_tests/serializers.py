@@ -26,17 +26,24 @@ class TestResultSerializer(serializers.ModelSerializer):
 
 class TestResultFullSerializer(serializers.ModelSerializer):
     test = PsycholyTest()
-    test_name = serializers.SerializerMethodField("get_test_name", read_only=True)
+    test_name = serializers.SerializerMethodField("get_test_name")
+    test_max_score = serializers.SerializerMethodField("get_test_max_score")
     answer = TestAnswerSerializer()
     user = TelegramUser()
 
     class Meta:
         model = TestResult
-        fields = ["test", "test_name", "user", "score", "answer", "result_hash", "created_at"]
+        fields = ["test", "test_name", "test_max_score", "user", "score", "answer", "result_hash", "created_at"]
 
     def get_test_name(self, obj):
         try:
             return obj.test.name
         except:
             return obj["test"].name
+        
+    def get_test_max_score(self, obj):
+        try:
+            return obj.test.max_score
+        except:
+            return obj["test"].max_score
     

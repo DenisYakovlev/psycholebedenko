@@ -56,7 +56,7 @@ class TestResultRetrive(generics.RetrieveUpdateDestroyAPIView):
         # only allow retrieve for non staff users
 
         if self.request.method == "GET":
-            return [IsAuthenticated()]
+            return []
         else:
             return [IsAdminUser()]
 
