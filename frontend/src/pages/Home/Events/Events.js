@@ -3,7 +3,7 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../contexts/UserContext"
-import { EventCard } from "../../../shared"
+import { EventCard, AdaptiveEventCard } from "../../../shared"
 import { backend_url } from "../../../constants"
 import MainText from "./MainText"
 import useApi from "../../../hooks/useApi"
@@ -46,7 +46,10 @@ export default function Events(){
                 {events.map((event, idx) => {
                     return(
                         <Col key={idx} className="m-0 p-0 d-flex justify-content-center">
-                            <EventCard event={event} idx={idx} link={`/event/${event.id}`}/>
+                            {/* use Adaptive card instead of normal one because of issues with safari
+                            <EventCard event={event} idx={idx} link={`/event/${event.id}`}/> 
+                            */}
+                            <AdaptiveEventCard event={event} idx={idx} />
                         </Col>
                     )
                 })}

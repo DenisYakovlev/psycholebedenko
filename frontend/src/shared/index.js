@@ -1,4 +1,5 @@
 import AuthorizationModal from "./AuthorizationModal/AuthorizationModal";
+import AdaptiveEventCard from "./AdaptiveEventCard/AdaptiveEventCard";
 import EventCard from "./EventCard/EventCard";
 import Calendar from "./Calendar/Calendar";
 import TimeOptionPicker from "./TimeOptionPicker/TimeOptionPicker";
@@ -11,6 +12,7 @@ import Tag from "./Tag";
 
 export {
     AuthorizationModal, 
+    AdaptiveEventCard,
     EventCard, 
     LoadSpinner, 
     BaseContainer,
