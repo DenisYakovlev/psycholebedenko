@@ -84,7 +84,7 @@ class UserFull(APIView):
                     "link": f"/admin/appointments/?state=1&user={user.id}",
                     "count": appointments.count()
                 },
-                "tests": tests_serializer.data
+                "tests": {test["test_name"]: test["result_hash"] for test in tests_serializer.data}
             }
         except:
             raise Http404
