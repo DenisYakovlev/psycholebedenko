@@ -5,7 +5,7 @@ import CardLayout from "./CardLayout"
 import { Tag } from "../../../../shared"
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPhone } from "@fortawesome/free-solid-svg-icons"
+import { faPhone, faClipboardCheck } from "@fortawesome/free-solid-svg-icons"
 import { faTelegram } from "@fortawesome/free-brands-svg-icons"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../../contexts"
@@ -49,7 +49,7 @@ export default function UserFullCard({userId}){
     }
 
     // separate user data
-    const {user, events, appointments} = userData
+    const {user, events, appointments, tests} = userData
 
     return (
         <CardLayout>
@@ -103,6 +103,20 @@ export default function UserFullCard({userId}){
                 </CardLayout.Body.Stats>
 
                 <CardLayout.Body.Info>
+                    {Object.entries(tests).map(([name, hash], idx) => 
+                        <Card.Text
+                            as={Link}
+                            to={`/t/${hash}`}
+                            style={{cursor: "pointer"}}
+                            key={idx} 
+                            className="m-0 p-0 fs-6 text-muted text-decoration-none"
+                        >
+                            <Tag icon={faClipboardCheck}>
+                                {name}
+                            </Tag>
+                        </Card.Text>
+                    )}
+
                     <Tag icon={faPhone}>
                         {user.phone_number ? user.phone_number : ""}
                     </Tag>

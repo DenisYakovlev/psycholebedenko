@@ -42,7 +42,7 @@ CardLayout.Body.Stats = ({children}) => {
 
 CardLayout.Body.Info = ({children}) => {
     return (
-        <Container className="m-0 p-0 d-flex flex-column align-items-center">
+        <Container className="m-0 p-0 d-flex flex-column align-items-center gap-1">
             {children}
         </Container>
     )
