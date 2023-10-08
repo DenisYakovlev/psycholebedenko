@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
 
-export default function CardBody({event}){
+export default function CardBody({event, link}){
     const formatDate = (eventDate) => {
         const monthsUkr = [
             "Січня", "Лютого", "Березня", "Квітня", "Травня", "Червня",
@@ -32,7 +32,7 @@ export default function CardBody({event}){
             <Container className="m-0 p-0 d-flex flex-row justify-content-between align-items-center">
                 <Card.Text 
                     title={event.title ? event.title : ''} 
-                    as={Link} to={`/event/${event.id}`} 
+                    as={Link} to={link} 
                     className="m-0 mb-1 fs-4 w-75 text-dark text-truncate text-decoration-none"
                 >
                     {event.title ? event.title : "Назва не вказана"}
