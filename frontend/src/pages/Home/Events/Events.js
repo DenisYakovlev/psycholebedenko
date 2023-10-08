@@ -49,9 +49,9 @@ export default function Events(){
                         <Col key={idx} className="m-0 p-0 d-flex justify-content-center">
                             {browserName == "Safari" || browserName == "Mobile Safari" ? (
                                 // old version of safari is not compatible with usage of container quaries
-                                <AdaptiveEventCard event={event} idx={idx} link={`/${source}/${event.id}`} />
+                                <AdaptiveEventCard event={event} idx={idx} link={`/event/${event.id}`} />
                             ) : (
-                                <EventCard event={event} idx={idx} link={`/${source}/${event.id}`}/>
+                                <EventCard event={event} idx={idx} link={`/event/${event.id}`}/>
                             )}
                         </Col>
                     )
