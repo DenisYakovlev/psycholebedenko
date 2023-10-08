@@ -3,16 +3,17 @@ import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { useState } from "react"
 
 
 export default function Question({question, onAnswer, index, prevQuestion}){
     return (
         <Container fluid className="p-0 d-flex flex-column">
-            <Container className="p-3 fs-1 text-dark fw-bold fade-in-question" fluid>
-                {question.title}
+            <Container className="px-3 pt-3 fs-1 text-dark fw-bold fade-in-question" fluid>
+                {`${question.id}. ${question.title}`}
             </Container>
 
-            <Form.Group className="p-3 fs-2 text-dark fw-semibold text-break d-flex flex-column fade-in-answers gap-3">
+            <Form.Group className="p-3 fs-3 text-dark fw-semibold text-break d-flex flex-column fade-in-answers gap-3">
                 {question.variants.map(variant => 
                     <Form.Check key={variant.id}>
                         <Form.Check.Input 
@@ -20,7 +21,7 @@ export default function Question({question, onAnswer, index, prevQuestion}){
                             id={`check-${variant.id}`}
                             value={variant.value}
                             onChange={() => onAnswer([question.id, variant.weight])}
-                            name="check-group"
+                            name={`check-group-${question.id}`}
                             style={{cursor: "pointer"}}
                         />
                         <Form.Check.Label 

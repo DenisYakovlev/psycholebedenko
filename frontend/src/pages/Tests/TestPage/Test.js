@@ -1,17 +1,20 @@
 import Carousel from "react-bootstrap/Carousel"
 import Container from "react-bootstrap/Container"
+import CloseButton from "react-bootstrap/CloseButton"
 import { useContext, useRef, useState } from "react"
 import TestPreview from "./TestPreview"
 import Question from "./Question"
 import { UserContext } from "../../../contexts"
 import { BaseContainer } from "../../../shared"
 import useApi from "../../../hooks/useApi"
+import { useNavigate } from "react-router"
 
 let answers = {}
 
 export default function Test({setResult, test}){
+    let navigate = useNavigate()
     const { user } = useContext(UserContext)
-    const { authFetch } = useApi()
+    const { authFetch, publicFetch } = useApi()
     const [isStarted, setIsStarted] = useState(false)
     const [index, setIndex] = useState(0)
 
@@ -33,6 +36,8 @@ export default function Test({setResult, test}){
     const handleSelect = selectedIndex => setIndex(selectedIndex)
 
     const handleAnswer = (answer) => {
+        // wait for 150 ms before switching to another question
+
         answers[answer[0]] = answer[1]
         setTimeout(resolve => nextQuestion(), 150)
     }
@@ -40,13 +45,18 @@ export default function Test({setResult, test}){
     const handleResult = () => {
         const score = Object.values(answers).reduce((value, curr) => curr + value, 0)
 
-
+        // if user is not authorized, than use anonymous result check
         if(!user){
-            setResult({
-                test: test.id,
-                test_name: test.name,
-                score: score
-            })
+            publicFetch.post('psy_tests/result_anon', {
+                headers: {
+                    "Content-type": "Application/json"
+                },
+                body: JSON.stringify({
+                    test: test.id,
+                    score: score
+                })
+            }).then(data => setResult(data))
+
             return
         }
 
@@ -62,6 +72,10 @@ export default function Test({setResult, test}){
         }).then(data => setResult(data))
     }
 
+    const handleTestClose = () => {
+        navigate(-1)
+    }
+
     return (
         <Container 
             className="p-0" 
@@ -73,7 +87,7 @@ export default function Test({setResult, test}){
         >
             {isStarted ? (
                 <Container 
-                    className="px-0 py-3 d-flex flex-column justify-content-center" 
+                    className="px-0 pb-5 mb-5 d-flex flex-column justify-content-center" 
                     fluid="xl"
                 >
                     <Carousel
@@ -88,9 +102,16 @@ export default function Test({setResult, test}){
                     >
                         {Object.values(test.test).map(question => (
                             <Carousel.Item key={question.id}>
-                                <p className="px-3 pb-3 m-0 fs-1 text-dark fw-semibold text-truncate">
-                                    {`${question.id}/${testLenegth}`}
-                                </p>
+                                <Container fluid className="px-3 py-2 d-flex justify-content-between align-items-center">
+                                    <p className="m-0 fs-1 text-dark fw-semibold text-truncate">
+                                        {`${question.id}/${testLenegth}`}
+                                    </p>
+
+                                    <CloseButton 
+                                        onClick={handleTestClose}
+                                        className="fs-2 text-dark d-md-none d-block"
+                                    />
+                                </Container>
 
                                 <Question 
                                     question={question}

@@ -24,7 +24,7 @@ export default function TestResult({restart, result}){
             fluid
         >
             <Container 
-                className="px-0 py-5 d-flex flex-column justify-content-center align-items-center gap-3" 
+                className="px-3 py-5 d-flex flex-column justify-content-center align-items-center gap-3" 
                 fluid
                 style={{backgroundColor: "#f4f4f4"}}
             >
@@ -53,7 +53,7 @@ export default function TestResult({restart, result}){
                 )}
             </Container>
 
-            <Container className="p-3" fluid="lg">
+            <Container className="px-3" fluid="lg">
                 <p className="px-0 pt-5 pb-2 m-0 text-muted fs-3 fw-semibold">
                     Пояснення результату:
                 </p>
@@ -69,17 +69,25 @@ export default function TestResult({restart, result}){
                     Постійне посилання на результат:
                 </p>
 
-                <Container className="p-0 d-flex justify-content-center">
-                    <p className="px-0 m-0 text-dark text-truncate fs-5 align-self-center">
-                        {`psycholebedenko.online/t/${result_hash}`}
-                    </p>
+                <Container className="px-0 pb-5 mb-5 d-flex justify-content-center">
+                    {result_hash ? (
+                        <>
+                            <p className="px-0 m-0 text-dark text-truncate fs-5 align-self-center">
+                                {`psycholebedenko.online/t/${result_hash}`}
+                            </p>
 
-                    <FontAwesomeIcon 
-                        icon={faArrowUpRightFromSquare} 
-                        className="ps-2 fs-5 text-dark align-self-center"
-                        onClick={handleRedirect}
-                        style={{cursor: "pointer"}}
-                    />
+                            <FontAwesomeIcon 
+                                icon={faArrowUpRightFromSquare} 
+                                className="ps-2 fs-5 text-dark align-self-center"
+                                onClick={handleRedirect}
+                                style={{cursor: "pointer"}}
+                            />
+                        </>
+                    ) : (
+                        <p className="px-0 m-0 text-dark text-center fs-6 align-self-center">
+                            Авторизуйтесь у додатку для збереження результата тесту
+                        </p>
+                    )}
                 </Container>
             </Container>
         </Container>
