@@ -47,15 +47,12 @@ export default function Events(){
                 {events.map((event, idx) => {
                     return(
                         <Col key={idx} className="m-0 p-0 d-flex justify-content-center">
-                            {/* {browserName == "Safari" ? (
+                            {browserName == "Safari" || browserName == "Mobile Safari" ? (
                                 // old version of safari is not compatible with usage of container quaries
-                                <AdaptiveEventCard event={event} idx={idx} link={`/event/${event.id}`}/>
+                                <AdaptiveEventCard event={event} idx={idx} link={`/${source}/${event.id}`} />
                             ) : (
-                                <EventCard event={event} idx={idx} link={`/event/${event.id}`}/>
-                            )} */}
-
-                            <AdaptiveEventCard event={event} idx={idx} link={`/event/${event.id}`}/>
-
+                                <EventCard event={event} idx={idx} link={`/${source}/${event.id}`}/>
+                            )}
                         </Col>
                     )
                 })}
