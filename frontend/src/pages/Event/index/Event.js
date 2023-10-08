@@ -49,9 +49,9 @@ export default function Event({source}){
                 <h1 className="text-dark text-center text-justify">
                     Групові зустрічі
                 </h1>
-                {/* <p className="text-muted text-center text-justify">
-                    Какой-то текст про групові зустрічі
-                </p> */}
+                <p className="text-muted text-center text-justify">
+                    {browserName}
+                </p>
             </Container>
             {isLoading ? 
                 <LoadSpinner />
@@ -60,12 +60,15 @@ export default function Event({source}){
                     {events.map((event, idx) => {
                         return(
                             <Col key={idx} className="m-0 p-0 d-flex justify-content-center">
-                                {browserName == "Safari" ? (
+                                {/* {browserName == "Safari" ? (
                                     // old version of safari is not compatible with usage of container quaries
                                     <AdaptiveEventCard event={event} idx={idx} link={`/${source}/${event.id}`} />
                                 ) : (
                                     <EventCard event={event} idx={idx} link={`/${source}/${event.id}`}/>
-                                )}
+                                )} */}
+
+                                <AdaptiveEventCard event={event} idx={idx} link={`/${source}/${event.id}`} />
+
                             </Col>
                         )
                     })}
