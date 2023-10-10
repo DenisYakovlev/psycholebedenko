@@ -2,12 +2,14 @@ import { useContext } from "react"
 import { UserContext } from "../contexts/UserContext"
 import { backend_url } from "../constants"
 import jwt_decode from "jwt-decode";
+import { useNavigate } from "react-router";
 const moment = require("moment-timezone")
 
 
 
 export default function useApi(){
     const {user, setUser} = useContext(UserContext)
+    let navigate = useNavigate()
 
     // validate user token
     const verifyToken = async () => {
@@ -120,7 +122,10 @@ export default function useApi(){
 
             throw new Error(`API Auth ${method} fetch error`)
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+            console.log(error)
+            navigate('/error')
+        })
     }
 
     // public fetch with error handling
@@ -135,7 +140,10 @@ export default function useApi(){
 
             throw new Error(`API Public ${method} fetch error`)
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+            console.log(error)
+            navigate('/error')
+        })
     }
 
     // auth fetch without error handling
