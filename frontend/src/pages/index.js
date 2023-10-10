@@ -5,6 +5,7 @@ import EventDetails from "./Event/Details/EventDetails";
 import { Admin, ScheduleCalendar, Planning, Users, UserEvents, Appointments, Assign, Events, EventsCreate, EventsUpdate } from "./Admin";
 import Tests from "./Tests/Index/Tests";
 import TestPage from "./Tests/TestPage/TestPage";
+import ErrorPage from "./Tests/ConstantLinkPage/ErrorPage";
 import DevelopmentPage from "./Tests/DevelopmentPage/DevelopmentPage";
 import ConstantLinkPage from "./Tests/ConstantLinkPage/ConstantLinkPage";
 import { User, Exit } from "./User";
@@ -18,6 +19,7 @@ export {
     EventDetails, 
     Tests, 
     TestPage,
+    ErrorPage,
     DevelopmentPage,
     ConstantLinkPage,
     User, 

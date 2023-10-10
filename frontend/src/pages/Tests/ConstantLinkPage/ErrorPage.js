@@ -11,7 +11,7 @@ export default function ErrorPage(){
                 height: "fit-content",
                 backgroundColor: "#f4f4f4"
             }}
-            className="py-5 d-flex flex-column justify-content-start align-items-center"
+            className="py-5 d-flex flex-column justify-content-center align-items-center"
             fluid
         >
             <FontAwesomeIcon 

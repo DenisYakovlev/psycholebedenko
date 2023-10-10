@@ -8,6 +8,7 @@ import {
   EventDetails, 
   Tests, 
   TestPage,
+  ErrorPage,
   DevelopmentPage,
   ConstantLinkPage,
   User, 
@@ -75,6 +76,8 @@ export default function App(){
                     <Route path="exit" element={<Exit />}/>
                   </Route>
 
+                  <Route path="*" element={<ErrorPage />}/>
+
                 </Route>
 
                 <Route path='/bot' element={<BotLayout />}>
@@ -102,6 +105,8 @@ export default function App(){
                     <Route path="tests" element={<DevelopmentPage />}/>
 
                     <Route path="user" element={<User />}/>
+
+                    <Route path="*" element={<ErrorPage />}/>
                   </Route>
                 </Route>
 
@@ -129,6 +134,7 @@ export default function App(){
                     <Route path="assign" element={<Assign />}/>
                   </Route>
                 </Route>
+
 
               </Routes>
             </AuthModalContextProvider>
