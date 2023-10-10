@@ -8,6 +8,7 @@ import {
   EventDetails, 
   Tests, 
   TestPage,
+  DevelopmentPage,
   ConstantLinkPage,
   User, 
   UserEvents,
@@ -55,6 +56,9 @@ export default function App(){
                     <Route path=":id" element={<EventDetails />} />
                   </Route>
 
+                  {/* 
+                  Unavailable until payment for tests is not complete
+
                   <Route path="t">
                     <Route path=":hash" element={<ConstantLinkPage />}/>
                   </Route>
@@ -62,7 +66,9 @@ export default function App(){
                   <Route path="tests">
                     <Route index element={<Tests />} />
                     <Route path=":name" element={<TestPage />}/>
-                  </Route>
+                  </Route> */}
+
+                  <Route path="tests" element={<DevelopmentPage />}/>
 
                   <Route path="user">
                     <Route index element={<User />}/>
@@ -85,10 +91,16 @@ export default function App(){
                       <Route path=":id" element={<EventDetails />} />
                     </Route>
 
+                    {/* 
+                    Unavailable until payment for tests is not complete
+                    
                     <Route path="tests">
                       <Route index element={<Tests />} />
                       <Route path=":name" element={<TestPage />}/>
-                    </Route>
+                    </Route> */}
+
+                    <Route path="tests" element={<DevelopmentPage />}/>
+
                     <Route path="user" element={<User />}/>
                   </Route>
                 </Route>
