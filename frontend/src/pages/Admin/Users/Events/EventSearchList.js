@@ -6,13 +6,13 @@ import EventSearchCard from "./EventSearchCard"
 export default function EventSearchList({events, setSelectedEvent}){
     let selectedCard = useRef(null)
 
-    const handleSelect = (e, event) => {
+    const handleSelect = (event, cardRef) => {
         if(selectedCard.current){
             selectedCard.current.style.setProperty("color", "var(--bs-dark)", "important")
         }
 
-        selectedCard.current = e.target
-        // selectedCard.current.style.setProperty("color", "var(--bs-success)", "important")
+        selectedCard.current = cardRef
+        selectedCard.current.style.setProperty("color", "var(--bs-success)", "important")
         
         setSelectedEvent(event.id)
     }
@@ -25,7 +25,7 @@ export default function EventSearchList({events, setSelectedEvent}){
                         <EventSearchCard 
                             key={event.id} 
                             event={event} 
-                            setSelectedEvent={(e, event) => handleSelect(e, event)}
+                            setSelectedEvent={(event, cardRef) => handleSelect(event, cardRef)}
                         />
                     )}
                 </Container>

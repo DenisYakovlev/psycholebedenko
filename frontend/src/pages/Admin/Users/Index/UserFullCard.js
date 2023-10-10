@@ -11,6 +11,7 @@ import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../../../contexts"
 import { backend_url } from "../../../../constants"
 import useApi from "../../../../hooks/useApi"
+import qs from "query-string"
 
 
 export default function UserFullCard({userId}){
@@ -123,7 +124,8 @@ export default function UserFullCard({userId}){
                 </CardLayout.Body.Info>
 
                 <Button 
-                    as={Link} to={`/admin/appointments/assign?user=${encodeURIComponent(JSON.stringify(user))}`} 
+                    as={Link} 
+                    to={`/admin/appointments/assign?${qs.stringify({user: JSON.stringify(user), search: user.phone_number})}`}
                     variant="outline-dark" size="md" 
                     className="text-decoration-none"
                 >

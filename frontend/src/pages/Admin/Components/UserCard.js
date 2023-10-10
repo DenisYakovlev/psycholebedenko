@@ -2,9 +2,12 @@ import Card from "react-bootstrap/Card"
 import Container from "react-bootstrap/Container"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons"
+import { useRef } from "react"
 
 
 export default function UserCard({user, setSelectedUser, props}){
+    const cardRef = useRef(null)
+
     return (
         <Card
             {...props}
@@ -15,7 +18,7 @@ export default function UserCard({user, setSelectedUser, props}){
                 <Card.Img src={user.photo_url} style={{width: "56px", height: "56px"}} alt="user picture"/>
 
                 <Container
-                    onClick={(e) => setSelectedUser(e, user)}
+                    onClick={() => setSelectedUser(user, cardRef.current)}
                     style={{cursor: "pointer"}}
                     className="p-0 d-flex justify-content-between align-items-center"
                 >
@@ -30,6 +33,7 @@ export default function UserCard({user, setSelectedUser, props}){
                         </Card.Text>
                     </Container>
                     <FontAwesomeIcon  
+                        ref={cardRef}
                         icon={faChevronRight} 
                         className="fs-3"
                     />

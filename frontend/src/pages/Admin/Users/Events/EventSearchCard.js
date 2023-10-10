@@ -3,9 +3,12 @@ import Container from "react-bootstrap/Container"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { formatDate } from "../../../utils"
+import { createRef, useRef } from "react"
 
 
 export default function EventSearchCard({event, setSelectedEvent}){
+    const cardRef = useRef(null)
+
     return (
         <Card
             bg="light" data-bs-theme="theme"
@@ -17,7 +20,7 @@ export default function EventSearchCard({event, setSelectedEvent}){
                 <Container
                     style={{cursor: "pointer"}}
                     className="p-0 d-flex justify-content-between align-items-center"
-                    onClick={(e) => setSelectedEvent(e, event)} 
+                    onClick={() => setSelectedEvent(event, cardRef.current)}
                 >
                     <Container className="m-0 px-2 d-flex flex-column">
                         <Card.Text 
@@ -30,6 +33,7 @@ export default function EventSearchCard({event, setSelectedEvent}){
                         </Card.Text>
                     </Container>
                     <FontAwesomeIcon 
+                        ref={cardRef}
                         icon={faChevronRight} 
                         className="fs-3"
                     />

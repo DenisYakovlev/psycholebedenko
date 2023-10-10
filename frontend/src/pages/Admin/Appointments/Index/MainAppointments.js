@@ -1,8 +1,7 @@
 import Container from "react-bootstrap/Container"
-import Pagination from "react-bootstrap/Pagination"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import { AppointmentCard } from "../../../../shared"
+import { AppointmentCard, PaginationMenu } from "../../../../shared"
 import { BaseLayoutTitle } from "../../Components"
 
 
@@ -31,32 +30,11 @@ export default function MainAppointments({appointments, onChange, currentPage, s
                         </Col>
                     )}
 
-                    <Pagination className="p-3 d-flex justify-content-center gap-2" size="sm">
-                        <Pagination.Prev
-                            onClick={() => setPage(appointments.links.previous)} 
-                            disabled={!appointments.links.previous}
-                        />
-
-                        {[...appointments.range].map(pageNumber => {
-                            if(pageNumber == '...'){
-                                return <Pagination.Item onClick={() => {}}>...</Pagination.Item>
-                            }
-                            else{
-                                return (
-                                    <Pagination.Item 
-                                        onClick={() => setPage(pageNumber)}
-                                        active={pageNumber == currentPage}
-                                    >
-                                        {pageNumber}
-                                    </Pagination.Item>)
-                            }
-                        })}
-                        
-                        <Pagination.Next 
-                            onClick={() => setPage(appointments.links.next)} 
-                            disabled={!appointments.links.next}
-                        />
-                    </Pagination>
+                    <PaginationMenu
+                        paginationObj={appointments}
+                        currentPage={currentPage}
+                        setPage={setPage} 
+                    />
                 </Row>
                 :
                 <></>
