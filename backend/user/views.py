@@ -17,6 +17,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from .models import TelegramUser
+from .paginations import UsersPagination
 from .serializers import TelegramUserSerializer, TelegramUserUpdateSerializer
 from .filters import UserAppointmentsFilters
 from appointment.serializers import AppointmentSerializer
@@ -29,6 +30,7 @@ from psy_tests.serializers import TestResultFullSerializer
 
 class UserList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
+    pagination_class = UsersPagination
     queryset = TelegramUser.objects.all()
     serializer_class = TelegramUserSerializer
     filter_backends = [filters.SearchFilter]
