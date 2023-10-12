@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Button from "react-bootstrap/Button"
 import Container from "react-bootstrap/Container"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock } from "@fortawesome/free-solid-svg-icons"
+import { faClock, faCheck, faXmark } from "@fortawesome/free-solid-svg-icons"
 import CardBody from './CardBody';
 import "./styles.css"
 
@@ -36,10 +36,11 @@ export default function EventCard({event, idx, link="#"}){
             <Card.Body className={`${cardDirection ? "event-card-layout-reverse" : "event-card-layout-normal"}` + ' p-0'}>
                 <Container className="event-card-body p-0 m-0 d-flex flex-column justify-content-between">
                     <CardBody event={event} link={link}/>
-                    <Container className="event-card-footer p-0 m-0 px-md-5 px-4 pb-4 d-flex justify-content-between align-items-center">
-                        <Card.Text className="m-0 fs-6 text-muted text-truncate">
+                    <Container className="event-card-footer fs-6 text-muted text-truncate p-0 m-0 px-md-5 px-4 pb-4 d-flex justify-content-between align-items-center">
+                        <Card.Text className="m-0">
                             <FontAwesomeIcon icon={faClock} /> {event?.duration ? event.duration + " хв." : "Тривалість не вказана"}
                         </Card.Text>
+
                         <Button as={Link} to={link} variant="outline-dark" className="">
                             Перейти
                         </Button>

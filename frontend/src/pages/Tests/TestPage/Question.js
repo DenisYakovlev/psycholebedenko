@@ -26,7 +26,7 @@ export default function Question({question, onAnswer, index, prevQuestion}){
                         />
                         <Form.Check.Label 
                             htmlFor={`check-${variant.id}`}
-                            className="w-100"
+                            className="w-100 user-select-none"
                             style={{cursor: "pointer"}}
                         >
                             {variant.value}

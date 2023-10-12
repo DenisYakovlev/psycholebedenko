@@ -56,10 +56,7 @@ export default function App(){
                     <Route index element={<Event source="event" />} />
                     <Route path=":id" element={<EventDetails />} />
                   </Route>
-
-                  {/* 
-                  Unavailable until payment for tests is not complete
-
+                  
                   <Route path="t">
                     <Route path=":hash" element={<ConstantLinkPage />}/>
                   </Route>
@@ -67,9 +64,13 @@ export default function App(){
                   <Route path="tests">
                     <Route index element={<Tests />} />
                     <Route path=":name" element={<TestPage />}/>
-                  </Route> */}
+                  </Route>
 
-                  <Route path="tests" element={<DevelopmentPage />}/>
+                  {/*
+                    In case of problems with client, toggle development page
+                    
+                    <Route path="tests" element={<DevelopmentPage />}/> 
+                  */}
 
                   <Route path="user">
                     <Route index element={<User />}/>
@@ -94,15 +95,17 @@ export default function App(){
                       <Route path=":id" element={<EventDetails />} />
                     </Route>
 
-                    {/* 
-                    Unavailable until payment for tests is not complete
                     
                     <Route path="tests">
                       <Route index element={<Tests />} />
                       <Route path=":name" element={<TestPage />}/>
-                    </Route> */}
+                    </Route>
 
-                    <Route path="tests" element={<DevelopmentPage />}/>
+                    {/*
+                    In case of problems with client, toggle development page
+                    
+                    <Route path="tests" element={<DevelopmentPage />}/> 
+                    */}
 
                     <Route path="user" element={<User />}/>
 
@@ -134,7 +137,6 @@ export default function App(){
                     <Route path="assign" element={<Assign />}/>
                   </Route>
                 </Route>
-
 
               </Routes>
             </AuthModalContextProvider>

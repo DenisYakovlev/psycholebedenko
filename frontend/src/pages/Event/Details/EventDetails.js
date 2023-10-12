@@ -1,4 +1,4 @@
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import Container from "react-bootstrap/Container"
 import Card from "react-bootstrap/Card"
 import Row from "react-bootstrap/Row"
@@ -15,11 +15,13 @@ import { AuthModalContext, UserContext } from "../../../contexts"
 import "./styles.css"
 import useApi from "../../../hooks/useApi"
 
+
 export default function EventDetails(){
+    let navigate = useNavigate()
     const {id} = useParams()
     const [isLoading, setIsLoading] = useState(false)
     const {user} = useContext(UserContext)
-    const {authFetch, publicFetch} = useApi()
+    const {authFetch, baseAuthFetch, publicFetch} = useApi()
     const {showAuthModal} = useContext(AuthModalContext)
     const [showResult, setShowResult] = useState(false)
     const [resultType, setResultType] = useState("")
@@ -56,10 +58,20 @@ export default function EventDetails(){
     }
 
     const handleRemoveParticipation = () => {
-        authFetch.delete(`event/${id}/participate`).then(data => {
-            setParticipated(false)
-            setResultType("success-off")
-            setShowResult(true)
+        baseAuthFetch.delete(`event/${id}/participate`).then(response => {
+            if(response.ok){
+                setParticipated(false)
+                setResultType("success-off")
+                setShowResult(true)
+
+                return
+            }
+
+            throw new Error("Event participation delete fail")
+        })
+        .catch(error => {
+            console.log(error)
+            navigate('/error')
         })
     }
 
