@@ -7,12 +7,13 @@ from schedule.models import Schedule
 
 def set_default_title():
     try:
-        return f"Appointment #{Appointment.objects.latest('id').id}"
+        return f"Консультація #{Appointment.objects.latest('id').id}"
     except Appointment.DoesNotExist:
-        return f"Appointment #0"
+        return f"Консультація #0"
 
 def set_default_address():
     return "Ще не визначено"
+
 
 class Appointment(models.Model):
     # change created_at to timezone with hour min sec format

@@ -13,14 +13,6 @@ class EventSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, attrs):
-        try:
-            create_zoom_link = self.context['request'].data['create_zoom_link']
-        except KeyError:
-            create_zoom_link = False
-    
-        if create_zoom_link:
-            random_link = 'https://docs.djangoproject.com/en/3.0/ref/models/fields/#django.db.models.Field.default'
-            attrs['zoom_link'] = random_link
             
         return super().validate(attrs)
 

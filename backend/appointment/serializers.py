@@ -4,6 +4,7 @@ import pytz
 from django.conf import settings
 from rest_framework import serializers
 from .models import Appointment
+from .tasks import create_appointment_zoom_link
 from user.serializers import TelegramUserSerializer
 from schedule.serializers import ScheduleSerializer
 
@@ -25,14 +26,6 @@ class AppointmentSerializer(serializers.ModelSerializer):
         return obj.date.date < datetime.datetime.now(tz=tz)
     
     def validate(self, attrs):
-        try:
-            create_zoom_link = self.context['request'].data['create_zoom_link']
-        except KeyError:
-            create_zoom_link = False
-        
-        if create_zoom_link:
-            random_link = 'https://docs.djangoproject.com/en/3.0/ref/models/fields/#django.db.models.Field.default'
-            attrs['zoom_link'] = random_link
             
         return super().validate(attrs)
         
@@ -54,9 +47,10 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
         except KeyError:
             create_zoom_link = False
         
-        if create_zoom_link:
-            random_link = 'https://docs.djangoproject.com/en/3.0/ref/models/fields/#django.db.models.Field.default'
-            attrs['zoom_link'] = random_link
+        # if create_zoom_link:
+            # random_link = 'https://docs.djangoproject.com/en/3.0/ref/models/fields/#django.db.models.Field.default'
+            # attrs['zoom_link'] = random_link
+            # create_appointment_zoom_link(self.instance)
 
         return super().validate(attrs)
 

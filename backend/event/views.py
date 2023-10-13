@@ -11,6 +11,7 @@ from django.http import Http404
 from django.conf import settings
 
 from .models import Event, Participation
+from .tasks import create_event_zoom_link
 from .serializers import EventSerializer, EventListSerializer, EventDetailSerializer, ParticipationSerializer, ParticipationInfoSerializer
 from .filters import EventFilter
 
@@ -42,10 +43,14 @@ class EventCreate(APIView):
     permission_classes = [IsAdminUser]
     
     def post(self, request):
-        serializer = EventSerializer(data=request.data, context={'request': request})
+        serializer = EventSerializer(data=request.data)
         
         if serializer.is_valid():
-            serializer.save()
+            obj = serializer.save()
+
+            if request.data.get("create_zoom_link"):
+                create_event_zoom_link.delay(obj.id)
+
             return Response(serializer.validated_data, status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -62,11 +67,14 @@ class EventManagement(APIView):
     
     def put(self, request, pk):
         event = self.get_event(pk)
-        serializer = EventSerializer(instance=event, data=request.data, partial=True,
-                                         context = {"request": request})
+        serializer = EventSerializer(instance=event, data=request.data, partial=True,)
         
         if serializer.is_valid():
-            serializer.save()
+            obj = serializer.save()
+
+            if request.data.get("create_zoom_link"):
+                create_event_zoom_link.delay(obj.id)
+
             return Response(serializer.validated_data, status.HTTP_200_OK)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

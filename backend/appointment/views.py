@@ -12,6 +12,7 @@ from django.http import Http404
 from .models import Appointment
 from .paginations import AppointmentPagination
 from .filters import AppointmentFilters
+from .tasks import create_appointment_zoom_link
 from .serializers import AppointmentSerializer, AppointmentListSerializer, AppointmentCreateSerializer
 from user.models import TelegramUser
 from schedule.models import Schedule
@@ -61,6 +62,9 @@ class AppointmentList(generics.ListCreateAPIView):
         serializer = AppointmentCreateSerializer(data=request.data)
         if serializer.is_valid():
             obj = serializer.save()
+
+            if request.data.get("create_zoom_link"):
+                create_appointment_zoom_link.delay(obj.id)
 
             bot.handleAppointmentCreateByAdminNotification.delay(obj.id)
             return Response(serializer.data, status.HTTP_201_CREATED)
@@ -130,10 +134,13 @@ class AppointmentDetail(APIView):
                             else AppointmentSerializer(instance=appointment)
             
 
-            # ignore notifications if notes are changed(this will cause spam issues)
+            # ignore notifications if only notes are changed(this will cause spam issues)
             # by checking if notes are not empty
             if not request.data.get("notes"):
                 bot.handleAppointmentUpdateNotification.delay(obj.id)
+
+            if request.data.get("create_zoom_link"):
+                create_appointment_zoom_link.delay(obj.id)
 
             return Response(_serializer.data, status.HTTP_202_ACCEPTED)
         
