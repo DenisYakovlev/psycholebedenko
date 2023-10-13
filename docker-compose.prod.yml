@@ -5,6 +5,9 @@ x-common-variables: &common-variables
   BOT_DEBUG: 0
   BOT_WEB_APP_URL: https://psycholebedenko.online/bot
   TELEGRAM_BOT_API_KEY: 6159160252:AAF1wkp3scOkCDnOoah8y_s9IcYIhWwxlUY
+  ZOOM_ACCOUNT_ID: E9k52le5RKu17kVl0kJvCg
+  ZOOM_CLIENT_ID: 6h4f7PnFTNuWge2xU3dKBA
+  ZOOM_CLIENT_SECRET: AiMs3Mu7ueHLv4VJTv3Z5YzKYNAwUqRr
   POSTGRES_DB: postgres
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
