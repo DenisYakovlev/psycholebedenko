@@ -15,6 +15,7 @@ from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
 from appointment.models import Appointment
 from appointment.serializers import AppointmentCreateSerializer
+from appointment.tasks import create_appointment_zoom_link
 from schedule.models import Schedule
 from .markups import gen_menu_markup, gen_settings_markup, phone_verification_markup
 
@@ -182,7 +183,7 @@ def handleAppointmentUpdateNotification(appointment_id):
 	Дані про вашу консультацію були оновлені
 
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else appointment.zoom_link}*
+	📍 Місце проведення: *{appointment.address if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}*
 	📌 Статус: *{format_status(appointment.status)}*
 	🗓 Дата: *{formated_date}*
 	"""
@@ -194,7 +195,7 @@ def handleAppointmentUpdateNotification(appointment_id):
 	Дані про консультацію були оновлені
 
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else appointment.zoom_link}*
+	📍 Місце проведення: *{appointment.address if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}*
 	📌 Статус: *{format_status(appointment.status)}*
 	🗓 Дата: *{formated_date}*
 	👤 Користувач: *{user.first_name}*
@@ -225,7 +226,7 @@ def handleAppointmentCreateNotification(appointment_id):
 	Ви створили запис на консультацію.
 
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else "Конференція Zoom"}*
+	📍 Місце проведення: *{appointment.address if appointment.address else "Міт у Zoom"}*
 	🗓 Дата: *{formated_date}*
 
 	*
@@ -241,7 +242,7 @@ def handleAppointmentCreateNotification(appointment_id):
 	Створено новий запит на консультацію.
 
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else "Конференція Zoom"}*
+	📍 Місце проведення: *{appointment.address if appointment.address else "Міт у Zoom"}*
 	🗓 Дата: *{formated_date}*
 	👤 Користувач: *{user.first_name}*
 	"""
@@ -262,11 +263,12 @@ def handle_query(call):
 	logger.debug("callback handle")
 
 	appointment = Appointment.objects.get(id=call.data)
-	_data = {"status": "appointed", "create_zoom_link": True}
 
+	link = create_appointment_zoom_link(appointment.id)
 
-	serializer = AppointmentCreateSerializer(instance=appointment, data=_data, 
-										partial=True, context={'request': {"data": _data}})
+	_data = {"status": "appointed", "zoom_link": link}
+
+	serializer = AppointmentCreateSerializer(instance=appointment, data=_data, partial=True)
 	
 	if serializer.is_valid():
 		obj = serializer.save()
@@ -294,7 +296,7 @@ def handleAppointmentCreateByAdminNotification(appointment_id):
 	Психолог записав вас на консультацію.
 
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else "Конференція Zoom"}*
+	📍 Місце проведення: *{appointment.address if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}*
 	🗓 Дата: *{formated_date}*
 
 	"""
@@ -307,7 +309,7 @@ def handleAppointmentCreateByAdminNotification(appointment_id):
 	Ви записали користувача на консультацію.
 
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else "Конференція Zoom"}*
+	📍 Місце проведення: *{appointment.address if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}*
 	🗓 Дата: *{formated_date}*
 	👤 Користувач: *{user.first_name}*
 
