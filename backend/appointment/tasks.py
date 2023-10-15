@@ -28,7 +28,6 @@ def appoinment_notifications():
 
 @shared_task
 def create_appointment_zoom_link(appointment_id):
-    print("hui")
     # more info: https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/meetingCreate
 
     # access token is valid for 60 minutes. Generate it every time for new request 
