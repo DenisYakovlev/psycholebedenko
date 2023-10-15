@@ -13,7 +13,7 @@ export default function CardBody({event, link}){
         ];
         
         const daysUkr = [
-            "Нед", "Пнд", "Втр", "Срд", "Чтв", "Птн", "Суб"
+            "Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"
         ];
 
         const date = new Date(eventDate);

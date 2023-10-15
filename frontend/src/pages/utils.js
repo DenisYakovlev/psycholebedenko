@@ -6,7 +6,7 @@ const monthsUkr = [
 ];
 
 const daysUkr = [
-    "Нед", "Пнд", "Втр", "Срд", "Чтв", "Птн", "Суб"
+    "Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"
 ];
 
 // {day: 30, month: 7, year: 2050} to "2050-08-30"
@@ -113,15 +113,15 @@ export const setStatusColor = status => {
 
 export const setStatusUkrName = status => {
     if(status == "pending"){
-        return "в обробці"
+        return "В обробці"
     }
     else if(status == "appointed"){
-        return "назначено"
+        return "Назначено"
     }
     else if(status == "complete"){
-        return "виконано"
+        return "Виконано"
     }
     else if(status == "denied"){
-        return "відмінено"
+        return "Відмінено"
     }
 }
