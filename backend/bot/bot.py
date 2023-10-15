@@ -180,10 +180,11 @@ def handleAppointmentUpdateNotification(appointment_id):
 	f"""
 	*📝 {appointment.title}*
 
+	
 	Дані про вашу консультацію були оновлені
 
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}*
+	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
 	📌 Статус: *{format_status(appointment.status)}*
 	🗓 Дата: *{formated_date}*
 	"""
@@ -192,10 +193,11 @@ def handleAppointmentUpdateNotification(appointment_id):
 	f"""
 	*📝 {appointment.title}*
 
+	
 	Дані про консультацію були оновлені
 
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}*
+	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
 	📌 Статус: *{format_status(appointment.status)}*
 	🗓 Дата: *{formated_date}*
 	👤 Користувач: *{user.first_name}*
@@ -225,6 +227,7 @@ def handleAppointmentCreateNotification(appointment_id):
 	
 	Ви створили запис на консультацію.
 
+	📌 Назва: *{appointment.title}*
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
 	📍 Місце проведення: *{appointment.address if appointment.address else "Міт у Zoom"}*
 	🗓 Дата: *{formated_date}*
@@ -241,6 +244,7 @@ def handleAppointmentCreateNotification(appointment_id):
 	
 	Створено новий запит на консультацію.
 
+	📌 Назва: *{appointment.title}*
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
 	📍 Місце проведення: *{appointment.address if appointment.address else "Міт у Zoom"}*
 	🗓 Дата: *{formated_date}*
@@ -295,8 +299,9 @@ def handleAppointmentCreateByAdminNotification(appointment_id):
 	
 	Психолог записав вас на консультацію.
 
+	📌 Назва: *{appointment.title}*
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}*
+	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
 	🗓 Дата: *{formated_date}*
 
 	"""
@@ -308,8 +313,9 @@ def handleAppointmentCreateByAdminNotification(appointment_id):
 	
 	Ви записали користувача на консультацію.
 
+	📌 Назва: *{appointment.title}*
 	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}*
+	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
 	🗓 Дата: *{formated_date}*
 	👤 Користувач: *{user.first_name}*
 
@@ -580,4 +586,6 @@ def response(message):
 
 @bot.message_handler(commands=['test'])
 def test(message):
-	bot.send_message(message.from_user.id, "test")
+	logger.debug("test")
+
+	bot.send_message(message.from_user.id, "[test](https://psycholebedenko.online)", parse_mode="Markdown")

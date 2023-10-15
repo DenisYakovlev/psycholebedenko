@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from django.conf import settings
 from django.http import Http404
+from celery import chain, chord
 
 from .models import Appointment
 from .paginations import AppointmentPagination
@@ -64,9 +65,13 @@ class AppointmentList(generics.ListCreateAPIView):
             obj = serializer.save()
 
             if request.data.get("create_zoom_link"):
-                create_appointment_zoom_link.delay(obj.id)
-
-            bot.handleAppointmentCreateByAdminNotification.delay(obj.id)
+                chain(
+                    create_appointment_zoom_link.si(obj.id), 
+                    bot.handleAppointmentCreateByAdminNotification.si(obj.id)
+                ).apply_async()
+            else:
+                bot.handleAppointmentCreateByAdminNotification.delay(obj.id)
+                
             return Response(serializer.data, status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -137,10 +142,14 @@ class AppointmentDetail(APIView):
             # ignore notifications if only notes are changed(this will cause spam issues)
             # by checking if notes are not empty
             if not request.data.get("notes"):
-                bot.handleAppointmentUpdateNotification.delay(obj.id)
 
-            if request.data.get("create_zoom_link"):
-                create_appointment_zoom_link.delay(obj.id)
+                if request.data.get("create_zoom_link"):
+                    chain(
+                        create_appointment_zoom_link.si(obj.id), 
+                        bot.handleAppointmentUpdateNotification.si(obj.id)
+                    ).apply_async()
+                else:
+                    bot.handleAppointmentUpdateNotification.delay(obj.id)
 
             return Response(_serializer.data, status.HTTP_202_ACCEPTED)
         
