@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 import pytz
 import telebot
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -16,6 +17,7 @@ from user.serializers import TelegramUserSerializer
 from appointment.models import Appointment
 from appointment.serializers import AppointmentCreateSerializer
 from appointment.tasks import create_appointment_zoom_link
+from event.models import Event, Participation
 from schedule.models import Schedule
 from .markups import gen_menu_markup, gen_settings_markup, phone_verification_markup
 
@@ -209,7 +211,74 @@ def handleAppointmentUpdateNotification(appointment_id):
         [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user.id}')],
         [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={user.id}')],
     ]))
+
+
+@shared_task
+def handleAppointmentScheduledNotification(appointment_id):
+	logger.debug("handleAppointmentScheduledNotification")	
+
+	appointment = Appointment.objects.get(id=appointment_id)
+	formated_date = format_date(appointment.date.date)
+
+	response_user = \
+	f"""
+	*📝 {appointment.title}*
+
 	
+	*Ваша консультація незабаром розпочнеться.*
+
+	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
+	🗓 Дата: *{formated_date}*
+
+	*При необхідності, зв'яжіться з психологом.*
+	"""
+
+	response_admin = \
+	f"""
+	*📝 {appointment.title}*
+
+	
+	Консультація незабаром розпочнеться.
+
+	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
+	🗓 Дата: *{formated_date}*
+	👤 Користувач: *{appointment.user.first_name}*
+	"""
+
+	bot.send_message(appointment.user.id, response_user, parse_mode="Markdown")
+	bot.send_message(settings.ADMIN_ID, response_admin, parse_mode="Markdown",
+		reply_markup=InlineKeyboardMarkup([
+        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={appointment.user.id}')],
+		[InlineKeyboardButton(text='Помітити як виконану', callback_data=json.dumps({
+			"action": "complete_appointment",
+			"data": appointment_id
+		}))],
+        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={appointment.user.id}')],
+    ]))
+
+
+@shared_task
+def handleEventNotification(event_id, user_id):
+	logger.debug("handleEventNotification")
+
+	event = Event.objects.get(id=event_id)
+	formated_date = format_date(event.date)
+
+	response = \
+	f"""
+	*🧷 {event.title}*
+
+	
+	Групова зустріч незабаром розпочнеться.
+
+	📍 Місце проведення: {f"*{event.address}*" if event.address else f"[Міт у Zoom]({event.zoom_link})"}
+	🗓 Дата: *{formated_date}*
+	"""
+
+	bot.send_message(user_id, response, parse_mode="Markdown")
+
 
 @shared_task
 def handleAppointmentCreateNotification(appointment_id):
@@ -257,7 +326,10 @@ def handleAppointmentCreateNotification(appointment_id):
 	bot.send_message(settings.ADMIN_ID, admin_response, parse_mode="Markdown",
 		reply_markup=InlineKeyboardMarkup([
         [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user.id}')],
-		[InlineKeyboardButton(text='Підтвердити/створити лінк у Zoom', callback_data=str(appointment_id))],
+		[InlineKeyboardButton(text='Підтвердити/створити лінк у Zoom', callback_data=json.dumps({
+			"action": "activate_appointment",
+			"data": appointment_id
+		}))],
         [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&status=pending&user={user.id}')],
     ]))
 
@@ -266,21 +338,39 @@ def handleAppointmentCreateNotification(appointment_id):
 def handle_query(call):
 	logger.debug("callback handle")
 
-	appointment = Appointment.objects.get(id=call.data)
+	callback = json.loads(call.data)
 
-	link = create_appointment_zoom_link(appointment.id)
+	if callback["action"] == "activate_appointment":
+		appointment = Appointment.objects.get(id=callback["data"])
 
-	_data = {"status": "appointed", "zoom_link": link}
+		link = create_appointment_zoom_link(appointment.id)
 
-	serializer = AppointmentCreateSerializer(instance=appointment, data=_data, partial=True)
-	
-	if serializer.is_valid():
-		obj = serializer.save()
+		_data = {"status": "appointed", "zoom_link": link}
 
-		handleAppointmentUpdateNotification.delay(obj.id)
-		return
+		serializer = AppointmentCreateSerializer(instance=appointment, data=_data, partial=True)
+		
+		if serializer.is_valid():
+			obj = serializer.save()
 
-	bot.send_message(settings.ADMIN_ID, f"errors: {serializer.errors}", parse_mode="Markdown")
+			handleAppointmentUpdateNotification.delay(obj.id)
+			return
+
+		bot.send_message(settings.ADMIN_ID, f"errors: {serializer.errors}", parse_mode="Markdown")
+
+	elif callback["action"] == "complete_appointment":
+		appointment = Appointment.objects.get(id=callback["data"])
+
+		_data = {"status": "complete"}
+
+		serializer = AppointmentCreateSerializer(instance=appointment, data=_data, partial=True)
+
+		if serializer.is_valid():
+			obj = serializer.save()
+
+			handleAppointmentUpdateNotification.delay(obj.id)
+			return
+		
+		bot.send_message(settings.ADMIN_ID, f"errors: {serializer.errors}", parse_mode="Markdown")
 
 
 @shared_task

@@ -1,9 +1,20 @@
 import requests
+import pytz
+from datetime import datetime
 import base64
 from django.conf import settings
 
 
 # global utils of app
+
+
+def aware_now():
+    # returns current time with app timezone
+
+    tz = pytz.timezone(settings.TIME_ZONE)
+    now = datetime.now(tz=tz)
+
+    return now
 
 def generate_zoom_auth_token():
     # generate auth token with base64 encoding

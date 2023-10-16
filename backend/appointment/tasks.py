@@ -5,25 +5,20 @@ from celery import shared_task
 
 from django.conf import settings
 from .models import Appointment
-from app.utils import generate_zoom_access_key
+from app.utils import generate_zoom_access_key, aware_now
 
 
 @shared_task
 def appoinment_notifications():
-    try:
-        tz = pytz.timezone(settings.TIME_ZONE)
-        start = datetime.now(tz=tz)
-        end = start + timedelta(hours=1)
+    check_start_time = aware_now()
+    check_end_time = check_start_time + timedelta(hours=1)
 
-        appointment = Appointment.objects. \
-            filter(date__date__gt=start, date__date__lt=end).first()
-
-        if not appointment:
-            return 
-        
-        return
-    except Appointment.DoesNotExist:
-        return
+    appointment = Appointment.objects.\
+            filter(date__date__gt=check_start_time, date__date__lt=check_end_time).first()
+    
+    from bot.bot import handleAppointmentScheduledNotification
+    
+    handleAppointmentScheduledNotification(appointment.id)
     
 
 @shared_task

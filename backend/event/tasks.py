@@ -4,9 +4,26 @@ from datetime import datetime, timedelta
 from celery import shared_task
 
 from django.conf import settings
-from .models import Event
-from app.utils import generate_zoom_access_key
+from celery import group
+from .models import Event, Participation
+from app.utils import generate_zoom_access_key, aware_now
 
+
+@shared_task
+def event_notifications():
+    check_start_time = aware_now()
+    check_end_time = check_start_time + timedelta(hours=1)
+
+    event = Event.objects.\
+            filter(date__gt=check_start_time, date__lt=check_end_time).first()
+    
+    participations = Participation.objects.filter(event=event.id)
+    
+    from bot.bot import handleEventNotification
+
+    users_to_notify = group(handleEventNotification.si(event.id, participation.user.id) for participation in participations)
+    users_to_notify.apply_async()
+    
     
 @shared_task
 def create_event_zoom_link(event_id):
