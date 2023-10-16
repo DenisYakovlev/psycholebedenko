@@ -165,8 +165,9 @@ def handleAppointmentUpdateNotification(appointment_id):
 
 		Консультація була відмінена
 		"""
+		if appointment.user.notifications_on:
+			bot.send_message(appointment.user.id, response, parse_mode="Markdown")
 
-		bot.send_message(appointment.user.id, response, parse_mode="Markdown")
 		bot.send_message(settings.ADMIN_ID, response, parse_mode="Markdown",
 			reply_markup=InlineKeyboardMarkup([
 			[InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={appointment.user.id}')],
@@ -205,7 +206,9 @@ def handleAppointmentUpdateNotification(appointment_id):
 	👤 Користувач: *{user.first_name}*
 	"""
 
-	bot.send_message(user.id, response_user, parse_mode="Markdown")
+	if user.notifications_on:
+		bot.send_message(user.id, response_user, parse_mode="Markdown")
+
 	bot.send_message(settings.ADMIN_ID, response_admin, parse_mode="Markdown",
 		reply_markup=InlineKeyboardMarkup([
         [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user.id}')],
@@ -247,7 +250,9 @@ def handleAppointmentScheduledNotification(appointment_id):
 	👤 Користувач: *{appointment.user.first_name}*
 	"""
 
-	bot.send_message(appointment.user.id, response_user, parse_mode="Markdown")
+	if appointment.user.notifications_on:
+		bot.send_message(appointment.user.id, response_user, parse_mode="Markdown")
+
 	bot.send_message(settings.ADMIN_ID, response_admin, parse_mode="Markdown",
 		reply_markup=InlineKeyboardMarkup([
         [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={appointment.user.id}')],
@@ -321,7 +326,8 @@ def handleAppointmentCreateNotification(appointment_id):
 	"""
 
 
-	bot.send_message(user.id, user_response, parse_mode="Markdown")
+	if user.notifications_on:
+		bot.send_message(user.id, user_response, parse_mode="Markdown")
 
 	bot.send_message(settings.ADMIN_ID, admin_response, parse_mode="Markdown",
 		reply_markup=InlineKeyboardMarkup([
@@ -411,7 +417,9 @@ def handleAppointmentCreateByAdminNotification(appointment_id):
 
 	"""
 
-	bot.send_message(user.id, response_user, parse_mode="Markdown")
+	if user.notifications_on:
+		bot.send_message(user.id, response_user, parse_mode="Markdown")
+
 	bot.send_message(settings.ADMIN_ID, response_admin, parse_mode="Markdown",
 		reply_markup=InlineKeyboardMarkup([
         [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user.id}')],
@@ -672,7 +680,6 @@ def response(message):
 @bot.message_handler(commands=["menu_test"])
 def response(message):
 	bot.send_message(message.from_user.id, "menu_markup", reply_markup=gen_menu_markup(message.chat.id))
-
 
 @bot.message_handler(commands=['test'])
 def test(message):

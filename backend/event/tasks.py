@@ -17,7 +17,9 @@ def event_notifications():
     event = Event.objects.\
             filter(date__gt=check_start_time, date__lt=check_end_time).first()
     
-    participations = Participation.objects.filter(event=event.id)
+    participations = Participation.objects.filter(event=event.id, user__notifications_on=True)
+
+    print(participations)
     
     from bot.bot import handleEventNotification
 
