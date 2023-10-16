@@ -35,8 +35,8 @@ export default function UserSearchFilter({users, setUsers, setSelectedUser}){
 
             query = qs.stringify({
                 search: _search,
-                page: 1
             })
+            setUserListPage(undefined)
         }
         else{
             query = qs.stringify({

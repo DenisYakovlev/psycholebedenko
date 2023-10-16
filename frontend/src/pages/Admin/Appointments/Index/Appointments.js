@@ -23,12 +23,18 @@ export default function Appointments(){
     const [appointments, setAppointments] = useState([])
 
 
-    const fetchAppointments = async () => {
-        const query = {
+    const fetchAppointments = async (discardPage=true) => {
+        let query = {
             user: selectedUser,
             status: selectedStatus,
             outdated: selectedState,
-            page: page > 0 ? page : 1
+        }
+
+        if(!discardPage){
+            query.page = page > 0 ? page : 1
+        }
+        else{
+            setPage(undefined)
         }
 
         await authFetch.get(`appointment?${qs.stringify(query)}`)
@@ -37,7 +43,11 @@ export default function Appointments(){
 
     useEffect(() => {
         fetchAppointments()
-    }, [selectedUser, selectedStatus, selectedState, page])
+    }, [selectedUser, selectedStatus, selectedState])
+
+    useEffect(() => {
+        fetchAppointments(false)
+    }, [page])
 
 
     return (
