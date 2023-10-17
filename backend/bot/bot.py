@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import pytz
+import inspect
 import telebot
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 from channels.layers import get_channel_layer
@@ -57,29 +58,31 @@ def botDrivenAuthorization(message):
 	user_data = message.from_user.to_dict()
 	serializer = TelegramUserSerializer(data=user_data)
 
-	response= \
-	f"""
-	*🎉 Вітаємо, {message.from_user.first_name}! 🎉*
+	response= inspect.cleandoc(
+		f"""
+		*🎉 Вітаємо, {message.from_user.first_name}! 🎉*
 
-	Ви авторизувались у веб-застосунку практикуючого
-	психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
+		Ви авторизувались у веб-застосунку практикуючого
+		психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
 
-	Всі ваші записи та налаштування акаунта можна 
-	переглянути через панель керування бота.
-	Нажміть на *меню* щоб відрити веб-застосунок.
-	"""
+		Всі ваші записи та налаштування акаунта можна 
+		переглянути через панель керування бота.
+		Нажміть на *меню* щоб відрити веб-застосунок.
+		"""
+	)
 
-	response_welcome_back= \
-	f"""
-	*🎉 З поверненням, {message.from_user.first_name}! 🎉*
+	response_welcome_back= inspect.cleandoc(
+		f"""
+		*🎉 З поверненням, {message.from_user.first_name}! 🎉*
 
-	Ви авторизувались у веб-застосунку практикуючого
-	психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
+		Ви авторизувались у веб-застосунку практикуючого
+		психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
 
-	Всі ваші записи та налаштування акаунта можна 
-	переглянути через панель керування бота.
-	Нажміть на *меню* щоб відрити веб-застосунок.
-	"""
+		Всі ваші записи та налаштування акаунта можна 
+		переглянути через панель керування бота.
+		Нажміть на *меню* щоб відрити веб-застосунок.
+		"""
+	)
 
 	if serializer.is_valid():
 		# save user data if it's his first visit to app
@@ -100,17 +103,18 @@ def webAppDrivenAuthorization(user_id, first_name, first_authorization=True):
 	# phone verification process should start after this message
 	logger.debug("webAppDrivenAuthorization")
 
-	response= \
-	f"""
-	*🎉 Вітаємо, {first_name}! 🎉*
+	response= inspect.cleandoc(
+		f"""
+		*🎉 Вітаємо, {first_name}! 🎉*
 
-	Ви авторизувались у веб-застосунку практикуючого
-	психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
+		Ви авторизувались у веб-застосунку практикуючого
+		психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
 
-	Всі ваші записи та налаштування акаунта можна 
-	переглянути через панель керування бота.
-	Нажміть на *меню* щоб відрити веб-застосунок.
-	"""
+		Всі ваші записи та налаштування акаунта можна 
+		переглянути через панель керування бота.
+		Нажміть на *меню* щоб відрити веб-застосунок.
+		"""
+	)
 
 	if first_authorization:
 		bot.send_message(user_id, response, reply_markup=gen_menu_markup(user_id), parse_mode="Markdown")
@@ -128,18 +132,19 @@ def handlePhoneVerification(user_id, wsToken, confirmToken, forceStart=False):
 		if token:
 			return
 		
-	response = \
-	f"""
-	*📞 Надання номера телефона*
+	response = inspect.cleandoc(
+		f"""
+		*📞 Надання номера телефона*
 
-	
-	Надайте номер телефона через меню. ⬇️⬇️⬇️
+		
+		Надайте номер телефона через меню. ⬇️⬇️⬇️
 
-	*
-	Через 5 хвилин, активація стане недоступною.
-	При помилці/труднощах, зверніться до психолога.
-	*
-	"""
+		*
+		Через 5 хвилин, активація стане недоступною.
+		При помилці/труднощах, зверніться до психолога.
+		*
+		"""
+	)
 
 	bot.send_message(user_id, response, reply_markup=phone_verification_markup, parse_mode="Markdown")
 
@@ -159,12 +164,14 @@ def handleAppointmentUpdateNotification(appointment_id):
 	appointment = Appointment.objects.get(id=appointment_id)
 
 	if appointment.status == Appointment.Status.DENIED:
-		response = \
-		f"""
-		*📝 {appointment.title}*
+		response = inspect.cleandoc(
+			f"""
+			*📝 {appointment.title}*
 
-		Консультація була відмінена
-		"""
+			Консультація була відмінена
+			"""
+		)
+
 		if appointment.user.notifications_on:
 			bot.send_message(appointment.user.id, response, parse_mode="Markdown")
 
@@ -179,32 +186,34 @@ def handleAppointmentUpdateNotification(appointment_id):
 	user = TelegramUser.objects.get(id=appointment.user)
 	formated_date = format_date(appointment.date.date)
 
-	response_user = \
-	f"""
-	*📝 {appointment.title}*
+	response_user = inspect.cleandoc(
+		f"""
+		*📝 {appointment.title}*
 
-	
-	Дані про вашу консультацію були оновлені
+		
+		Дані про вашу консультацію були оновлені
 
-	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-	📌 Статус: *{format_status(appointment.status)}*
-	🗓 Дата: *{formated_date}*
-	"""
+		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
+		📌 Статус: *{format_status(appointment.status)}*
+		🗓 Дата: *{formated_date}*
+		"""
+	)
 
-	response_admin = \
-	f"""
-	*📝 {appointment.title}*
+	response_admin = inspect.cleandoc(
+		f"""
+		*📝 {appointment.title}*
 
-	
-	Дані про консультацію були оновлені
+		
+		Дані про консультацію були оновлені
 
-	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-	📌 Статус: *{format_status(appointment.status)}*
-	🗓 Дата: *{formated_date}*
-	👤 Користувач: *{user.first_name}*
-	"""
+		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
+		📌 Статус: *{format_status(appointment.status)}*
+		🗓 Дата: *{formated_date}*
+		👤 Користувач: *{user.first_name}*
+		"""
+	)
 
 	if user.notifications_on:
 		bot.send_message(user.id, response_user, parse_mode="Markdown")
@@ -223,32 +232,34 @@ def handleAppointmentScheduledNotification(appointment_id):
 	appointment = Appointment.objects.get(id=appointment_id)
 	formated_date = format_date(appointment.date.date)
 
-	response_user = \
-	f"""
-	*📝 {appointment.title}*
+	response_user = inspect.cleandoc(
+		f"""
+		*📝 {appointment.title}*
 
-	
-	*Ваша консультація незабаром розпочнеться.*
+		
+		*Ваша консультація незабаром розпочнеться.*
 
-	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-	🗓 Дата: *{formated_date}*
+		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
+		🗓 Дата: *{formated_date}*
 
-	*При необхідності, зв'яжіться з психологом.*
-	"""
+		*При необхідності, зв'яжіться з психологом.*
+		"""
+	)
 
-	response_admin = \
-	f"""
-	*📝 {appointment.title}*
+	response_admin = inspect.cleandoc(
+		f"""
+		*📝 {appointment.title}*
 
-	
-	Консультація незабаром розпочнеться.
+		
+		Консультація незабаром розпочнеться.
 
-	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-	🗓 Дата: *{formated_date}*
-	👤 Користувач: *{appointment.user.first_name}*
-	"""
+		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
+		🗓 Дата: *{formated_date}*
+		👤 Користувач: *{appointment.user.first_name}*
+		"""
+	)
 
 	if appointment.user.notifications_on:
 		bot.send_message(appointment.user.id, response_user, parse_mode="Markdown")
@@ -271,16 +282,17 @@ def handleEventNotification(event_id, user_id):
 	event = Event.objects.get(id=event_id)
 	formated_date = format_date(event.date)
 
-	response = \
-	f"""
-	*🧷 {event.title}*
+	response = inspect.cleandoc(
+		f"""
+		*🧷 {event.title}*
 
-	
-	Групова зустріч незабаром розпочнеться.
+		
+		Групова зустріч незабаром розпочнеться.
 
-	📍 Місце проведення: {f"*{event.address}*" if event.address else f"[Міт у Zoom]({event.zoom_link})"}
-	🗓 Дата: *{formated_date}*
-	"""
+		📍 Місце проведення: {f"*{event.address}*" if event.address else f"[Міт у Zoom]({event.zoom_link})"}
+		🗓 Дата: *{formated_date}*
+		"""
+	)
 
 	bot.send_message(user_id, response, parse_mode="Markdown")
 
@@ -294,36 +306,38 @@ def handleAppointmentCreateNotification(appointment_id):
 	user = TelegramUser.objects.get(id=appointment.user)
 	formated_date = format_date(appointment.date.date)
 
-	user_response = \
-	f"""
-	*📝 Запис на консультацію*
+	user_response = inspect.cleandoc(
+		f"""
+		*📝 Запис на консультацію*
 
-	
-	Ви створили запис на консультацію.
+		
+		Ви створили запис на консультацію.
 
-	📌 Назва: *{appointment.title}*
-	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else "Міт у Zoom"}*
-	🗓 Дата: *{formated_date}*
+		📌 Назва: *{appointment.title}*
+		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+		📍 Місце проведення: *{appointment.address if appointment.address else "Міт у Zoom"}*
+		🗓 Дата: *{formated_date}*
 
-	*
-	Очікуйте підтвердження психолога.
-	*
-	"""
+		*
+		Очікуйте підтвердження психолога.
+		*
+		"""
+	)
 
-	admin_response = \
-	f"""
-	*📝 Запис на консультацію*
+	admin_response = inspect.cleandoc(
+		f"""
+		*📝 Запис на консультацію*
 
-	
-	Створено новий запит на консультацію.
+		
+		Створено новий запит на консультацію.
 
-	📌 Назва: *{appointment.title}*
-	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: *{appointment.address if appointment.address else "Міт у Zoom"}*
-	🗓 Дата: *{formated_date}*
-	👤 Користувач: *{user.first_name}*
-	"""
+		📌 Назва: *{appointment.title}*
+		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+		📍 Місце проведення: *{appointment.address if appointment.address else "Міт у Zoom"}*
+		🗓 Дата: *{formated_date}*
+		👤 Користувач: *{user.first_name}*
+		"""
+	)
 
 
 	if user.notifications_on:
@@ -388,34 +402,36 @@ def handleAppointmentCreateByAdminNotification(appointment_id):
 	user = TelegramUser.objects.get(id=appointment.user)
 	formated_date = format_date(appointment.date.date)
 
-	response_user = \
-	f"""
-	*📝 Запис на консультацію*
+	response_user = inspect.cleandoc(
+		f"""
+		*📝 Запис на консультацію*
 
-	
-	Психолог записав вас на консультацію.
+		
+		Психолог записав вас на консультацію.
 
-	📌 Назва: *{appointment.title}*
-	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-	🗓 Дата: *{formated_date}*
+		📌 Назва: *{appointment.title}*
+		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
+		🗓 Дата: *{formated_date}*
 
-	"""
+		"""
+	)
 
-	response_admin = \
-	f"""
-	*📝 Запис на консультацію*
+	response_admin = inspect.cleandoc(
+		f"""
+		*📝 Запис на консультацію*
 
-	
-	Ви записали користувача на консультацію.
+		
+		Ви записали користувача на консультацію.
 
-	📌 Назва: *{appointment.title}*
-	📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-	📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-	🗓 Дата: *{formated_date}*
-	👤 Користувач: *{user.first_name}*
+		📌 Назва: *{appointment.title}*
+		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
+		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
+		🗓 Дата: *{formated_date}*
+		👤 Користувач: *{user.first_name}*
 
-	"""
+		"""
+	)
 
 	if user.notifications_on:
 		bot.send_message(user.id, response_user, parse_mode="Markdown")
@@ -445,40 +461,43 @@ def handle_contact(message):
 	user = TelegramUser.objects.get(id=message.contact.user_id)
 	wsToken, confirmToken = generatePhoneVerificationTokens(message.contact.user_id, user.auth_date)
 
-	error_response = \
-	f"""
-	*❌ Виникла помилка*
+	error_response = inspect.cleandoc(
+		f"""
+		*❌ Виникла помилка*
 
-	Час на верифікацію телефона вийшов, або
-	були надані неправильні дані
+		Час на верифікацію телефона вийшов, або
+		були надані неправильні дані
 
-	Спробуйте пізніше або зверніться до
-	психолога за допомогою.
-	"""
+		Спробуйте пізніше або зверніться до
+		психолога за допомогою.
+		"""
+	)
 
-	server_error = lambda error: \
-	f"""
-	*❌ Сервера помилка*
+	server_error = lambda error: inspect.cleandoc(
+		f"""
+		*❌ Сервера помилка*
 
-	{error}
+		{error}
 
-	Спробуйте пізніше або зверніться до
-	психолога за допомогою.
-	"""
+		Спробуйте пізніше або зверніться до
+		психолога за допомогою.
+		"""
+	)
 
-	good_response = \
-	f"""
-	*✅ Успішно!*
+	good_response = inspect.cleandoc(
+		f"""
+		*✅ Успішно!*
 
-	Тепер психолог зможе з вами зв'язати при
-	необхідності обговорити питання щодо консультацій.
+		Тепер психолог зможе з вами зв'язати при
+		необхідності обговорити питання щодо консультацій.
 
-	*
-	Ваше ім'я та номер телефона потрібні лише 
-	для можливості зв'язку з психологом. 
-	Конфіденційність ваших даних гарантована.
-	*
-	"""
+		*
+		Ваше ім'я та номер телефона потрібні лише 
+		для можливості зв'язку з психологом. 
+		Конфіденційність ваших даних гарантована.
+		*
+		"""
+	)
 
 	# verify token 
 	try:
@@ -528,20 +547,21 @@ def _settings(message):
 	logger.debug("settings")
 	user = TelegramUser.objects.get(id=message.from_user.id)
 
-	_response = \
-	f"""
-	*⚙️ Налаштування Особистого кабінета:*
+	_response = inspect.cleandoc(
+		f"""
+		*⚙️ Налаштування Особистого кабінета:*
 
-	👤 Ім'я: *{user.first_name}*
-	📞 Номер телефона: *{user.phone_number if user.phone_number else "Невідомий"}*
-	🕒 Оповіщення: *{"🟢 Включені" if user.notifications_on else "🔴 Ввимкнені"}*
+		👤 Ім'я: *{user.first_name}*
+		📞 Номер телефона: *{user.phone_number if user.phone_number else "Невідомий"}*
+		🕒 Оповіщення: *{"🟢 Включені" if user.notifications_on else "🔴 Ввимкнені"}*
 
-	*
-	Ваше ім'я та номер телефона потрібні лише 
-	для можливості зв'язку з психологом. 
-	Конфіденційність ваших даних гарантована.
-	*
-	"""
+		*
+		Ваше ім'я та номер телефона потрібні лише 
+		для можливості зв'язку з психологом. 
+		Конфіденційність ваших даних гарантована.
+		*
+		"""
+	)
 
 
 	bot.send_message(message.from_user.id, _response, reply_markup=gen_settings_markup(message.from_user.id), parse_mode="Markdown")
@@ -551,10 +571,11 @@ def _settings(message):
 def menu(message):
 	logger.debug("menu")
 	
-	response = \
-	f"""
-	📇 Головне меню
-	"""
+	response = inspect.cleandoc(
+		f"""
+		📇 Головне меню
+		"""
+	)
 
 	bot.send_message(message.from_user.id, response, reply_markup=gen_menu_markup(message.chat.id))
 
@@ -569,25 +590,27 @@ def notifications_off(message):
 	if serializer.is_valid():
 		serializer.save()
 
-		response = \
-		f"""
-		*✅ Змінено!*
+		response = inspect.cleandoc(
+			f"""
+			*✅ Змінено!*
 
-		Тепер бот *не буде* відправляти вам
-		повідомлення про початок консультацій та
-		групових зустрічей.
-		"""
-		
+			Тепер бот *не буде* відправляти вам
+			повідомлення про початок консультацій та
+			групових зустрічей.
+			"""
+		)
+
 		bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
 		return
 
-	response = \
-	f"""
-	*❌ Виникла помилка*
+	response = inspect.cleandoc(
+		f"""
+		*❌ Виникла помилка*
 
-	Спробуйте пізніше або зверніться до
-	психолога за допомогою.
-	"""
+		Спробуйте пізніше або зверніться до
+		психолога за допомогою.
+		"""
+	)
 
 	bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
 
@@ -601,25 +624,27 @@ def notifications_on(message):
 	if serializer.is_valid():
 		serializer.save()
 
-		response = \
-		f"""
-		*✅ Змінено!*
+		response = inspect.cleandoc(
+			f"""
+			*✅ Змінено!*
 
-		Тепер бот *буде* відправляти вам
-		повідомлення про початок консультацій та
-		групових зустрічей.
-		"""
+			Тепер бот *буде* відправляти вам
+			повідомлення про початок консультацій та
+			групових зустрічей.
+			"""
+		)
 		
 		bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
 		return
 
-	response = \
-	f"""
-	*❌ Виникла помилка*
+	response = inspect.cleandoc(
+		f"""
+		*❌ Виникла помилка*
 
-	Спробуйте пізніше або зверніться до
-	психолога за допомогою.
-	"""
+		Спробуйте пізніше або зверніться до
+		психолога за допомогою.
+		"""
+	)
 
 	bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
 
@@ -632,28 +657,30 @@ def phone_update(message):
 		wsToken, confirmToken = generatePhoneVerificationTokens(user.id, user.auth_date)
 		cache.set(wsToken, confirmToken, settings.PHONE_VERIFICATION_TIMEOUT_SECS)
 	
-		response = \
-		f"""
-		*📞 Оновлення номера телефона*
+		response = inspect.cleandoc(
+			f"""
+			*📞 Оновлення номера телефона*
 
-		Надайте номер телефона через меню. ⬇️⬇️⬇️
+			Надайте номер телефона через меню. ⬇️⬇️⬇️
 
-		*
-		Через 5 хвилин, активація стане недоступною.
-		При помилці/труднощах, зверніться до психолога.
-		*
-		"""
+			*
+			Через 5 хвилин, активація стане недоступною.
+			При помилці/труднощах, зверніться до психолога.
+			*
+			"""
+		)
 
 		bot.send_message(user.id, response, reply_markup=phone_verification_markup, parse_mode="Markdown")
 		return
 	except:
-		response = \
-		f"""
-		*❌ Виникла помилка*
+		response = inspect.cleandoc(
+			f"""
+			*❌ Виникла помилка*
 
-		Спробуйте пізніше або зверніться до
-		психолога за допомогою.
-		"""
+			Спробуйте пізніше або зверніться до
+			психолога за допомогою.
+			"""
+		)
 
 		bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
 
@@ -685,4 +712,4 @@ def response(message):
 def test(message):
 	logger.debug("test")
 
-	bot.send_message(message.from_user.id, "[test](https://psycholebedenko.online)", parse_mode="Markdown")
+	bot.send_message(message.from_user.id, "testing", parse_mode="MarkdownV2")
