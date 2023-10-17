@@ -9,11 +9,11 @@ export default function UsersList({users, handleSearch, setSelectedUser, page, s
 
     const handleSelect = (user, cardRef) => {
         if(selectedCard.current){
-            selectedCard.current.style.setProperty("color", "var(--bs-dark)", "important")
+            selectedCard.current.style.setProperty("border-right", "none", "important")
         }
 
         selectedCard.current = cardRef
-        selectedCard.current.style.setProperty("color", "var(--bs-success)", "important")
+        selectedCard.current.style.setProperty("border-right", "solid 5px #556080", "important")
         
         setSelectedUser(user)
     }
@@ -35,10 +35,6 @@ export default function UsersList({users, handleSearch, setSelectedUser, page, s
                         />
                     )}
 
-                    {/* <Pagination className="p-3 d-flex justify-content-center gap-2" size="sm">
-                        <Pagination.Prev onClick={() => _handleSearch(users.previous)} disabled={!users.previous}/>
-                        <Pagination.Next onClick={() => _handleSearch(users.next)} disabled={!users.next}/>
-                    </Pagination> */}
 
                     <PaginationMenu 
                         paginationObj={users}

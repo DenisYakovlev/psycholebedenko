@@ -13,6 +13,7 @@ export default function UserCard({user, setSelectedUser, props}){
             {...props}
             bg="light" data-bs-theme="theme"
             className="m-0 p-3 rounded-0 border-0 border-bottom border-muted w-100"
+            ref={cardRef}
         >
             <Card.Body className="m-0 p-0 d-flex gap-2">
                 <Card.Img src={user.photo_url} style={{width: "56px", height: "56px"}} alt="user picture"/>
@@ -33,7 +34,7 @@ export default function UserCard({user, setSelectedUser, props}){
                         </Card.Text>
                     </Container>
                     <FontAwesomeIcon  
-                        ref={cardRef}
+                        // ref={cardRef}
                         icon={faChevronRight} 
                         className="fs-3"
                     />
