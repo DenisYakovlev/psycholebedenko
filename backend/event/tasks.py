@@ -19,8 +19,6 @@ def event_notifications():
     
     participations = Participation.objects.filter(event=event.id, user__notifications_on=True)
 
-    print(participations)
-    
     from bot.bot import handleEventNotification
 
     users_to_notify = group(handleEventNotification.si(event.id, participation.user.id) for participation in participations)

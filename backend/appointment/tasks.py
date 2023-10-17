@@ -13,12 +13,18 @@ def appoinment_notifications():
     check_start_time = aware_now()
     check_end_time = check_start_time + timedelta(hours=1)
 
-    appointment = Appointment.objects.\
-            filter(date__date__gt=check_start_time, date__date__lt=check_end_time).first()
-    
-    from bot.bot import handleAppointmentScheduledNotification
-    
-    handleAppointmentScheduledNotification(appointment.id)
+    try:
+        appointment = Appointment.objects.\
+                filter(date__date__gt=check_start_time, date__date__lt=check_end_time).first()
+        
+        if not appointment:
+            return
+
+        from bot.bot import handleAppointmentScheduledNotification
+        
+        handleAppointmentScheduledNotification(appointment.id)
+    except:
+        pass
     
 
 @shared_task
