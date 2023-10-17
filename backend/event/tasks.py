@@ -14,15 +14,21 @@ def event_notifications():
     check_start_time = aware_now()
     check_end_time = check_start_time + timedelta(hours=1)
 
-    event = Event.objects.\
-            filter(date__gt=check_start_time, date__lt=check_end_time).first()
-    
-    participations = Participation.objects.filter(event=event.id, user__notifications_on=True)
+    try:
+        event = Event.objects.\
+                filter(date__gt=check_start_time, date__lt=check_end_time).first()
+        
+        if not event:
+            return
+        
+        participations = Participation.objects.filter(event=event.id, user__notifications_on=True)
 
-    from bot.bot import handleEventNotification
+        from bot.bot import handleEventNotification
 
-    users_to_notify = group(handleEventNotification.si(event.id, participation.user.id) for participation in participations)
-    users_to_notify.apply_async()
+        users_to_notify = group(handleEventNotification.si(event.id, participation.user.id) for participation in participations)
+        users_to_notify.apply_async()
+    except:
+        return
     
     
 @shared_task
