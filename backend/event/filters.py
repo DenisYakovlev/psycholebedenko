@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 from django.conf import settings
 from django_filters import rest_framework as filters
@@ -12,7 +12,7 @@ class EventFilter(filters.FilterSet):
         now = datetime.now(tz=timezone)
 
         if value == "active":
-            return queryset.filter(date__gt=now)
+            return queryset.filter(date__gt=now - timedelta(hours=1))
         elif value == "outdated": 
             return queryset.filter(date__lt=now)
         else:

@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 import pytz
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.conf import settings
 
 
@@ -32,4 +32,4 @@ class AppointmentFilters(filters.FilterSet):
         if value:
             return queryset
         else:
-            return queryset.filter(date__date__gt=now)
+            return queryset.filter(date__date__gt=now - timedelta(hours=1))
