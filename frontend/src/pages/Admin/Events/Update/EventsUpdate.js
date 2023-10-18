@@ -43,7 +43,7 @@ export default function EventsUpdate(){
                     />
                 </TwoSideLayout.Side>
 
-                <TwoSideLayout.Main sticky={false}>
+                <TwoSideLayout.Main sticky>
                     <LayoutMain
                         event={virtualEvent}
                     />

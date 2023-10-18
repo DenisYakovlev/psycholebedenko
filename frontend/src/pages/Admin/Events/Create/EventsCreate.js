@@ -21,7 +21,7 @@ export default function EventsCreate(){
                     />
                 </TwoSideLayout.Side>
 
-                <TwoSideLayout.Main sticky={false}>
+                <TwoSideLayout.Main sticky>
                     <LayoutMain
                         event={virtualEvent}
                     />
