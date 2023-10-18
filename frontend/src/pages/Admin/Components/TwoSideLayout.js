@@ -29,7 +29,7 @@ TwoSideLayout.Main = ({children, sticky=false}) => {
     return (
         <Col
             xl={8} lg={6} sm={12} xs={12}
-            className={`m-0 p-0 ${sticky ? "position-sticky top-0" : ""} two-side-layout-main`}
+            className={`m-0 p-0 ${sticky ? "vh-100 position-sticky top-0 overflow-scroll" : ""} two-side-layout-main`}
             style={{backgroundColor: "var(--bs-gray-100)"}}
         >
             {children}
