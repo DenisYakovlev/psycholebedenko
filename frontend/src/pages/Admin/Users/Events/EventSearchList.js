@@ -8,11 +8,11 @@ export default function EventSearchList({events, setSelectedEvent}){
 
     const handleSelect = (event, cardRef) => {
         if(selectedCard.current){
-            selectedCard.current.style.setProperty("color", "var(--bs-dark)", "important")
+            selectedCard.current.style.setProperty("border-right", "none", "important")
         }
 
         selectedCard.current = cardRef
-        selectedCard.current.style.setProperty("color", "var(--bs-success)", "important")
+        selectedCard.current.style.setProperty("border-right", "solid 5px #556080", "important")
         
         setSelectedEvent(event.id)
     }

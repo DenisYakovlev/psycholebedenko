@@ -33,6 +33,7 @@ export default function CurrentEventSection(){
 
             <AppointmentCard 
                 appointment={currentEvent}
+                onChange={fetchEvent}
             />
         </Container>
     )

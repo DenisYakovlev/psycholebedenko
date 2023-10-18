@@ -13,6 +13,7 @@ export default function EventSearchCard({event, setSelectedEvent}){
         <Card
             bg="light" data-bs-theme="theme"
             className="m-0 p-3 rounded-0 border-0 border-bottom border-muted"
+            ref={cardRef}
         >
             <Card.Body className="m-0 p-0 d-flex gap-2">
                 <Card.Img src={event.img_url} style={{width: "56px", height: "56px"}} alt="event picture"/>
@@ -33,7 +34,6 @@ export default function EventSearchCard({event, setSelectedEvent}){
                         </Card.Text>
                     </Container>
                     <FontAwesomeIcon 
-                        ref={cardRef}
                         icon={faChevronRight} 
                         className="fs-3"
                     />

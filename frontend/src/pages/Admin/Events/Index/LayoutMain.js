@@ -16,7 +16,7 @@ export default function LayoutMain({events}){
                 <Row sm={1} xs={1} className="m-0 p-0 w-100 px-0 py-5 gap-5">
                     {events.map((event, idx) => {
                         return(
-                            <Col key={idx} className="m-0 p-0 px-lg-5 px-3 d-flex justify-content-center">
+                            <Col key={idx} className="m-0 p-0 px-xl-5 px-3 d-flex justify-content-center">
                                 <MainEventCard 
                                     event={event} 
                                     editable={true}
