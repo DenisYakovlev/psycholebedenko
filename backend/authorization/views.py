@@ -8,7 +8,7 @@ from .serializers import AuthWidgetTelegramUserSerializer, AuthBotAppTelegramUse
 from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
 from .utils import generatePhoneVerificationTokens
-from bot import bot
+from bot.tasks import handlePhoneVerification, webAppDrivenAuthorization
 
 
 class AuthWidgetTelegramUser(APIView):
@@ -30,7 +30,7 @@ class AuthWidgetTelegramUser(APIView):
                 # check if user needs phone update and verification
                 if not user.phone_number:
                     wsToken, confirmToken = generatePhoneVerificationTokens(user.id, user.auth_date)
-                    verification_start, verification_end = bot.handlePhoneVerification(request.data['id'], wsToken, confirmToken)
+                    verification_start, verification_end = handlePhoneVerification(request.data['id'], wsToken, confirmToken)
 
                     return Response({
                         **tokens_serializer.validated_data,
@@ -63,10 +63,10 @@ class AuthWidgetTelegramUser(APIView):
             tokens_serializer = PasswordlessTokenObtainPairSerializer(data=serializer.validated_data)
             if tokens_serializer.is_valid():
                 # notify user about his first authorization
-                bot.webAppDrivenAuthorization.delay(request.data['id'], request.data['first_name'], first_authorization=True)
+                webAppDrivenAuthorization.delay(request.data['id'], request.data['first_name'], first_authorization=True)
 
                 wsToken, confirmToken = generatePhoneVerificationTokens(request.data['id'], request.data['auth_date'])
-                verification_start, verification_end = bot.handlePhoneVerification(request.data['id'], wsToken, confirmToken)
+                verification_start, verification_end = handlePhoneVerification(request.data['id'], wsToken, confirmToken)
 
                 return Response({
                     **tokens_serializer.validated_data,
@@ -134,7 +134,7 @@ class PhoneVerificationRetry(APIView):
             return Response({"msg": "Connection token is not provided"}, status.HTTP_409_CONFLICT)
             
         wsToken, confirmToken = generatePhoneVerificationTokens(request.user.id, request.user.auth_date)
-        verification_start,verification_end = bot.handlePhoneVerification(request.user.id, wsToken, confirmToken, forceStart=True)
+        verification_start,verification_end = handlePhoneVerification(request.user.id, wsToken, confirmToken, forceStart=True)
 
         return Response({
             "phoneVerificationToken": wsToken,

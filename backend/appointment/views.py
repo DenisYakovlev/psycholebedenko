@@ -18,7 +18,7 @@ from .serializers import AppointmentSerializer, AppointmentListSerializer, Appoi
 from user.models import TelegramUser
 from schedule.models import Schedule
 
-from bot import bot
+from bot.tasks import handleAppointmentCreateByAdminNotification, handleAppointmentCreateNotification, handleAppointmentUpdateNotification
 
 
 class AppointmentClosest(APIView):
@@ -67,10 +67,10 @@ class AppointmentList(generics.ListCreateAPIView):
             if request.data.get("create_zoom_link"):
                 chain(
                     create_appointment_zoom_link.si(obj.id), 
-                    bot.handleAppointmentCreateByAdminNotification.si(obj.id)
+                    handleAppointmentCreateByAdminNotification.si(obj.id)
                 ).apply_async()
             else:
-                bot.handleAppointmentCreateByAdminNotification.delay(obj.id)
+                handleAppointmentCreateByAdminNotification.delay(obj.id)
                 
             return Response(serializer.data, status.HTTP_201_CREATED)
         
@@ -98,7 +98,7 @@ class AppointmentCreate(APIView):
         if serializer.is_valid():
             obj = serializer.save()
 
-            bot.handleAppointmentCreateNotification.delay(obj.id)
+            handleAppointmentCreateNotification.delay(obj.id)
             return Response(serializer.data, status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -146,10 +146,10 @@ class AppointmentDetail(APIView):
                 if request.data.get("create_zoom_link"):
                     chain(
                         create_appointment_zoom_link.si(obj.id), 
-                        bot.handleAppointmentUpdateNotification.si(obj.id)
+                        handleAppointmentUpdateNotification.si(obj.id)
                     ).apply_async()
                 else:
-                    bot.handleAppointmentUpdateNotification.delay(obj.id)
+                    handleAppointmentUpdateNotification.delay(obj.id)
 
             return Response(_serializer.data, status.HTTP_202_ACCEPTED)
         

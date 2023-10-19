@@ -20,7 +20,7 @@ def appoinment_notifications():
         if not appointment:
             return
 
-        from bot.bot import handleAppointmentScheduledNotification
+        from bot.tasks import handleAppointmentScheduledNotification
         
         handleAppointmentScheduledNotification(appointment.id)
     except:
