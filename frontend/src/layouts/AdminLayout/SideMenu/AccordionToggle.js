@@ -15,10 +15,12 @@ export default function AccordionToggle({children, icon, bordedTop=true, borderB
                 borderTop: `${bordedTop ? "solid 1px var(--bs-gray-400)": "none"}`
             }}
             onClick={handleClick}
-            className="m-0 p-3 d-flex align-items-center"
+            className="m-0 p-3 d-flex align-items-center justify-content-start"
         >
             {icon &&
-                <FontAwesomeIcon icon={icon} style={{width: "40px", height: "32px", fontSize: "32px"}}/>
+                <Container className="m-0 p-0 w-auto">
+                    <FontAwesomeIcon icon={icon} style={{width: "40px", height: "32px"}}/>
+                </Container>
             }
                 {children}
         </Container>
