@@ -29,7 +29,7 @@ def gen_settings_markup(user_id):
 
     settings_markup.row(
         KeyboardButton(
-            text="📇 Меню"
+            text="⏮ Меню"
         )
     )
 
@@ -59,7 +59,7 @@ def gen_menu_markup(user_id):
 
         menu_markup.row(
             KeyboardButton(
-                text="📇 Меню"
+                text="⏮ Меню"
             )
         )
 
@@ -110,5 +110,5 @@ phone_verification_markup = ReplyKeyboardMarkup(
     row_width=1
 ).add(
     KeyboardButton("📞 Надати номер телефону", request_contact=True),
-    KeyboardButton("📇 Меню")
+    KeyboardButton("⏮ Меню")
 )

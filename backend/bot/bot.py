@@ -1,16 +1,15 @@
 from datetime import datetime
 import json
 import pytz
-import inspect
 import telebot
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 from channels.layers import get_channel_layer
 from django.core.cache import cache
 from django.conf import settings
 from django.utils.timezone import make_aware
-from celery import shared_task
 
-from . import TOKEN, logger, month_names, day_names
+from . import TOKEN, logger
+from .utils import format_date, format_status
 from authorization.utils import generatePhoneVerificationTokens
 from asgiref.sync import async_to_sync
 from user.models import TelegramUser
@@ -21,34 +20,11 @@ from appointment.tasks import create_appointment_zoom_link
 from event.models import Event, Participation
 from schedule.models import Schedule
 from .markups import gen_menu_markup, gen_settings_markup, phone_verification_markup
+from .messages import MessageBuilder
 
 
 bot = telebot.TeleBot(TOKEN)
 
-
-# refactor to utils
-def format_date(date):
-	tz = pytz.timezone(settings.TIME_ZONE)
-	_date = date.astimezone(tz)
-
-	day_name = day_names[_date.weekday()]
-	month_name = month_names[_date.month]
-	time = _date.strftime("%H:%M")
-
-	return f"{day_name}, {_date.day} {month_name} О {time}"
-
-def format_status(status):
-	formated_status = {
-		"pending": "🟡 в обробці",
-		"appointed": "🟢 назначено",
-		"complete": "🔵 виконано",
-		"denied": "🔴 відмінено"
-	}
-
-	return formated_status[status]
-
-
-# NEED TO REFACTOR ALL THIS
 
 @bot.message_handler(commands=['start'])
 def botDrivenAuthorization(message):
@@ -58,300 +34,27 @@ def botDrivenAuthorization(message):
 	user_data = message.from_user.to_dict()
 	serializer = TelegramUserSerializer(data=user_data)
 
-	response= inspect.cleandoc(
-		f"""
-		*🎉 Вітаємо, {message.from_user.first_name}! 🎉*
-
-		Ви авторизувались у веб-застосунку практикуючого
-		психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
-
-		Всі ваші записи та налаштування акаунта можна 
-		переглянути через панель керування бота.
-		Нажміть на *меню* щоб відрити веб-застосунок.
-		"""
-	)
-
-	response_welcome_back= inspect.cleandoc(
-		f"""
-		*🎉 З поверненням, {message.from_user.first_name}! 🎉*
-
-		Ви авторизувались у веб-застосунку практикуючого
-		психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
-
-		Всі ваші записи та налаштування акаунта можна 
-		переглянути через панель керування бота.
-		Нажміть на *меню* щоб відрити веб-застосунок.
-		"""
-	)
-
 	if serializer.is_valid():
 		# save user data if it's his first visit to app
 
 		serializer.save()
 
-		bot.send_message(message.chat.id, response, reply_markup=gen_menu_markup(message.chat.id), parse_mode="Markdown")
+		bot.send_message(
+			message.chat.id, 
+			MessageBuilder.start(message.from_user.first_name, settings.ADMIN_ID), 
+			reply_markup=gen_menu_markup(message.chat.id), 
+			parse_mode="Markdown"
+		)
 	else:
 		# id error occurs if user is already authorized.
 		# handle greetings of already authorized user.
 
-		bot.send_message(message.chat.id, response_welcome_back, reply_markup=gen_menu_markup(message.chat.id), parse_mode="Markdown")
-
-
-@shared_task
-def webAppDrivenAuthorization(user_id, first_name, first_authorization=True):
-	# notify user about his first authorization. All his auth data is already saved in db
-	# phone verification process should start after this message
-	logger.debug("webAppDrivenAuthorization")
-
-	response= inspect.cleandoc(
-		f"""
-		*🎉 Вітаємо, {first_name}! 🎉*
-
-		Ви авторизувались у веб-застосунку практикуючого
-		психолога [Лянного Андрія](tg://user?id={settings.ADMIN_ID}).
-
-		Всі ваші записи та налаштування акаунта можна 
-		переглянути через панель керування бота.
-		Нажміть на *меню* щоб відрити веб-застосунок.
-		"""
-	)
-
-	if first_authorization:
-		bot.send_message(user_id, response, reply_markup=gen_menu_markup(user_id), parse_mode="Markdown")
-
-
-@shared_task
-def handlePhoneVerification(user_id, wsToken, confirmToken, forceStart=False):
-	# forceStart omits token check. Used in phone verification restart
-	logger.debug("handlePhoneVerification")
-
-	if not forceStart:
-		# check if token already exists and doesn't need to refresh
-		token = cache.get(wsToken)
-
-		if token:
-			return
-		
-	response = inspect.cleandoc(
-		f"""
-		*📞 Надання номера телефона*
-
-		
-		Надайте номер телефона через меню. ⬇️⬇️⬇️
-
-		*
-		Через 5 хвилин, активація стане недоступною.
-		При помилці/труднощах, зверніться до психолога.
-		*
-		"""
-	)
-
-	bot.send_message(user_id, response, reply_markup=phone_verification_markup, parse_mode="Markdown")
-
-	# set up timestamps of start and timeout of verification
-	tz = pytz.timezone(settings.TIME_ZONE)
-	verification_start = int(datetime.now(tz=tz).timestamp())
-	verification_end = verification_start + settings.PHONE_VERIFICATION_TIMEOUT_SECS
-
-	cache.set(wsToken, confirmToken, settings.PHONE_VERIFICATION_TIMEOUT_SECS)
-	return verification_start, verification_end
-
-
-@shared_task
-def handleAppointmentUpdateNotification(appointment_id):
-	logger.debug("handleAppointmentUpdateNotification")
-	
-	appointment = Appointment.objects.get(id=appointment_id)
-
-	if appointment.status == Appointment.Status.DENIED:
-		response = inspect.cleandoc(
-			f"""
-			*📝 {appointment.title}*
-
-			Консультація була відмінена
-			"""
+		bot.send_message(
+			message.chat.id, 
+			MessageBuilder.welcome_back(message.from_user.first_name, settings.ADMIN_ID), 
+			reply_markup=gen_menu_markup(message.chat.id), 
+			parse_mode="Markdown"
 		)
-
-		if appointment.user.notifications_on:
-			bot.send_message(appointment.user.id, response, parse_mode="Markdown")
-
-		bot.send_message(settings.ADMIN_ID, response, parse_mode="Markdown",
-			reply_markup=InlineKeyboardMarkup([
-			[InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={appointment.user.id}')],
-			[InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={appointment.user.id}')],
-    	]))
-
-		return
-
-	user = TelegramUser.objects.get(id=appointment.user)
-	formated_date = format_date(appointment.date.date)
-
-	response_user = inspect.cleandoc(
-		f"""
-		*📝 {appointment.title}*
-
-		
-		Дані про вашу консультацію були оновлені
-
-		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-		📌 Статус: *{format_status(appointment.status)}*
-		🗓 Дата: *{formated_date}*
-		"""
-	)
-
-	response_admin = inspect.cleandoc(
-		f"""
-		*📝 {appointment.title}*
-
-		
-		Дані про консультацію були оновлені
-
-		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-		📌 Статус: *{format_status(appointment.status)}*
-		🗓 Дата: *{formated_date}*
-		👤 Користувач: *{user.first_name}*
-		"""
-	)
-
-	if user.notifications_on:
-		bot.send_message(user.id, response_user, parse_mode="Markdown")
-
-	bot.send_message(settings.ADMIN_ID, response_admin, parse_mode="Markdown",
-		reply_markup=InlineKeyboardMarkup([
-        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user.id}')],
-        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={user.id}')],
-    ]))
-
-
-@shared_task
-def handleAppointmentScheduledNotification(appointment_id):
-	logger.debug("handleAppointmentScheduledNotification")	
-
-	appointment = Appointment.objects.get(id=appointment_id)
-	formated_date = format_date(appointment.date.date)
-
-	response_user = inspect.cleandoc(
-		f"""
-		*📝 {appointment.title}*
-
-		
-		*Ваша консультація незабаром розпочнеться.*
-
-		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-		🗓 Дата: *{formated_date}*
-
-		*При необхідності, зв'яжіться з психологом.*
-		"""
-	)
-
-	response_admin = inspect.cleandoc(
-		f"""
-		*📝 {appointment.title}*
-
-		
-		Консультація незабаром розпочнеться.
-
-		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-		🗓 Дата: *{formated_date}*
-		👤 Користувач: *{appointment.user.first_name}*
-		"""
-	)
-
-	if appointment.user.notifications_on:
-		bot.send_message(appointment.user.id, response_user, parse_mode="Markdown")
-
-	bot.send_message(settings.ADMIN_ID, response_admin, parse_mode="Markdown",
-		reply_markup=InlineKeyboardMarkup([
-        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={appointment.user.id}')],
-		[InlineKeyboardButton(text='Помітити як виконану', callback_data=json.dumps({
-			"action": "complete_appointment",
-			"data": appointment_id
-		}))],
-        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={appointment.user.id}')],
-    ]))
-
-
-@shared_task
-def handleEventNotification(event_id, user_id):
-	logger.debug("handleEventNotification")
-
-	event = Event.objects.get(id=event_id)
-	formated_date = format_date(event.date)
-
-	response = inspect.cleandoc(
-		f"""
-		*🧷 {event.title}*
-
-		
-		Групова зустріч незабаром розпочнеться.
-
-		📍 Місце проведення: {f"*{event.address}*" if event.address else f"[Міт у Zoom]({event.zoom_link})"}
-		🗓 Дата: *{formated_date}*
-		"""
-	)
-
-	bot.send_message(user_id, response, parse_mode="Markdown")
-
-
-@shared_task
-def handleAppointmentCreateNotification(appointment_id):
-	logger.debug("handleAppointmentCreateNotification")
-
-	appointment = Appointment.objects.get(id=appointment_id)
-
-	user = TelegramUser.objects.get(id=appointment.user)
-	formated_date = format_date(appointment.date.date)
-
-	user_response = inspect.cleandoc(
-		f"""
-		*📝 Запис на консультацію*
-
-		
-		Ви створили запис на консультацію.
-
-		📌 Назва: *{appointment.title}*
-		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-		📍 Місце проведення: *{appointment.address if appointment.address else "Міт у Zoom"}*
-		🗓 Дата: *{formated_date}*
-
-		*
-		Очікуйте підтвердження психолога.
-		*
-		"""
-	)
-
-	admin_response = inspect.cleandoc(
-		f"""
-		*📝 Запис на консультацію*
-
-		
-		Створено новий запит на консультацію.
-
-		📌 Назва: *{appointment.title}*
-		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-		📍 Місце проведення: *{appointment.address if appointment.address else "Міт у Zoom"}*
-		🗓 Дата: *{formated_date}*
-		👤 Користувач: *{user.first_name}*
-		"""
-	)
-
-
-	if user.notifications_on:
-		bot.send_message(user.id, user_response, parse_mode="Markdown")
-
-	bot.send_message(settings.ADMIN_ID, admin_response, parse_mode="Markdown",
-		reply_markup=InlineKeyboardMarkup([
-        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user.id}')],
-		[InlineKeyboardButton(text='Підтвердити/створити лінк у Zoom', callback_data=json.dumps({
-			"action": "activate_appointment",
-			"data": appointment_id
-		}))],
-        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&status=pending&user={user.id}')],
-    ]))
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -359,6 +62,8 @@ def handle_query(call):
 	logger.debug("callback handle")
 
 	callback = json.loads(call.data)
+
+	from .tasks import handleAppointmentUpdateNotification
 
 	if callback["action"] == "activate_appointment":
 		appointment = Appointment.objects.get(id=callback["data"])
@@ -391,56 +96,6 @@ def handle_query(call):
 			return
 		
 		bot.send_message(settings.ADMIN_ID, f"errors: {serializer.errors}", parse_mode="Markdown")
-
-
-@shared_task
-def handleAppointmentCreateByAdminNotification(appointment_id):
-	logger.debug("handleAppointmentCreateByAdminNotification")
-
-	appointment = Appointment.objects.get(id=appointment_id)
-
-	user = TelegramUser.objects.get(id=appointment.user)
-	formated_date = format_date(appointment.date.date)
-
-	response_user = inspect.cleandoc(
-		f"""
-		*📝 Запис на консультацію*
-
-		
-		Психолог записав вас на консультацію.
-
-		📌 Назва: *{appointment.title}*
-		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-		🗓 Дата: *{formated_date}*
-
-		"""
-	)
-
-	response_admin = inspect.cleandoc(
-		f"""
-		*📝 Запис на консультацію*
-
-		
-		Ви записали користувача на консультацію.
-
-		📌 Назва: *{appointment.title}*
-		📡 Формат: *{"Онлайн" if appointment.online else "Офлайн"}*
-		📍 Місце проведення: {f"*{appointment.address}*" if appointment.address else f"[Міт у Zoom]({appointment.zoom_link})"}
-		🗓 Дата: *{formated_date}*
-		👤 Користувач: *{user.first_name}*
-
-		"""
-	)
-
-	if user.notifications_on:
-		bot.send_message(user.id, response_user, parse_mode="Markdown")
-
-	bot.send_message(settings.ADMIN_ID, response_admin, parse_mode="Markdown",
-		reply_markup=InlineKeyboardMarkup([
-        [InlineKeyboardButton(text='Написати користувачу', url=f'tg://user?id={user.id}')],
-        [InlineKeyboardButton(text='Відкрити у панелі', url=f'https://psycholebedenko.online/admin/appointments/?state=0&user={user.id}')],
-    ]))
 	
 
 @bot.message_handler(content_types=['contact']) 
@@ -449,55 +104,21 @@ def handle_contact(message):
 
 	# handle errors
 	if message.contact is None:
-		bot.send_message(message.chat.id, "No contact", reply_markup=phone_verification_markup)
+		bot.send_message(message.chat.id, MessageBuilder.phone_no_contact(), reply_markup=phone_verification_markup)
 		return
 	if message.chat.id != message.contact.user_id:
-		bot.send_message(message.chat.id, "Incorrect phone number", reply_markup=phone_verification_markup)
+		bot.send_message(message.chat.id, MessageBuilder.phone_wrong_contact(), reply_markup=phone_verification_markup)
 		return
 	if not TelegramUser.objects.filter(id=message.contact.user_id).exists():
-		bot.send_message(message.chat.id, "User does not exists", reply_markup=phone_verification_markup)
+		bot.send_message(message.chat.id, MessageBuilder.phone_user_error(), reply_markup=phone_verification_markup)
 		return
 	
 	user = TelegramUser.objects.get(id=message.contact.user_id)
 	wsToken, confirmToken = generatePhoneVerificationTokens(message.contact.user_id, user.auth_date)
 
-	error_response = inspect.cleandoc(
-		f"""
-		*❌ Виникла помилка*
-
-		Час на верифікацію телефона вийшов, або
-		були надані неправильні дані
-
-		Спробуйте пізніше або зверніться до
-		психолога за допомогою.
-		"""
-	)
-
-	server_error = lambda error: inspect.cleandoc(
-		f"""
-		*❌ Сервера помилка*
-
-		{error}
-
-		Спробуйте пізніше або зверніться до
-		психолога за допомогою.
-		"""
-	)
-
-	good_response = inspect.cleandoc(
-		f"""
-		*✅ Успішно!*
-
-		Тепер психолог зможе з вами зв'язати при
-		необхідності обговорити питання щодо консультацій.
-
-		*
-		Ваше ім'я та номер телефона потрібні лише 
-		для можливості зв'язку з психологом. 
-		Конфіденційність ваших даних гарантована.
-		*
-		"""
-	)
+	error_response = MessageBuilder.phone_error()
+	server_error = lambda error: MessageBuilder.phone_server_error(error)
+	good_response = MessageBuilder.phone_ok()
 
 	# verify token 
 	try:
@@ -547,35 +168,20 @@ def _settings(message):
 	logger.debug("settings")
 	user = TelegramUser.objects.get(id=message.from_user.id)
 
-	_response = inspect.cleandoc(
-		f"""
-		*⚙️ Налаштування Особистого кабінета:*
-
-		👤 Ім'я: *{user.first_name}*
-		📞 Номер телефона: *{user.phone_number if user.phone_number else "Невідомий"}*
-		🕒 Оповіщення: *{"🟢 Включені" if user.notifications_on else "🔴 Ввимкнені"}*
-
-		*
-		Ваше ім'я та номер телефона потрібні лише 
-		для можливості зв'язку з психологом. 
-		Конфіденційність ваших даних гарантована.
-		*
-		"""
+	_response = MessageBuilder.settings(
+		user.first_name,
+		user.phone_number,
+		user.notifications_on
 	)
-
 
 	bot.send_message(message.from_user.id, _response, reply_markup=gen_settings_markup(message.from_user.id), parse_mode="Markdown")
 
 
-@bot.message_handler(regexp="📇 Меню")
+@bot.message_handler(regexp="⏮ Меню")
 def menu(message):
 	logger.debug("menu")
 	
-	response = inspect.cleandoc(
-		f"""
-		📇 Головне меню
-		"""
-	)
+	response = MessageBuilder.menu()
 
 	bot.send_message(message.from_user.id, response, reply_markup=gen_menu_markup(message.chat.id))
 
@@ -590,29 +196,15 @@ def notifications_off(message):
 	if serializer.is_valid():
 		serializer.save()
 
-		response = inspect.cleandoc(
-			f"""
-			*✅ Змінено!*
-
-			Тепер бот *не буде* відправляти вам
-			повідомлення про початок консультацій та
-			групових зустрічей.
-			"""
-		)
+		response = MessageBuilder.notifications_off()
 
 		bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
 		return
 
-	response = inspect.cleandoc(
-		f"""
-		*❌ Виникла помилка*
-
-		Спробуйте пізніше або зверніться до
-		психолога за допомогою.
-		"""
-	)
+	response = MessageBuilder.error()
 
 	bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
+
 
 @bot.message_handler(regexp="🟢 Включити оповіщення")
 def notifications_on(message):
@@ -624,29 +216,15 @@ def notifications_on(message):
 	if serializer.is_valid():
 		serializer.save()
 
-		response = inspect.cleandoc(
-			f"""
-			*✅ Змінено!*
-
-			Тепер бот *буде* відправляти вам
-			повідомлення про початок консультацій та
-			групових зустрічей.
-			"""
-		)
+		response = MessageBuilder.notifications_on()
 		
 		bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
 		return
 
-	response = inspect.cleandoc(
-		f"""
-		*❌ Виникла помилка*
-
-		Спробуйте пізніше або зверніться до
-		психолога за допомогою.
-		"""
-	)
+	response = MessageBuilder.error()
 
 	bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
+
 
 @bot.message_handler(regexp="📞 Оновити номер телефона")
 def phone_update(message):
@@ -657,30 +235,12 @@ def phone_update(message):
 		wsToken, confirmToken = generatePhoneVerificationTokens(user.id, user.auth_date)
 		cache.set(wsToken, confirmToken, settings.PHONE_VERIFICATION_TIMEOUT_SECS)
 	
-		response = inspect.cleandoc(
-			f"""
-			*📞 Оновлення номера телефона*
-
-			Надайте номер телефона через меню. ⬇️⬇️⬇️
-
-			*
-			Через 5 хвилин, активація стане недоступною.
-			При помилці/труднощах, зверніться до психолога.
-			*
-			"""
-		)
+		response = MessageBuilder.phone_update()
 
 		bot.send_message(user.id, response, reply_markup=phone_verification_markup, parse_mode="Markdown")
 		return
 	except:
-		response = inspect.cleandoc(
-			f"""
-			*❌ Виникла помилка*
-
-			Спробуйте пізніше або зверніться до
-			психолога за допомогою.
-			"""
-		)
+		response = MessageBuilder.error()
 
 		bot.send_message(user.id, response, reply_markup=gen_settings_markup(user.id), parse_mode="Markdown")
 
@@ -700,16 +260,3 @@ def write_to_admin(message):
 
 	bot.send_contact(message.chat.id, admin.phone_number, admin.first_name, admin.last_name, reply_markup=gen_menu_markup(message.chat.id))
 
-@bot.message_handler(commands=["phone_test"])
-def response(message):
-	bot.send_message(message.from_user.id, "phone_markup", reply_markup=phone_verification_markup)
-
-@bot.message_handler(commands=["menu_test"])
-def response(message):
-	bot.send_message(message.from_user.id, "menu_markup", reply_markup=gen_menu_markup(message.chat.id))
-
-@bot.message_handler(commands=['test'])
-def test(message):
-	logger.debug("test")
-
-	bot.send_message(message.from_user.id, "testing", parse_mode="MarkdownV2")
