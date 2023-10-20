@@ -13,6 +13,7 @@ x-common-variables: &common-variables
   POSTGRES_PASSWORD: postgres
   POSTGRES_HOST: db
   SSL_HEADER: https
+  ADMIN_ID: 605099201
 
 services:
   frontend:
