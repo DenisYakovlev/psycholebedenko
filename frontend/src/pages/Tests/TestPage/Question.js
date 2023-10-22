@@ -2,11 +2,11 @@ import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import { useState } from "react"
 
 
-export default function Question({question, onAnswer, index, prevQuestion}){
+export default function Question({question, onAnswer, lastAnsweredRef, index, handleSelect}){
     return (
         <Container fluid className="p-0 d-flex flex-column">
             <Container className="px-3 pt-3 fs-1 text-dark fw-bold fade-in-question" fluid>
@@ -35,18 +35,29 @@ export default function Question({question, onAnswer, index, prevQuestion}){
                 )}
             </Form.Group>
 
-            {index > 0 && (
-                <Container className="p-3">
+            <Container className="p-3 d-flex gap-5">
+                {index > 0 && (
                     <Button
                         variant="outline-dark"
                         size="md"
                         className="px-4"
-                        onClick={prevQuestion}
+                        onClick={() => handleSelect(index - 1)}
                     >
                         <FontAwesomeIcon icon={faArrowLeft} className="m-0 p-0"/>
                     </Button>
-                </Container>
-            )}
+                )}
+
+                {lastAnsweredRef.current > index && (
+                    <Button
+                        variant="outline-dark"
+                        size="md"
+                        className="px-4"
+                        onClick={() => handleSelect(index + 1)}
+                    >
+                        <FontAwesomeIcon icon={faArrowRight} className="m-0 p-0"/>
+                    </Button>
+                )}
+            </Container>
         </Container>
     )
 }

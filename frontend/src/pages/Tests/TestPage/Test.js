@@ -13,6 +13,7 @@ let answers = {}
 
 export default function Test({setResult, test}){
     let navigate = useNavigate()
+    let lastAnsweredIndex = useRef(0)
     const { user } = useContext(UserContext)
     const { authFetch, publicFetch } = useApi()
     const [isStarted, setIsStarted] = useState(false)
@@ -27,6 +28,8 @@ export default function Test({setResult, test}){
             handleResult()
         }
         else{
+            // last answered should not change if current index + 1 is not next question
+            lastAnsweredIndex.current = Math.max(index + 1, lastAnsweredIndex.current)
             handleSelect(index + 1)
         }
     }
@@ -117,7 +120,9 @@ export default function Test({setResult, test}){
                                     question={question}
                                     onAnswer={handleAnswer}
                                     index={index}
+                                    lastAnsweredRef={lastAnsweredIndex}
                                     prevQuestion={prevQuestion}
+                                    handleSelect={handleSelect}
                                 />
                             </Carousel.Item>
                         ))}
