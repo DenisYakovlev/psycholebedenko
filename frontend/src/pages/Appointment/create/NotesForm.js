@@ -8,7 +8,7 @@ import { TextEditingTag } from "../../../shared"
 export default function NotesForm({nextSlide, notes, setNotes}){
     return (
         <Container className="px-3 mt-3 d-flex flex-column gap-1">
-            <p className="m-0 p-0 text-center text-muted fs-6">
+            <p className="m-0 mb-3 p-0 text-center text-muted fs-6">
                 Нотатки
             </p>
 

@@ -43,8 +43,8 @@ export default function DatePicking({sumbitDate}){
 
     return (
         <Suspense fallback={<LoadSpinner />}>
-            <Container className="px-3 m-0 d-flex flex-column gap-3">
-                <p className="p-0 m-0 text-muted text-center fs-6">
+            <Container className="px-3 mt-3 d-flex flex-column gap-3">
+                <p className="p-0 m-0 mb-3 text-muted text-center fs-6">
                     Оберіть дату та час
                 </p>
 
