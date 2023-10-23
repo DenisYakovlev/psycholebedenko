@@ -40,7 +40,7 @@ export default function AuthWidget(){
                         className="m-0 d-flex flex-row gap-2 align-items-center justify-content-center"
                     >
                         <p className="m-0 p-0 fs-6 text-muted text-justify">
-                            увійти
+                            Увійти
                         </p>
                         <FontAwesomeIcon icon={faUser}/>
                     </Container>
