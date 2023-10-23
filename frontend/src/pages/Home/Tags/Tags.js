@@ -24,7 +24,7 @@ export default function Details(){
         <Container style={{backgroundColor: "#f4f4f4", height: "fit-content", minHeight: "100vh"}} className="p-0 d-flex flex-column align-items-center" fluid>
             <Container className="py-5 px-0">
                 <h1 className="m-0 pt-5 pb-md-5 pb-3 text-center text-dark text-justify">
-                    Спектр спеціалізації
+                    Основні теми з якими я працюю
                 </h1>
             </Container>
             <Container style={{height: "25vh"}} className="p-0 d-flex flex-column align-items-center " fluid>
@@ -32,7 +32,7 @@ export default function Details(){
                     setActiveTag={setActiveTag} 
                 />
             </Container>
-            <Container style={{height: "fit-content", minHeight: "20vh"}} className="mt-md-5 mt-3 p-0">
+            <Container style={{height: "fit-content", minHeight: "20vh"}} className="mt-md-5 mt-3 p-0" fluid="md">
                 {activeTag ?
                     <p className="m-0 px-md-5 px-3 pb-5 text-muted fs-5 text-justify tagcloud-text">
                         {tagText[activeTag]}
