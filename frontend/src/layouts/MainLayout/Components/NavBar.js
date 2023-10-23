@@ -92,23 +92,23 @@ export default function NavBar(){
                         <Nav.Link 
                             onClick={handleLinkClick} as={Link} to="/appointment"
                         >
-                                консультації
+                                Консультації
                         </Nav.Link>
                         <Nav.Link 
                             onClick={handleLinkClick} as={Link} to="/event"
                         >
-                            групові зустрічі
+                            Групові зустрічі
                         </Nav.Link>
                         <Nav.Link 
                             onClick={handleLinkClick} as={Link} to="/tests"
                         >
-                            тести
+                            Тести
                         </Nav.Link>
                         {isStaff ?
                             <Nav.Link 
                                 onClick={handleLinkClick} as={Link} to="/admin"
                             >
-                                адмін панель
+                                Адмін панель
                             </Nav.Link>
                             : <></>
                         }
