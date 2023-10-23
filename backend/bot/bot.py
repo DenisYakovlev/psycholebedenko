@@ -104,13 +104,13 @@ def handle_contact(message):
 
 	# handle errors
 	if message.contact is None:
-		bot.send_message(message.chat.id, MessageBuilder.phone_no_contact(), reply_markup=phone_verification_markup)
+		bot.send_message(message.chat.id, MessageBuilder.phone_no_contact(), reply_markup=phone_verification_markup, parse_mode="Markdown")
 		return
 	if message.chat.id != message.contact.user_id:
-		bot.send_message(message.chat.id, MessageBuilder.phone_wrong_contact(), reply_markup=phone_verification_markup)
+		bot.send_message(message.chat.id, MessageBuilder.phone_wrong_contact(), reply_markup=phone_verification_markup, parse_mode="Markdown")
 		return
 	if not TelegramUser.objects.filter(id=message.contact.user_id).exists():
-		bot.send_message(message.chat.id, MessageBuilder.phone_user_error(), reply_markup=phone_verification_markup)
+		bot.send_message(message.chat.id, MessageBuilder.phone_user_error(), reply_markup=phone_verification_markup, parse_mode="Markdown")
 		return
 	
 	user = TelegramUser.objects.get(id=message.contact.user_id)
