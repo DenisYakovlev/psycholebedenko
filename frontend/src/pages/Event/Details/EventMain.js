@@ -7,7 +7,7 @@ import { faCalendarDays } from "@fortawesome/free-solid-svg-icons"
 
 export default function EventMain({event}){
     return(
-        <Container style={{minWidth: "100%", minHeight: "30vh"}} className="m-0 px-md-5 px-3 d-flex flex-column align-items-start">
+        <Container style={{minWidth: "100%", minHeight: "30vh"}} className="m-0 px-md-5 px-3 mt-md-0 mt-3 d-flex flex-column align-items-start">
             <Card.Text className="m-0 mb-1 fs-6 text-muted text-justify">
                 <FontAwesomeIcon icon={faCalendarDays} className="pe-2"/> 
                 {formatDate(event.date)}

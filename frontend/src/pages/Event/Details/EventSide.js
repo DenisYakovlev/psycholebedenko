@@ -20,7 +20,7 @@ export default function EventSide({event}){
         <Container style={{width: "fit-content", top: "4em"}} className="m-0 mt-md-5 mt-3 px-md-3 px-sm-5 px-5 d-flex flex-column justify-content-start position-sticky gap-2">
             <Tag icon={faClock}>
                 <p className="m-0 px-1">
-                    {event.duration ? event.duration + "хв." : "не вказано"}
+                    {event.duration ? event.duration + " хв." : "не вказано"}
                 </p>
             </Tag>
             <Tag icon={faUserGroup}>

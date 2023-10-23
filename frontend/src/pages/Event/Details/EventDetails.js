@@ -104,7 +104,7 @@ export default function EventDetails(){
                 // style={{width: "1200px", maxWidth: "90vw", minWidth: "350px"}}
                 bg="white" data-bs-theme="light"
             >
-                <p className="m-0 pt-md-5 pt-3 pb-3 text-center fs-1 fw-bold">
+                <p className="mt-3 pt-md-5 pt-3 pb-3 px-3 text-center fs-1 fw-bold">
                     {event.title}
                 </p>
 
