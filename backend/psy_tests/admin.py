@@ -5,8 +5,8 @@ from .models import PsycholyTest, TestResult, TestAnswer
 
 
 @admin.register(PsycholyTest)
-class TelegramUserAdmin(admin.ModelAdmin):
-    list_display = ('name')
+class PsychologyTestAdmin(admin.ModelAdmin):
+    list_display = ['name']
     
 
 admin.site.register(TestAnswer)
