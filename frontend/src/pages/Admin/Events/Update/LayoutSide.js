@@ -11,6 +11,7 @@ import ZoomForm from "./Forms/ZoomForm"
 import DateForm from "./Forms/DateForm"
 import TimeForm from "./Forms/TimeForm"
 import ImgForm from "./Forms/ImgForm"
+import ParticipantsLimitForm from "./Forms/ParticipantsLimitForm"
 import ResultModal from "./ResultModal"
 import { useContext, useState } from "react"
 import { backend_url } from "../../../../constants"
@@ -77,6 +78,10 @@ export default function LayoutSide({event, setEvent}){
                 <DurationForm
                     duration = {event.duration}
                     onChange = {e => handleChange("duration", e.target.value)}
+                />
+                <ParticipantsLimitForm 
+                    limit = {event.participants_limit}
+                    onChange = {e => handleChange("participants_limit", e.target.value)}
                 />
                 <OnlineForm
                     online = {event.online}

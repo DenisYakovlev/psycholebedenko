@@ -16,6 +16,13 @@ export default function EventSide({event}){
         }
     }
 
+    const formatParticipationInfo = () => {
+        const participantsCount = event.participants_count ? event.participants_count : "0"
+        const participantsLimit = event.participants_limit ? event.participants_limit : "0"
+
+        return `${participantsCount}/${participantsLimit} чол. записалось`
+    }
+
     return (
         <Container style={{width: "fit-content", top: "4em"}} className="m-0 mt-md-5 mt-3 px-md-3 px-sm-5 px-5 d-flex flex-column justify-content-start position-sticky gap-2">
             <Tag icon={faClock}>
@@ -25,7 +32,7 @@ export default function EventSide({event}){
             </Tag>
             <Tag icon={faUserGroup}>
                 <p className="m-0 px-1">
-                    {`${event.participants_count ? event.participants_count : "0 "} чол. вже записалось`}
+                    {formatParticipationInfo()}
                 </p>
             </Tag>
             <Tag icon={event.online ? faWifi : faUsers}>

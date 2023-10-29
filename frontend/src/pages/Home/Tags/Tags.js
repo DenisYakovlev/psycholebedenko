@@ -32,7 +32,7 @@ export default function Details(){
                     setActiveTag={setActiveTag} 
                 />
             </Container>
-            <Container style={{height: "fit-content", minHeight: "20vh"}} className="mt-md-5 mt-3 p-0" fluid="md">
+            <Container style={{height: "fit-content", minHeight: "20vh"}} className="mt-md-5 mt-3 p-0" fluid="xl">
                 {activeTag ?
                     <p className="m-0 px-md-5 px-3 pb-5 text-muted fs-5 text-justify tagcloud-text">
                         {tagText[activeTag]}

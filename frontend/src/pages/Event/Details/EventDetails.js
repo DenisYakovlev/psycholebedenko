@@ -41,13 +41,13 @@ export default function EventDetails(){
     }
 
     useEffect(() => {
+        window.scrollTo(0, 0)
         fetchEvent()
     }, [user])
 
-    useEffect(() => {
-        window.scrollTo(0, 0)
-        fetchEvent()
-    }, [])
+    // useEffect(() => {
+    //     fetchEvent()
+    // }, [])
 
     const handleAddParticipation = () => {
         authFetch.post(`event/${id}/participate`).then(data => {
@@ -119,14 +119,19 @@ export default function EventDetails(){
                                 Відписатися
                             </Button>
                             :
-                            <Button onClick={user ? handleAddParticipation : showAuthModal} variant="outline-dark" className="">
+                            <Button 
+                                onClick={user ? handleAddParticipation : showAuthModal} 
+                                variant="outline-dark" 
+                                className=""
+                                disabled={event.participants_limit_exceeded}
+                            >
                                 Записатися
                             </Button>
                         }
                         </>
                         :
                         <>
-                            <p className="mb-3 p-0 text-justify text-muted fs-6">
+                            <p className="mb-3 p-0 text-justify text-dark text-semibold fs-6">
                                 При авторизації, ви зможете записатись на зустріч та отримати повідомлення у Телеграмі про початок заходу.
                             </p>
                             <Button onClick={handleUnauthorizedParticipation} variant="outline-dark" className="">
