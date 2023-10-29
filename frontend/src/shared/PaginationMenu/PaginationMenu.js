@@ -11,7 +11,7 @@ export default function PaginationMenu({paginationObj, currentPage, setPage}){
 
             {[...paginationObj.range].map((pageNumber, idx) => {
                 if(pageNumber == '...'){
-                    return <Pagination.Item key={idx} onClick={() => {}}>...</Pagination.Item>
+                    return <Pagination.Item disabled={true} key={idx} onClick={() => {}}>...</Pagination.Item>
                 }
                 else{
                     return (
