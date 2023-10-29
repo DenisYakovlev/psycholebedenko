@@ -14,7 +14,7 @@ export default function Home(){
     return (
         <Container fluid className="p-0">
             <Helmet>
-                <title>Лляний Андрій - особистий психолог</title>
+                <title>Ляний Андрій - особистий психолог</title>
                 <meta
                     name="description"
                     content="Особистий практикуючий онлайн психолог - Лляний Андрій. Відвідайте безкоштовні групові зустрічі та запишіться на особисту консультацію."
