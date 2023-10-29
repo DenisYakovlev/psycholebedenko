@@ -18,6 +18,7 @@ class Event(models.Model):
     date = models.DateTimeField(blank=True, null=True)
     duration = models.IntegerField(blank=True, null=True)
     online = models.BooleanField(default=False)
+    participants_limit = models.IntegerField(blank=True, null=True, default=0)
     zoom_link = models.URLField(blank=True, null=True) 
     address = models.CharField(max_length=512, blank=True, null=True)
     participants = models.ManyToManyField(TelegramUser, through="Participation")

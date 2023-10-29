@@ -12,6 +12,7 @@ from django.conf import settings
 
 from .models import Event, Participation
 from .tasks import create_event_zoom_link
+from .paginations import EventPagination
 from .serializers import EventSerializer, EventListSerializer, EventDetailSerializer, ParticipationSerializer, ParticipationInfoSerializer
 from .filters import EventFilter
 
@@ -31,9 +32,15 @@ class EventList(generics.ListAPIView):
     
 class EventDetail(APIView):
     permission_classes = []
+
+    def get_event(self, pk):
+        try:
+            return Event.objects.get(id=pk)
+        except:
+            raise Http404
     
     def get(self, request, pk):
-        event = Event.objects.get(id=pk)
+        event = self.get_event(pk)
         serializer = EventDetailSerializer(event, context = {'request': request})
         
         return Response(serializer.data, status.HTTP_200_OK)
@@ -48,7 +55,7 @@ class EventCreate(APIView):
         if serializer.is_valid():
             obj = serializer.save()
 
-            if request.data.get("create_zoom_link"):
+            if request.data.get("create_zoom_link") == True:
                 create_event_zoom_link.delay(obj.id)
 
             return Response(serializer.validated_data, status.HTTP_201_CREATED)
@@ -68,7 +75,7 @@ class EventManagement(APIView):
     def put(self, request, pk):
         event = self.get_event(pk)
         serializer = EventSerializer(instance=event, data=request.data, partial=True,)
-        
+
         if serializer.is_valid():
             obj = serializer.save()
 
@@ -100,6 +107,9 @@ class ParticipationManagement(APIView):
         
         if Participation.objects.filter(user=request.user.id, event=event.id).exists():
             return Response({"msg": "already participated"}, status.HTTP_409_CONFLICT)
+        
+        if event.participants.count() >= event.participants_limit:
+            return Response({"msg": "participants limit exceeded"}, status.HTTP_409_CONFLICT)
         
         serializer = ParticipationSerializer(data={'user': request.user.id, 'event': event.id})
         

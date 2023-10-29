@@ -21,10 +21,25 @@ class EventListSerializer(serializers.ModelSerializer):
     participants_count = serializers.SerializerMethodField('get_participants_count')
     outdated = serializers.SerializerMethodField('get_outdated')
     participated = serializers.SerializerMethodField('get_participated')
+    participants_limit_exceeded = serializers.SerializerMethodField('get_participants_limit_exceeded')
     
     class Meta:
         model = Event
-        fields = ['id', 'title', 'thumbnail_text', 'date', 'img_url', 'duration', 'participants_count', 'outdated', 'participated', 'online', 'created_at']
+        fields = [
+            'id', 
+            'title', 
+            'thumbnail_text', 
+            'date', 
+            'img_url', 
+            'duration', 
+            'participated',
+            'participants_count',
+            'participants_limit', 
+            'participants_limit_exceeded',
+            'outdated', 
+            'online', 
+            'created_at',
+        ]
         
     def get_participants_count(self, obj):
         return obj.participants.all().count()
@@ -43,6 +58,11 @@ class EventListSerializer(serializers.ModelSerializer):
             return Participation.objects.filter(user=user.id, event=obj.id).exists()
         except KeyError:
             return False
+        
+    def get_participants_limit_exceeded(self, obj):
+        participants_count = obj.participants.all().count()
+
+        return participants_count >= obj.participants_limit
         
         
 class EventDetailSerializer(EventListSerializer):
