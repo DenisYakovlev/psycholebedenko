@@ -3,12 +3,14 @@ import { UserContext } from "../contexts/UserContext"
 import { backend_url } from "../constants"
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router";
+import { AlertContext } from "../contexts";
 const moment = require("moment-timezone")
 
 
 
 export default function useApi(){
     const {user, setUser} = useContext(UserContext)
+    const {showAlert} = useContext(AlertContext)
     let navigate = useNavigate()
 
     // validate user token
@@ -120,11 +122,11 @@ export default function useApi(){
                 return response.json()
             }
 
-            throw new Error(`API Auth ${method} fetch error`)
+            return response.json().then(data => {throw new Error(JSON.stringify(data))})
         })
         .catch(error => {
             console.log(error)
-            navigate('/error')
+            showAlert(error.toString())
         })
     }
 
@@ -138,11 +140,11 @@ export default function useApi(){
                 return response.json()
             }
 
-            throw new Error(`API Public ${method} fetch error`)
+            return response.json().then(data => {throw new Error(JSON.stringify(data))})
         })
         .catch(error => {
             console.log(error)
-            navigate('/error')
+            showAlert(error.toString())
         })
     }
 

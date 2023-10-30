@@ -30,7 +30,7 @@ import {
 import Consulting from "./pages/Home/Consulting/Consulting";
 
 import { BotLayout, MainLayout, AdminLayout } from './layouts';
-import { UserContextProvider, AuthModalContextProvider} from "./contexts";
+import { UserContextProvider, AuthModalContextProvider, AlertContextProvider} from "./contexts";
 import { QueryParamProvider } from "use-query-params";
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 
@@ -39,6 +39,7 @@ import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 export default function App(){
   return (
     <BrowserRouter>
+      <AlertContextProvider>
         <UserContextProvider>
           <QueryParamProvider adapter={ReactRouter6Adapter}>
             <AuthModalContextProvider>
@@ -142,6 +143,7 @@ export default function App(){
             </AuthModalContextProvider>
           </QueryParamProvider>
         </UserContextProvider>
+      </AlertContextProvider>
     </BrowserRouter>
   )
 };

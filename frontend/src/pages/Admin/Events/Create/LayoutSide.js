@@ -15,12 +15,13 @@ import ParticipantsLimitForm from "../Update/Forms/ParticipantsLimitForm"
 import ResultModal from "./ResultModal"
 import { useContext, useState } from "react"
 import { backend_url } from "../../../../constants"
-import { UserContext } from "../../../../contexts"
+import { AlertContext, UserContext } from "../../../../contexts"
 import useApi from "../../../../hooks/useApi"
 
 
 export default function LayoutSide({event, setEvent}){
     // const {authFetch} = useContext(UserContext)
+    const {showAlert} = useContext(AlertContext)
     const {baseAuthFetch} = useApi()
     const [showResult, setShowResult] = useState(false)
     const [resultType, setResultType] = useState(null)
@@ -44,12 +45,14 @@ export default function LayoutSide({event, setEvent}){
                 return response.json()
             }
 
-            throw new Error("Admin event create post error")
+            return response.json().then(data => {throw new Error(JSON.stringify(data))})
         })
         .catch(error => {
             setResultType("conflict")
             setShowResult(true)
+
             console.log(error)
+            showAlert(error.toString())
         })
     }
 

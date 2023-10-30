@@ -32,8 +32,8 @@ export default function CardBody({event, link}){
             <Container className="m-0 p-0 d-flex flex-row justify-content-between align-items-center">
                 <Card.Text 
                     title={event.title ? event.title : ''} 
-                    as={Link} to={link} 
-                    className="m-0 mb-1 fs-4 w-75 text-dark text-truncate text-decoration-none"
+                    as={Link} to={link}
+                    className="m-0 mb-1 fs-4 text-dark overflow-hidden text-decoration-none"
                 >
                     {event.title ? event.title : "Назва не вказана"}
                 </Card.Text>

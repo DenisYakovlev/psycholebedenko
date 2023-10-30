@@ -49,7 +49,6 @@ export default function FastNavSection(){
                 text="Опис картки"
                 link="#"
             />
-
         </Container>
     )
 }
