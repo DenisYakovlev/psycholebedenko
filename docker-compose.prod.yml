@@ -1,7 +1,7 @@
 version: '3.8'
 
 x-common-variables: &common-variables
-  DEBUG: 1
+  DEBUG: 0
   BOT_DEBUG: 0
   BOT_WEB_APP_URL: https://psycholebedenko.online/bot
   TELEGRAM_BOT_API_KEY: 6159160252:AAF1wkp3scOkCDnOoah8y_s9IcYIhWwxlUY
@@ -42,6 +42,7 @@ services:
       context: ./backend
     command: >
       sh -c "python manage.py migrate --run-syncdb &&
+      python manage.py collectstatic --noinput &&
       python manage.py runserver 0.0.0.0:8000"
     container_name: backend
     image: backend-img
