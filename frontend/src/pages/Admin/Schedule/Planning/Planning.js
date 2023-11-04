@@ -87,14 +87,20 @@ export default function Planning(){
 
         setTime(date.time)
 
+        console.log(date.schedule)
+
         if(date.schedule){
             if(date.schedule?.appointment){
-                setSelectedAppointment(date.schedule?.appointment)
                 dateIsFree.current = false
+                setSelectedAppointment(date.schedule?.appointment)
+
+                console.log("appointment is not null")
             }
             else{
-                setSelectedAppointment(null)
                 dateIsFree.current = true
+                setSelectedAppointment(null)
+
+                console.log("appointment is null")
             }
         }
         else{
