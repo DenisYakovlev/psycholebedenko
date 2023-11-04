@@ -87,20 +87,16 @@ export default function Planning(){
 
         setTime(date.time)
 
-        console.log(date.schedule)
-
         if(date.schedule){
             if(date.schedule?.appointment){
                 dateIsFree.current = false
                 setSelectedAppointment(date.schedule?.appointment)
 
-                console.log("appointment is not null")
             }
             else{
                 dateIsFree.current = true
                 setSelectedAppointment(null)
 
-                console.log("appointment is null")
             }
         }
         else{
@@ -128,7 +124,7 @@ export default function Planning(){
                 </TwoSideLayout.Side>
                 
                 <TwoSideLayout.Main>
-                    <Container className="p-0">
+                    <Container className="p-0" fluid>
                         
                         <BaseLayoutTitle>
                             {date ? pretifyCalendarDate(date): "Графік | Консультації"}
