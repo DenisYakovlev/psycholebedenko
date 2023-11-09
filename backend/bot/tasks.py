@@ -51,13 +51,15 @@ def handlePhoneVerification(user_id, wsToken, confirmToken, forceStart=False):
 		parse_mode="Markdown"
 	)
 
+	# remove verification dates for now
+	#
 	# set up timestamps of start and timeout of verification
-	tz = pytz.timezone(settings.TIME_ZONE)
-	verification_start = int(datetime.now(tz=tz).timestamp())
-	verification_end = verification_start + settings.PHONE_VERIFICATION_TIMEOUT_SECS
+	# tz = pytz.timezone(settings.TIME_ZONE)
+	# verification_start = int(datetime.now(tz=tz).timestamp())
+	# verification_end = verification_start + settings.PHONE_VERIFICATION_TIMEOUT_SECS
 
 	cache.set(wsToken, confirmToken, settings.PHONE_VERIFICATION_TIMEOUT_SECS)
-	return verification_start, verification_end
+	# return verification_start, verification_end
 
 
 @shared_task

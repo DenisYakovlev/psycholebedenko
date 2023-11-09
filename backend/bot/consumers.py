@@ -21,8 +21,9 @@ class PhoneVerificationConsumer(WebsocketConsumer):
         self.token = self.scope["url_route"]["kwargs"]["token"]
         self.room_group_name = "phone_verification_%s" % self.token
 
-        if not self.tokenIsValid():
-            self.close()
+        # remove token validation for now because of unpredictable behavior
+        # if not self.tokenIsValid():
+        #     self.close()
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
