@@ -4,6 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.core.cache import cache
+from django.utils import timezone
+from django.conf import settings
+from celery import chain
+
 from .serializers import AuthWidgetTelegramUserSerializer, AuthBotAppTelegramUserSerializer, PasswordlessTokenObtainPairSerializer, AuthBotAppSeamlessUserSerializer
 from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
@@ -11,9 +15,15 @@ from .utils import generatePhoneVerificationTokens
 from bot.tasks import handlePhoneVerification, webAppDrivenAuthorization
 
 
+def generatePhoneVerficationTimestamps():
+    verification_start = int(timezone.localtime().timestamp())
+    verification_end = verification_start + settings.PHONE_VERIFICATION_TIMEOUT_SECS
+
+    return verification_start, verification_end
+
 class AuthWidgetTelegramUser(APIView):
     permission_classes = []
-    
+
 
     def HandleUserUpdate(self, request):
         user = TelegramUser.objects.get(id=request.data["id"])
@@ -30,8 +40,9 @@ class AuthWidgetTelegramUser(APIView):
                 # check if user needs phone update and verification
                 if not user.phone_number:
                     wsToken, confirmToken = generatePhoneVerificationTokens(user.id, user.auth_date)
-                    verification_start, verification_end = handlePhoneVerification(request.data['id'], wsToken, confirmToken)
-
+                    verification_start, verification_end = generatePhoneVerficationTimestamps()
+                    handlePhoneVerification.delay(request.data['id'], wsToken, confirmToken)
+                    
                     return Response({
                         **tokens_serializer.validated_data,
                         "phoneVerificationToken": wsToken,
@@ -62,11 +73,14 @@ class AuthWidgetTelegramUser(APIView):
             # create jwt tokens
             tokens_serializer = PasswordlessTokenObtainPairSerializer(data=serializer.validated_data)
             if tokens_serializer.is_valid():
-                # notify user about his first authorization
-                webAppDrivenAuthorization.delay(request.data['id'], request.data['first_name'], first_authorization=True)
-
+                # notify user about his first authorization and start phone verification
                 wsToken, confirmToken = generatePhoneVerificationTokens(request.data['id'], request.data['auth_date'])
-                verification_start, verification_end = handlePhoneVerification(request.data['id'], wsToken, confirmToken)
+                verification_start, verification_end = generatePhoneVerficationTimestamps()
+
+                chain(
+                    webAppDrivenAuthorization.si(request.data['id'], request.data['first_name'], first_authorization=True),
+                    handlePhoneVerification.si(request.data['id'], wsToken, confirmToken)
+                ).apply_async()
 
                 return Response({
                     **tokens_serializer.validated_data,
@@ -134,7 +148,8 @@ class PhoneVerificationRetry(APIView):
             return Response({"msg": "Connection token is not provided"}, status.HTTP_409_CONFLICT)
             
         wsToken, confirmToken = generatePhoneVerificationTokens(request.user.id, request.user.auth_date)
-        verification_start,verification_end = handlePhoneVerification(request.user.id, wsToken, confirmToken, forceStart=True)
+        verification_start, verification_end = generatePhoneVerficationTimestamps()
+        handlePhoneVerification.delay(request.user.id, wsToken, confirmToken, forceStart=True)
 
         return Response({
             "phoneVerificationToken": wsToken,
