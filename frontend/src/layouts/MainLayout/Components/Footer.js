@@ -8,6 +8,10 @@ export default function Footer(){
         window.open('https://telegram.org/privacy/ua', '_blank')
     }
 
+    const handleCreatorGithubRedirect = () => {
+        window.open('https://github.com/DenisYakovlev', '_blank')
+    }
+
     return (
         <Container 
             style={{height: "fit-content", backgroundColor: "#f4f4f4"}} 
@@ -15,9 +19,13 @@ export default function Footer(){
             fluid
         >
             <Credentials />
-            <p className="m-0 p-0 text-center fs-6 text-muted fw-semibold text-center">
-                @2023 Psycholebedenko | <Link onClick={handleTermsRedirect} className="p-0 text-decoration-none text-muted fw-semibold">Угода користувача</Link>
-            </p>
+
+            <Container className="p-0 d-flex justify-content-center gap-1" fluid>
+                <p onClick={handleCreatorGithubRedirect} style={{cursor: "pointer"}} className="m-0 p-0 fs-6 text-muted fw-semibold">
+                    Created by Denis Yakovlev | 
+                </p>
+                <Link onClick={handleTermsRedirect} className="p-0 text-decoration-none text-muted fw-semibold">Угода користувача</Link>
+            </Container>
         </Container>
     )
 }
