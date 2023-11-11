@@ -30,7 +30,7 @@ export default function Consulting({source=""}){
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 fontFamily: ["Cousine", "Courier"],
-                minHeight: "100vh",
+                minHeight: "calc(100vh - var(--nav-height))",
                 height: "fit-content"
             }} className="m-0 p-0 d-flex align-items-end justify-content-center" fluid>
                 <Row className="m-0 p-0 mt-5">

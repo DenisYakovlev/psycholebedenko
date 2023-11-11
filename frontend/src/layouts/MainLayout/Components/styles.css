@@ -9,7 +9,7 @@
 }
 
 .navbar{
-    height: 56px;
+    height: var(--nav-height);
     width: 100%;
     border-bottom: solid 1px #f4f4f4;
     animation-name: SlideIn;
