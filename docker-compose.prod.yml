@@ -1,20 +1,5 @@
 version: '3.8'
 
-x-common-variables: &common-variables
-  DEBUG: 0
-  BOT_DEBUG: 0
-  BOT_WEB_APP_URL: https://psycholebedenko.online/bot
-  TELEGRAM_BOT_API_KEY: 6159160252:AAF1wkp3scOkCDnOoah8y_s9IcYIhWwxlUY
-  ZOOM_ACCOUNT_ID: Z1c8ziuuQEersZYHsV94jg
-  ZOOM_CLIENT_ID: 4SSlaLm9SWamVyUr85mJGg
-  ZOOM_CLIENT_SECRET: kvSnzZUQrpPWy7kIZq71oewXZX1BNYz0
-  POSTGRES_DB: postgres
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_HOST: db
-  SSL_HEADER: https
-  ADMIN_ID: 605099201
-
 services:
   frontend:
     build:
@@ -50,8 +35,8 @@ services:
       - ./backend:/app
     ports:
       - "81:8000"
-    environment:
-      *common-variables
+    env_file:
+      - .env.prod
     depends_on:
       db:
         condition: service_healthy
@@ -59,8 +44,8 @@ services:
   telebot:
     image: backend-img
     container_name: telebot
-    environment:
-      *common-variables
+    env_file:
+      - .env.prod
     command: >
       sh -c "python manage.py runbot"
     depends_on:
@@ -71,10 +56,8 @@ services:
     container_name: db
     volumes:
       - ./data/db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - .env.db
     ports:
       - "5432:5432"
     healthcheck:
@@ -98,8 +81,8 @@ services:
   worker:
     image: backend-img
     container_name: worker
-    environment:
-      *common-variables
+    env_file:
+      - .env.prod
     command: >
       sh -c "celery -A app worker -l info 
       --without-heartbeat --without-gossip --without-mingle"
@@ -109,8 +92,8 @@ services:
   celery-beat:
     image: backend-img
     container_name: celery-beat
-    environment:
-      *common-variables
+    env_file:
+      - .env.prod
     command: >
       sh -c "celery -A app beat -l info"
     depends_on:

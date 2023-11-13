@@ -1,19 +1,5 @@
 version: '3.8'
 
-x-common-variables: &common-variables
-  DEBUG: 1
-  BOT_DEBUG: 1
-  TELEGRAM_BOT_API_KEY: 6699782670:AAHq5qoBHxLwCp3prvnj1YbBCdaIswmJ4Lo
-  ZOOM_ACCOUNT_ID: Z1c8ziuuQEersZYHsV94jg
-  ZOOM_CLIENT_ID: 4SSlaLm9SWamVyUr85mJGg
-  ZOOM_CLIENT_SECRET: kvSnzZUQrpPWy7kIZq71oewXZX1BNYz0
-  POSTGRES_DB: postgres
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_HOST: db
-  SSL_HEADER: http
-  ADMIN_ID: 820543856
-
 services:
   frontend:
     build:
@@ -49,8 +35,8 @@ services:
       - ./backend:/app
     ports:
       - "81:8000"
-    environment:
-      *common-variables
+    env_file:
+      - .env.dev
     depends_on:
       db:
         condition: service_healthy
@@ -60,10 +46,8 @@ services:
     container_name: db
     volumes:
       - ./data/db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - .env.db
     ports:
       - "5432:5432"
     healthcheck:
@@ -87,8 +71,8 @@ services:
   worker:
     image: backend-img
     container_name: worker
-    environment:
-      *common-variables
+    env_file:
+      - .env.dev
     command: >
       sh -c "celery -A app worker -l info"
     depends_on:
@@ -97,8 +81,8 @@ services:
   celery-beat:
     image: backend-img
     container_name: celery-beat
-    environment:
-      *common-variables
+    env_file:
+      - .env.dev
     command: >
       sh -c "celery -A app beat -l info"
     depends_on:
