@@ -43,13 +43,13 @@ export default function Credentials(){
                         ТЕЛЕГРАМ
                     </p>
                 </SocialLinkCol>
-                <SocialLinkCol link="https://www.instagram.com/psyholebedenko_/">
+                <SocialLinkCol link="https://www.instagram.com/psycholebedenko_/">
                     <FontAwesomeIcon icon={faInstagram} style={{fontSize: "32px"}}/>
                     <p style={{fontSize: "8px"}}>
                         ІНСТАГРАМ
                     </p>
                 </SocialLinkCol>
-                <SocialLinkCol link="#">
+                <SocialLinkCol link="https://www.linkedin.com/in/%D0%B0%D0%BD%D0%B4%D1%80%D0%B5%D0%B9-%D0%BB%D0%B5%D0%B1%D0%B5%D0%B4%D0%B5%D0%BD%D0%BA%D0%BE-653a4826a/">
                     <FontAwesomeIcon icon={faLinkedin} style={{fontSize: "32px"}}/>
                     <p style={{fontSize: "8px"}}>
                         ЛІНКЕДІН
