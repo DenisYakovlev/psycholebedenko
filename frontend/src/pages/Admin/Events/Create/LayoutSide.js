@@ -42,9 +42,11 @@ export default function LayoutSide({event, setEvent}){
             if(response.ok){
                 setResultType("success")
                 setShowResult(true)
+                localStorage.setItem('adminEventCreateForm', '{}')
                 return response.json()
             }
 
+            localStorage.setItem('adminEventCreateForm', '{}')
             return response.json().then(data => {throw new Error(JSON.stringify(data))})
         })
         .catch(error => {
