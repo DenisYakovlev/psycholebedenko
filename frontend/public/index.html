@@ -23,7 +23,17 @@
     <title>Лянний Андрій - особистий психолог</title>
 
     <!-- telegram scripts -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+      const currPath = window.location.pathname
+      if(currPath.startsWith('/bot')){
+        var head = document.getElementsByTagName("head")[0]
+        let telegramScript = document.createElement("script")
+        telegramScript.type = "text/javascript"
+        telegramScript.src = "https://telegram.org/js/telegram-web-app.js"
+
+        head.appendChild(telegramScript)
+      }
+    </script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-C04SJVHV2W"></script>
