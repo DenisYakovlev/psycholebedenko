@@ -30,8 +30,9 @@ export default function EventsCreate(){
     }
     
     useEffect(() => {
-        const formIsNotEmpty = 
-                Object.values(virtualEvent).some(value => value !== undefined)
+        const formIsNotEmpty = Object.values(virtualEvent).some(value => {
+            return value !== undefined && (typeof value === 'string' && value.length > 0)
+        })
                 
         const handleBeforeUnload = event => {
             if(formIsNotEmpty){
