@@ -55,7 +55,7 @@ services:
       - backend
       - frontend
     volumes:
-      - /nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt/live/psycholebedenko.online/fullchain.pem:/etc/nginx/ssl/fullchain.pem:ro
       - /etc/letsencrypt/live/psycholebedenko.online/privkey.pem:/etc/nginx/ssl/privkey.pem:ro
     networks:
