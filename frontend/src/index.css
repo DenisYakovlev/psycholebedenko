@@ -2,6 +2,11 @@
   --nav-height: 56px;
 }
 
+html {
+  height: 100%;
+  overflow: hidden; /* Hide scrollbars */
+}
+
 body {
   margin: 0;
   min-width: 350px;
