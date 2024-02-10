@@ -2,9 +2,14 @@
   --nav-height: 56px;
 }
 
-html {
-  height: 100%;
-  overflow: hidden; /* Hide scrollbars */
+html{
+  /* remove scrollbar for IE, Edge and Firefox */
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}::-webkit-scrollbar {
+  /* hide scrollbar for chrome, safari and opera */
+  display: none;
 }
 
 body {
@@ -16,16 +21,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* remove scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
-/* hide scrollbar for chrome, safari and opera */
-body::-webkit-scrollbar {
-  display: none;
-}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
