@@ -16,5 +16,5 @@ class EventFilter(filters.FilterSet):
         elif value == "outdated": 
             return queryset.filter(date__lt=now)
         else:
-            return queryset
+            return queryset.order_by('-date')
         

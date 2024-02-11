@@ -25,7 +25,6 @@ class EventList(generics.ListAPIView):
     filterset_class = EventFilter
     search_fields = ['title']
 
-
     def get_serializer_class(self):
         return EventDetailSerializer if self.request.user.is_staff else EventListSerializer
     
@@ -55,7 +54,7 @@ class EventCreate(APIView):
         if serializer.is_valid():
             obj = serializer.save()
 
-            if request.data.get("create_zoom_link") == True:
+            if request.data.get("create_zoom_link") == 'true':
                 create_event_zoom_link.delay(obj.id)
 
             return Response(serializer.validated_data, status.HTTP_201_CREATED)
@@ -157,3 +156,13 @@ class EventParticipants(generics.RetrieveAPIView):
         
         return Response(data, status.HTTP_200_OK)
     
+
+class EventListParticipants(generics.ListAPIView):
+    permission_classes = [IsAdminUser]
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    pagination_class = EventPagination
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_class = EventFilter
+    search_fields = ['title']
+
