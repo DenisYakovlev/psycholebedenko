@@ -10,6 +10,7 @@ import StatusForm from "./Forms/StatusForm"
 import DateForm from "./Forms/DateForm"
 import NotesForm from "./Forms/NotesForm"
 import ResultModal from "./ResultModal"
+import { TextEditingTag } from "../../../../shared"
 import { useContext, useState } from "react"
 import { backend_url } from "../../../../constants"
 import { AlertContext, UserContext } from "../../../../contexts"
@@ -74,12 +75,11 @@ export default function LayoutSide({card, setCard}){
                         Оберіть Користувача
                     </Wrapper.Title>
 
-                    <Wrapper.Body>
-                        <UserForm 
-                            user={card.user}
-                            onChange = {value => handleChange("user", value)} 
-                        />
-                    </Wrapper.Body>
+                    {/* Doesn't need padding from Wrapper.Body */}
+                    <UserForm 
+                        user={card.user}
+                        onChange = {value => handleChange("user", value)} 
+                    />
                 </Wrapper.Item>
 
                 <Wrapper.Item>
@@ -150,6 +150,10 @@ export default function LayoutSide({card, setCard}){
                 <Wrapper.Item>
                     <Wrapper.Title>
                         Введіть замітки
+                        <TextEditingTag 
+                            text={card.notes}
+                            onChange={e => handleChange("notes", e.target.value)}
+                        />
                     </Wrapper.Title>
 
                     <Wrapper.Body>

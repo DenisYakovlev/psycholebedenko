@@ -1,4 +1,5 @@
-import { BaseLayoutTitle, UserSearchFilter } from "../../Components"
+import { BaseLayoutTitle, ObjSearchFilter } from "../../Components"
+import UserMiniCard from "../../Users/Index/UserMiniCard"
 import {Filters, FiltersToggle} from "../../Components/"
 import Container from "react-bootstrap/Container"
 import StatusFilter from "./StatusFilter"
@@ -30,10 +31,13 @@ export default function SideFilters({
                     </FiltersToggle>
 
                     <Filters.Body>
-                        <UserSearchFilter
-                            users={users}
-                            setUsers={setUsers}
-                            setSelectedUser={user => setSelectedUser(user.id)}
+                        <ObjSearchFilter 
+                            obj={users}
+                            setObj={setUsers}
+                            ObjComponent={UserMiniCard}
+                            setSelectedObj={user => setSelectedUser(user.id)}
+                            apiUrl="user"
+                            searchPlaceholder="Введіть номер тел./юзернейм"
                         />
                     </Filters.Body>
                 </Filters.Item>

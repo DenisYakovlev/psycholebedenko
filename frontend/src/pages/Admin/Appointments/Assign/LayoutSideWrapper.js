@@ -21,7 +21,7 @@ Wrapper.Item = ({children}) => {
 
 Wrapper.Title = ({children}) => {
     return (
-        <p className="my-3 px-3 text-justify fs-5 text-muted">
+        <p className="my-3 px-3 text-justify fs-5 text-muted d-flex flex-row justify-content-between align-items-center">
             {children}
         </p>
     )

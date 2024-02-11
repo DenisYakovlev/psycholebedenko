@@ -6,7 +6,7 @@ export default function NotesForm({notes, onChange}){
         <Form.Control 
             value={notes} 
             onChange={onChange} 
-            style={{height: "30vh", minHeight: "200px"}} 
+            style={{height: "30vh", minHeight: "200px", resize: "vertical"}} 
             as="textarea" 
             placeholder="Можна не заповнювати"
         />

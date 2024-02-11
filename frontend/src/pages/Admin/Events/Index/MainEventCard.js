@@ -52,7 +52,10 @@ export default function MainEventCard({event, editable=false}){
                             <Card.Text className="m-0 p-0 fs-5 text-dark fw-bold text-justify">
                                 Основний текст
                             </Card.Text>
-                            <Card.Text style={{height: "fit-content", whiteSpace: "break-spaces"}} className="m-0 fs-6 pe-0 text-dark text-justify">
+                            <Card.Text 
+                                style={{height: "fit-content", whiteSpace: "break-spaces"}} 
+                                className="m-0 fs-6 pe-0 text-dark text-justify overflow-scroll"
+                            >
                                 {event.main_text}
                             </Card.Text>
                         </Container>
@@ -62,7 +65,10 @@ export default function MainEventCard({event, editable=false}){
                             <Card.Text className="m-0 p-0 fs-5 text-muted fw-bold text-justify">
                                 Другорядний текст
                             </Card.Text>
-                            <Card.Text style={{height: "fit-content", whiteSpace: "break-spaces"}} className="m-0 fs-6 pe-0 text-muted text-justify">
+                            <Card.Text 
+                                style={{height: "fit-content", whiteSpace: "break-spaces"}} 
+                                className="m-0 fs-6 pe-0 text-muted text-justify overflow-scroll"
+                            >
                                 {event.thumbnail_text}
                             </Card.Text>
                         </Container> : <></>

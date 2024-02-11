@@ -1,16 +1,13 @@
 import Container from "react-bootstrap/Container"
-import { BaseLayoutTitle, UsersList } from "../../Components"
-import { useContext, useEffect, useState } from "react"
-import { UserContext } from "../../../../contexts"
-import { backend_url } from "../../../../constants"
+import { BaseLayoutTitle } from "../../Components"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
-import UserCard from "../../Components/UserCard"
+import UserMiniCard from "../Index/UserMiniCard"
 import useApi from "../../../../hooks/useApi"
 
 
 export default function LayoutMain({selectedEvent}){
     let navigate = useNavigate()
-    // const {authFetch} = useContext(UserContext)
     const {authFetch} = useApi()
     const [users, setUsers] = useState([])
 
@@ -36,7 +33,7 @@ export default function LayoutMain({selectedEvent}){
 
             <Container className="p-0 d-flex flex-column align-items-center" fluid>
                 {Object.values(users).map(user =>
-                    <UserCard 
+                    <UserMiniCard 
                         key={user.id}
                         user={user}
                         setSelectedUser={() => handleSelect(user.id)}

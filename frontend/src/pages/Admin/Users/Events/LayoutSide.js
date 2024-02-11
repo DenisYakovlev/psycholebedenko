@@ -1,6 +1,7 @@
 import Container from "react-bootstrap/Container"
+import EventSearchCard from "./EventSearchCard"
+import {ObjSearchFilter} from "../../Components"
 import { BaseLayoutTitle } from "../../Components"
-import EventSearchFilter from "./EventSearchFilter"
 
 
 export default function LayoutSide({events, setEvents, setSelectedEvent}){
@@ -10,10 +11,18 @@ export default function LayoutSide({events, setEvents, setSelectedEvent}){
                 Параметри
             </BaseLayoutTitle>
 
-            <EventSearchFilter 
+            {/* <EventSearchFilter 
                 events={events}
                 setEvents={setEvents}
                 setSelectedEvent={setSelectedEvent}
+            /> */}
+            <ObjSearchFilter
+                obj={events}
+                setObj={setEvents}
+                ObjComponent={EventSearchCard}
+                setSelectedObj={event => setSelectedEvent(event.id)}
+                apiUrl="event/participants_list"
+                searchPlaceholder="Введіть назву івенту"
             />
         </Container>
     )

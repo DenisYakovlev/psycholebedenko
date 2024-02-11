@@ -14,7 +14,6 @@ import ImgForm from "../Update/Forms/ImgForm"
 import ParticipantsLimitForm from "../Update/Forms/ParticipantsLimitForm"
 import ResultModal from "./ResultModal"
 import { useContext, useState } from "react"
-import { backend_url } from "../../../../constants"
 import { AlertContext, UserContext } from "../../../../contexts"
 import useApi from "../../../../hooks/useApi"
 
@@ -97,7 +96,7 @@ export default function LayoutSide({event, setEvent}){
                     onChange = {e => handleChange("address", e.target.value)}
                 />
                 <ZoomForm 
-                    onChange={e => handleChange("create_zoom_link", e.target.value)}
+                    onChange={e => handleChange("create_zoom_link", e.target.value == "true")}
                 />
                 <DateForm 
                     date = {event.date}

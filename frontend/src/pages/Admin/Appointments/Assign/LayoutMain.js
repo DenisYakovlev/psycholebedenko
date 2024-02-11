@@ -16,6 +16,8 @@ export default function LayoutMain({card, setCard}){
                     appointment={card}
                     onChange={() => {}}
                     onDelete={() => {}} 
+                    onNotesChange={notes => setCard({...card, notes: notes})}
+                    allowNotesModal={false}
                 />
             </Container>
         </Container>

@@ -38,6 +38,20 @@ export default function StatusFilters({status, setStatus}){
                         Минулі
                     </Form.Check.Label>
                 </Form.Check>
+
+                <Form.Check>
+                    <Form.Check.Input 
+                        value="any" 
+                        defaultChecked={status == "any"}
+                        onChange={e => setStatus(e.target.value)}  
+                        name="event-outdated-group" 
+                        type="radio" 
+                        id="event-status-any"
+                    />
+                    <Form.Check.Label htmlFor="event-status-any">
+                        Будь-який
+                    </Form.Check.Label>
+                </Form.Check>
             </Form>
         </Filters.Body.Layout>
     )

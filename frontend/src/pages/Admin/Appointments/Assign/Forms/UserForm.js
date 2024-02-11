@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { UserSearchFilter } from "../../../Components";
+import { ObjSearchFilter } from "../../../Components";
+import UserMiniCard from "../../../Users/Index/UserMiniCard";
 import { JsonParam, StringParam, useQueryParam } from "use-query-params";
 
 
@@ -13,10 +14,13 @@ export default function UserForm({user, onChange}){
     }
 
     return (
-        <UserSearchFilter
-            users={users}
-            setUsers={setUsers}
-            setSelectedUser={handleChange}
+        <ObjSearchFilter 
+            obj={users}
+            setObj={setUsers}
+            ObjComponent={UserMiniCard}
+            setSelectedObj={handleChange}
+            apiUrl="user"
+            searchPlaceholder="Введіть номер тел./юзернейм"
         />
     )
 }
