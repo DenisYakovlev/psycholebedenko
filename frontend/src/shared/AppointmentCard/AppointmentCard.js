@@ -4,7 +4,13 @@ import CardBody from "./CardBody"
 import CardFooter from "./CardFooter"
 
 
-export default function AppointmentCard({appointment, onChange=() => {}, onDelete=() => {}}){
+export default function AppointmentCard({
+    appointment, 
+    onChange=() => {}, 
+    onDelete=() => {}, 
+    onNotesChange=() => {}, 
+    allowNotesModal = true
+}){
     return (
         <Card
             style={{height: "500px", minWidth: "300px", maxWidth: "320px"}} bg="light" data-bs-theme="light" 
@@ -14,7 +20,7 @@ export default function AppointmentCard({appointment, onChange=() => {}, onDelet
                 <CardHeader appointment={appointment} onChange={onChange} onDelete={onDelete}/>
                 <CardBody appointment={appointment}/>
             </Card.Body>
-            <CardFooter appointment={appointment} />
+            <CardFooter appointment={appointment} onNotesChange={onNotesChange} allowNotesModal={allowNotesModal}/>
         </Card>
     )
 }

@@ -9,11 +9,10 @@ import { backend_url } from "../../constants"
 import useApi from "../../hooks/useApi"
 
 
-export default function CardFooter({appointment}){
+export default function CardFooter({appointment, onNotesChange, allowNotesModal}){
     // const {authFetch} = useContext(UserContext)
     const [notes, setNotes] = useState(appointment.notes)
     const {authFetch} = useApi()
-
 
     useEffect(() => {
         setNotes(appointment.notes)
@@ -30,6 +29,13 @@ export default function CardFooter({appointment}){
         })
     }
 
+    const handleNotesChange = event => {
+        const data = event.target.value
+
+        setNotes(data)
+        onNotesChange(data)
+    }
+
     return (
         <Container className="mt-auto p-0">
             <Accordion className="app-accardion">
@@ -40,15 +46,17 @@ export default function CardFooter({appointment}){
                                 Ваші записи
                             </p>
 
-                            <TextEditingTag 
-                                text={notes}
-                                onChange={e => setNotes(e.target.value)}
-                            />
+                            {allowNotesModal && (
+                                <TextEditingTag 
+                                    text={notes}
+                                    onChange={e => setNotes(e.target.value)}
+                                />
+                            )}
                         </Container>
                         <Form className="mt-3">
                             <Form.Group>
                             <Form.Control 
-                                value={notes ? notes : ""} onChange={e => setNotes(e.target.value)}
+                                value={notes ? notes : ""} onChange={e => handleNotesChange(e)}
                                 style={{height: "250px", resize: "none"}} as="textarea" placeholder="Можна не заповнювати"
                             />
                             </Form.Group>
