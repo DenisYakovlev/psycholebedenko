@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const Filters = ({children}) => {
     return (
-        <Accordion>
+        <Accordion defaultActiveKey="0">
             {children}
         </Accordion>
     )

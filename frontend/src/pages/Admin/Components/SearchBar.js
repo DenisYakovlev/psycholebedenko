@@ -14,11 +14,18 @@ export default function SearchBar({value, onChange, onSubmit, placeholder=""}){
         }
     }
 
+    const handleChange = event => {
+        const data = event.target.value
+
+        setSearchValue(data)
+        onChange(data)
+    }
+
     return (
         <InputGroup className="m-0 px-5 py-3">
             <Form.Control
                 value={searchValue ? searchValue : ""}
-                onChange={e => setSearchValue(e.target.value)}
+                onChange={e => handleChange(e)}
                 className="border-secondary" 
                 onKeyDown={handleKeyDown}
                 type="search"
