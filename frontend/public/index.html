@@ -24,8 +24,11 @@
 
     <!-- telegram scripts -->
     <script>
+      // Enabled for now. When off, loads telegram script only for telegram routes
+      const forceScriptLoad = true
+
       const currPath = window.location.pathname
-      if(currPath.startsWith('/bot')){
+      if(currPath.startsWith('/bot') || forceScriptLoad){
         var head = document.getElementsByTagName("head")[0]
         let telegramScript = document.createElement("script")
         telegramScript.type = "text/javascript"
