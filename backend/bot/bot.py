@@ -113,12 +113,14 @@ def handle_contact(message):
 		bot.send_message(message.chat.id, MessageBuilder.phone_user_error(), reply_markup=phone_verification_markup, parse_mode="Markdown")
 		return
 	
+	
 	user = TelegramUser.objects.get(id=message.contact.user_id)
 	wsToken, confirmToken = generatePhoneVerificationTokens(message.contact.user_id, user.auth_date)
 
 	error_response = MessageBuilder.phone_error()
 	server_error = lambda error: MessageBuilder.phone_server_error(error)
 	good_response = MessageBuilder.phone_ok()
+
 
 	# verify token 
 	try:

@@ -1,4 +1,5 @@
 import json
+from . import logger
 from channels.generic.websocket import WebsocketConsumer
 from django.core.cache import cache
 from django.conf import settings
@@ -20,6 +21,8 @@ class PhoneVerificationConsumer(WebsocketConsumer):
     def connect(self):
         self.token = self.scope["url_route"]["kwargs"]["token"]
         self.room_group_name = "phone_verification_%s" % self.token
+
+        logger.debug("consumer_connect")
 
         # remove token validation for now because of unpredictable behavior
         # if not self.tokenIsValid():

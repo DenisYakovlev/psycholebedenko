@@ -59,6 +59,7 @@ def handlePhoneVerification(user_id, wsToken, confirmToken, forceStart=False):
 	# verification_end = verification_start + settings.PHONE_VERIFICATION_TIMEOUT_SECS
 
 	cache.set(wsToken, confirmToken, settings.PHONE_VERIFICATION_TIMEOUT_SECS)
+	logger.debug(f"tokens: {wsToken}, {confirmToken}")
 	# return verification_start, verification_end
 
 
