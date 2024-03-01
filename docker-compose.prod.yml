@@ -20,8 +20,6 @@ services:
       - backend
     stdin_open: true
     tty: true
-    networks:
-      - webnet
  
   backend:
     build: 
@@ -42,8 +40,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - webnet
 
   nginx:
     image: nginx:latest
@@ -58,8 +54,6 @@ services:
       - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt/live/psycholebedenko.online/fullchain.pem:/etc/nginx/ssl/fullchain.pem:ro
       - /etc/letsencrypt/live/psycholebedenko.online/privkey.pem:/etc/nginx/ssl/privkey.pem:ro
-    networks:
-      - webnet
 
   telebot:
     image: backend-img
@@ -70,8 +64,6 @@ services:
       sh -c "python manage.py runbot"
     depends_on:
       - backend
-    networks:
-      - webnet
 
   db:
     image: postgres:15.4
@@ -87,8 +79,6 @@ services:
       interval: 20s
       timeout: 10s
       retries: 3
-    networks:
-      - webnet
 
   rabbitmq:
     restart: always
@@ -101,8 +91,6 @@ services:
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=+sbwt none +sbwtdcpu none +sbwtdio none
     ports:
       - "5672:5672"
-    networks:
-      - webnet
 
   worker:
     image: backend-img
@@ -114,8 +102,6 @@ services:
       --without-heartbeat --without-gossip --without-mingle"
     depends_on:
       - rabbitmq
-    networks:
-      - webnet
 
   celery-beat:
     image: backend-img
@@ -126,8 +112,6 @@ services:
       sh -c "celery -A app beat -l info"
     depends_on:
       - rabbitmq
-    networks:
-      - webnet
 
   redis:
     image: redis:latest
@@ -138,8 +122,3 @@ services:
       - ./redis:/var/lib/redis
     ports:
       - 6379:6379
-    networks:
-      - webnet
-
-networks:
-  webnet:
