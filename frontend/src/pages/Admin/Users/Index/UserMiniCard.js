@@ -5,7 +5,7 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { useRef } from "react"
 
 
-export default function UserCardTest({value, onSelect, props}){
+export default function UserMiniCard({value, onSelect, props}){
     const cardRef = useRef(null)
 
     return (

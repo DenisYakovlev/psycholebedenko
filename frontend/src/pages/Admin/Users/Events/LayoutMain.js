@@ -32,11 +32,11 @@ export default function LayoutMain({selectedEvent}){
 
 
             <Container className="p-0 d-flex flex-column align-items-center" fluid>
-                {Object.values(users).map(user =>
+                {users.map(user =>
                     <UserMiniCard 
                         key={user.id}
-                        user={user}
-                        setSelectedUser={() => handleSelect(user.id)}
+                        value={user}
+                        onSelect={() => handleSelect(user.id)}
                     />
                 )}
             </Container>
