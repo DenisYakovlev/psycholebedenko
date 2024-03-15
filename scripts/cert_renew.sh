@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# stop nginx service
+docker-compose -f ../docker-compose.yml stop nginx
+
 # Renew the Let's Encrypt certificate
 sudo certbot renew --force-renewal --standalone
 
