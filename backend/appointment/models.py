@@ -15,6 +15,11 @@ def set_default_address():
     return "Ще не визначено"
 
 
+class ActiveAppointmentsManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().exclude(status__in=[Appointment.Status.DENIED, Appointment.Status.COMPLETE])
+
+
 class Appointment(models.Model):
     # change created_at to timezone with hour min sec format
     
@@ -33,6 +38,9 @@ class Appointment(models.Model):
     address = models.CharField(max_length=512, blank=True, null=True)
     status = models.TextField(choices=Status.choices, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()
+    active = ActiveAppointmentsManager()
     
     class Meta:
         ordering = ['date']
