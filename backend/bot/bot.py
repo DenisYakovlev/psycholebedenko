@@ -1,12 +1,14 @@
 from datetime import datetime
+import re
 import json
 import pytz
 import telebot
-from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
+from telebot.types import Message, Chat
 from channels.layers import get_channel_layer
 from django.core.cache import cache
 from django.conf import settings
-from django.utils.timezone import make_aware
+from django.db import transaction
+from django.utils.timezone import make_aware, now
 
 from . import TOKEN, logger
 from .utils import format_date, format_status
@@ -21,9 +23,11 @@ from event.models import Event, Participation
 from schedule.models import Schedule
 from .markups import gen_menu_markup, gen_settings_markup, phone_verification_markup
 from .messages import MessageBuilder
+from .filters import IsAdmin
 
 
 bot = telebot.TeleBot(TOKEN)
+bot.add_custom_filter(IsAdmin())
 
 
 @bot.message_handler(commands=['start'])
@@ -262,3 +266,207 @@ def write_to_admin(message):
 
 	bot.send_contact(message.chat.id, admin.phone_number, admin.first_name, admin.last_name, reply_markup=gen_menu_markup(message.chat.id))
 
+
+@bot.business_message_handler(commands=["сайт"])
+def website_link(message: Message) -> None:
+	bot.send_message(
+		chat_id=message.chat.id,
+		business_connection_id=message.business_connection_id,
+		text=MessageBuilder.site_link(),
+		parse_mode="Markdown"
+	)
+
+@bot.business_message_handler(commands=["бот"])
+def bot_link(message: Message) -> None:
+	bot.send_message(
+		chat_id=message.chat.id,
+		business_connection_id=message.business_connection_id,
+		text=MessageBuilder.bot_link(),
+		parse_mode="Markdown"
+	)
+
+@bot.business_message_handler(commands=["записати"], is_admin=True)
+@transaction.atomic
+def business_appointment(message: Message) -> None:
+	pattern = r'^/записати\s(онлайн)\s(\d{4}-\d{2}-\d{2})\s(\d{2}:\d{2})$'
+	match = re.match(pattern, message.text)
+
+	# validate command
+	if not match:
+		return bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_comand_error(),
+			parse_mode="Markdown"
+		)
+	
+	format, date, time = match.group(1), match.group(2), match.group(3)
+
+	# validate/create date for new appointment
+	try:
+		schedule_obj = make_aware(datetime.fromisoformat(date + "T" + time), pytz.timezone(settings.TIME_ZONE))
+	except:
+		return bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_comand_error(),
+			parse_mode="Markdown"
+		)
+	
+	schedule = Schedule.objects.filter(date=schedule_obj).first()
+
+	# validate/create schedule object for new appointment
+	if not schedule:
+		schedule = Schedule.objects.create(date=schedule_obj)
+	elif schedule and Appointment.objects.filter(date=schedule.id):
+		return bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_date_error(),
+			parse_mode="Markdown"
+		)
+	
+	user = TelegramUser.objects.filter(id=message.chat.id).first()
+
+	# validate/create user object for new appointment
+	if not user:
+		chat_obj: Chat = message.chat
+		user = TelegramUser.objects.create(
+			id=chat_obj.id,
+			first_name=chat_obj.first_name,
+			last_name=chat_obj.last_name,
+			username=chat_obj.username
+		)
+
+	appointment = Appointment.objects.create(
+		user=user,
+		date=schedule,
+		online=format == "online",
+		status=Appointment.Status.APPOINTED
+	)
+
+	# notify that in process
+	bot.send_message(
+		chat_id=message.chat.id,
+		business_connection_id=message.business_connection_id,
+		text=MessageBuilder.appointment_bot_create_pre(message.chat.first_name),
+		parse_mode="Markdown"
+	)
+
+	zoom_link = create_appointment_zoom_link(appointment.id)
+
+	serializer = AppointmentCreateSerializer(instance=appointment, data={"zoom_link": zoom_link}, partial=True)
+	
+	if serializer.is_valid():
+		serializer.save()
+		formated_date = format_date(schedule_obj)
+
+		return bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_create(
+				title=appointment.title, 
+				online=appointment.online, 
+				formated_date=formated_date, 
+				first_name=user.first_name, 
+				address=appointment.address,
+				zoom_link=zoom_link
+			),
+			parse_mode="Markdown"
+		)
+
+	bot.send_message(settings.ADMIN_ID, f"errors: {serializer.errors}", parse_mode="Markdown")
+
+@bot.business_message_handler(commands=["запис"])
+def closest_appointment(message: Message) -> None:
+	try:
+		appointment = Appointment.active.filter(date__date__gt=now(), user=message.chat.id).first()
+		formated_date = format_date(appointment.date.date)
+
+		bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_closest(
+				title=appointment.title, 
+				online=appointment.online, 
+				formated_date=formated_date, 
+				first_name=message.chat.first_name, 
+				address=appointment.address,
+				zoom_link=appointment.zoom_link
+			),
+			parse_mode="Markdown"
+		)
+	except:
+		bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_closest_not_exist(),
+			parse_mode="Markdown"
+		)
+
+@bot.business_message_handler(commands=["запис_відмінити"], is_admin=True)
+def decline_closest_appointment(message: Message) -> None:
+	try:
+		appointment = Appointment.active.filter(date__date__gt=now(), user=message.chat.id).first()
+
+		appointment.status = Appointment.Status.DENIED
+		appointment.date = None
+		appointment.save()
+
+		bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_closest_decline(appointment.title),
+			parse_mode="Markdown"
+		)
+	except Exception as e:
+		bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_closest_not_exist(),
+			parse_mode="Markdown"
+		)
+
+@bot.business_message_handler(commands=["запис_завершити"], is_admin=True)
+def complete_closest_appointment(message: Message) -> None:
+	try:
+		appointment = Appointment.active.filter(date__date__gt=now(), user=message.chat.id).first()
+
+		appointment.status = Appointment.Status.COMPLETE
+		appointment.save()
+
+		bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_closest_complete(appointment.title),
+			parse_mode="Markdown"
+		)
+	except Exception as e:
+		bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_closest_not_exist(),
+			parse_mode="Markdown"
+		)
+
+@bot.business_message_handler(commands=["запис_оновити"], is_admin=True)
+def complete_closest_appointment(message: Message) -> None:
+	try:
+		appointment = Appointment.active.filter(date__date__gt=now(), user=message.chat.id).first()
+
+		zoom_link = create_appointment_zoom_link(appointment.id)
+		appointment.save()
+
+		bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_closest_new_link(appointment.title, zoom_link),
+			parse_mode="Markdown"
+		)
+	except Exception as e:
+		bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_closest_not_exist(),
+			parse_mode="Markdown"
+		)

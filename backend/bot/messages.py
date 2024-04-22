@@ -363,3 +363,131 @@ class MessageBuilder():
             Користувач с таким контактом не існує.
             """
         )
+    
+    @staticmethod
+    def site_link():
+        return _(
+            """
+            Текст про [сайт](https://psycholebedenko.online/)\.
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def bot_link():
+        return _(
+            """
+            Текст про [бота](tg://resolve?domain=Psycholebedenko_bot)
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def appointment_comand_error():
+        return _(
+            """
+            *❌ Виникла помилка*
+            
+            Введена команда не відповідає необхідній структурі
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def appointment_date_error():
+        return _(
+            """
+            *❌ Виникла помилка*
+            
+            Вже існує запис на цю дату
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def appointment_bot_create(title, online, formated_date, first_name, address=None, zoom_link=None):
+        return _(
+            f"""
+            *📝 {title}*
+
+            Створено нову консультацію.
+
+            📡 Формат: *{"Онлайн" if online else "Офлайн"}*
+            📍 Місце проведення: {f"*{address}*" if address else f"[Міт у Zoom]({zoom_link})"}
+            🗓 Дата: *{formated_date}*
+            👤 Ім'я клієнта: *{first_name}*
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def appointment_bot_create_pre(first_name):
+        return _(
+            f"""
+            *⌛️ Створюю нову консультацію для {first_name}...*
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def appointment_bot_closest(title, online, formated_date, first_name, address=None, zoom_link=None):
+        return _(
+            f"""
+            *📝 {title}*
+
+            📡 Формат: *{"Онлайн" if online else "Офлайн"}*
+            📍 Місце проведення: {f"*{address}*" if address else f"[Міт у Zoom]({zoom_link})"}
+            🗓 Дата: *{formated_date}*
+            👤 Ім'я клієнта: *{first_name}*
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def appointment_bot_closest_decline(title):
+        return _(
+            f"""
+            *📝 {title} була відмінена*
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def appointment_bot_closest_not_exist():
+        return _(
+            f"""
+            *📝 Не знайдено жодної консультації...*
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def appointment_bot_closest_complete(title):
+        return _(
+            f"""
+            *📝 {title} закінчена*
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def appointment_bot_closest_new_link(title, zoom_link):
+        return _(
+            f"""
+            *📝 {title}*
+
+            Оновлено: [посилання на зум]({zoom_link})
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
