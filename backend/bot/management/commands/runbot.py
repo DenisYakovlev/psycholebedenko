@@ -5,6 +5,7 @@ from django.utils import autoreload
 
 from bot import logger
 from bot.bot import bot
+from telebot.util import update_types
 
 
 def start_bot(*args, **kwars):
@@ -14,7 +15,7 @@ def start_bot(*args, **kwars):
     while True:
         try:
             logger.debug('polling')
-            bot.polling(none_stop=True)
+            bot.polling(none_stop=True, allowed_updates=update_types)
         except Exception as _ex:
             print(_ex)
             sleep(15)	
