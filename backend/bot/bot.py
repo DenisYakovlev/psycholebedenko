@@ -269,20 +269,22 @@ def write_to_admin(message):
 
 @bot.business_message_handler(commands=["сайт"])
 def website_link(message: Message) -> None:
-	bot.send_message(
+	bot.send_photo(
 		chat_id=message.chat.id,
 		business_connection_id=message.business_connection_id,
-		text=MessageBuilder.site_link(),
+		photo="https://psycholebedenko-backend.s3.amazonaws.com/event_img_4.jpg",
+		caption=MessageBuilder.site_link(),
 		parse_mode="Markdown"
 	)
 
 @bot.business_message_handler(commands=["бот"])
 def bot_link(message: Message) -> None:
-	bot.send_message(
+	bot.send_photo(
 		chat_id=message.chat.id,
 		business_connection_id=message.business_connection_id,
-		text=MessageBuilder.bot_link(),
-		parse_mode="Markdown"
+		caption=MessageBuilder.bot_link(),
+		photo="https://psycholebedenko-backend.s3.amazonaws.com/event_img_4.jpg",
+		parse_mode="Markdown",
 	)
 
 @bot.business_message_handler(commands=["записати"], is_admin=True)
@@ -366,7 +368,7 @@ def business_appointment(message: Message) -> None:
 			business_connection_id=message.business_connection_id,
 			text=MessageBuilder.appointment_bot_create(
 				title=appointment.title, 
-				online=appointment.online, 
+				online=True, 
 				formated_date=formated_date, 
 				first_name=user.first_name, 
 				address=appointment.address,
@@ -377,34 +379,8 @@ def business_appointment(message: Message) -> None:
 
 	bot.send_message(settings.ADMIN_ID, f"errors: {serializer.errors}", parse_mode="Markdown")
 
-@bot.business_message_handler(commands=["запис"])
-def closest_appointment(message: Message) -> None:
-	try:
-		appointment = Appointment.active.filter(date__date__gt=now(), user=message.chat.id).first()
-		formated_date = format_date(appointment.date.date)
 
-		bot.send_message(
-			chat_id=message.chat.id,
-			business_connection_id=message.business_connection_id,
-			text=MessageBuilder.appointment_bot_closest(
-				title=appointment.title, 
-				online=appointment.online, 
-				formated_date=formated_date, 
-				first_name=message.chat.first_name, 
-				address=appointment.address,
-				zoom_link=appointment.zoom_link
-			),
-			parse_mode="Markdown"
-		)
-	except:
-		bot.send_message(
-			chat_id=message.chat.id,
-			business_connection_id=message.business_connection_id,
-			text=MessageBuilder.appointment_bot_closest_not_exist(),
-			parse_mode="Markdown"
-		)
-
-@bot.business_message_handler(commands=["запис_відмінити"], is_admin=True)
+@bot.business_message_handler(regexp="/запис відмінити", is_admin=True)
 def decline_closest_appointment(message: Message) -> None:
 	try:
 		appointment = Appointment.active.filter(date__date__gt=now(), user=message.chat.id).first()
@@ -427,7 +403,7 @@ def decline_closest_appointment(message: Message) -> None:
 			parse_mode="Markdown"
 		)
 
-@bot.business_message_handler(commands=["запис_завершити"], is_admin=True)
+@bot.business_message_handler(regexp="/запис завершити", is_admin=True)
 def complete_closest_appointment(message: Message) -> None:
 	try:
 		appointment = Appointment.active.filter(date__date__gt=now(), user=message.chat.id).first()
@@ -449,7 +425,7 @@ def complete_closest_appointment(message: Message) -> None:
 			parse_mode="Markdown"
 		)
 
-@bot.business_message_handler(commands=["запис_оновити"], is_admin=True)
+@bot.business_message_handler(regexp="/запис оновити", is_admin=True)
 def complete_closest_appointment(message: Message) -> None:
 	try:
 		appointment = Appointment.active.filter(date__date__gt=now(), user=message.chat.id).first()
@@ -464,6 +440,33 @@ def complete_closest_appointment(message: Message) -> None:
 			parse_mode="Markdown"
 		)
 	except Exception as e:
+		bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_closest_not_exist(),
+			parse_mode="Markdown"
+		)
+
+@bot.business_message_handler(regexp="/запис")
+def closest_appointment(message: Message) -> None:
+	try:
+		appointment = Appointment.active.filter(date__date__gt=now(), user=message.chat.id).first()
+		formated_date = format_date(appointment.date.date)
+
+		bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_bot_closest(
+				title=appointment.title, 
+				online=True, 
+				formated_date=formated_date, 
+				first_name=message.chat.first_name, 
+				address=appointment.address,
+				zoom_link=appointment.zoom_link
+			),
+			parse_mode="Markdown"
+		)
+	except:
 		bot.send_message(
 			chat_id=message.chat.id,
 			business_connection_id=message.business_connection_id,

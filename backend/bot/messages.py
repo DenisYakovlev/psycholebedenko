@@ -368,7 +368,10 @@ class MessageBuilder():
     def site_link():
         return _(
             """
-            Текст про [сайт](https://psycholebedenko.online/)\.
+            https://psycholebedenko.online/
+
+            Лянний Андрій- Особистий психолог. 
+            Запис на індивідуальну психологічну консультацію в зручному форматі. Надання психологічної підтримки. Групові психологічні зустрічі. М. Миколаїв.
 
             @Psycholebedenko\_bot 🤖
             """
@@ -378,7 +381,10 @@ class MessageBuilder():
     def bot_link():
         return _(
             """
-            Текст про [бота](tg://resolve?domain=Psycholebedenko_bot)
+            [Телеграм бот](tg://resolve?domain=Psycholebedenko_bot)
+
+            Запис на психологічні консультації та 
+            групові зустрічі практикуючого психолога Лянного Андрія.
 
             @Psycholebedenko\_bot 🤖
             """
@@ -412,7 +418,7 @@ class MessageBuilder():
     def appointment_bot_create(title, online, formated_date, first_name, address=None, zoom_link=None):
         return _(
             f"""
-            *📝 {title}*
+            *📝 Консультація*
 
             Створено нову консультацію.
 
@@ -439,7 +445,7 @@ class MessageBuilder():
     def appointment_bot_closest(title, online, formated_date, first_name, address=None, zoom_link=None):
         return _(
             f"""
-            *📝 {title}*
+            *📝 Консультація*
 
             📡 Формат: *{"Онлайн" if online else "Офлайн"}*
             📍 Місце проведення: {f"*{address}*" if address else f"[Міт у Zoom]({zoom_link})"}
@@ -454,7 +460,7 @@ class MessageBuilder():
     def appointment_bot_closest_decline(title):
         return _(
             f"""
-            *📝 {title} була відмінена*
+            *📝 Консультація була відмінена*
 
             @Psycholebedenko\_bot 🤖
             """
@@ -474,7 +480,7 @@ class MessageBuilder():
     def appointment_bot_closest_complete(title):
         return _(
             f"""
-            *📝 {title} закінчена*
+            *📝 Консультація закінчена*
 
             @Psycholebedenko\_bot 🤖
             """
@@ -484,7 +490,7 @@ class MessageBuilder():
     def appointment_bot_closest_new_link(title, zoom_link):
         return _(
             f"""
-            *📝 {title}*
+            *📝 Консультація*
 
             Оновлено: [посилання на зум]({zoom_link})
 
