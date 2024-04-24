@@ -18,7 +18,7 @@ from user.models import TelegramUser
 from user.serializers import TelegramUserSerializer
 from appointment.models import Appointment
 from appointment.serializers import AppointmentCreateSerializer
-from appointment.tasks import create_appointment_zoom_link
+from appointment.tasks import create_appointment_zoom_link, create_zoom_link
 from event.models import Event, Participation
 from schedule.models import Schedule
 from .markups import gen_menu_markup, gen_settings_markup, phone_verification_markup
@@ -287,7 +287,7 @@ def bot_link(message: Message) -> None:
 		parse_mode="Markdown",
 	)
 
-@bot.business_message_handler(commands=["записати"], is_admin=True)
+@bot.business_message_handler(regexp="/записати", is_admin=True)
 @transaction.atomic
 def business_appointment(message: Message) -> None:
 	pattern = r'^/записати\s(онлайн)\s(\d{4}-\d{2}-\d{2})\s(\d{2}:\d{2})$'
@@ -378,6 +378,65 @@ def business_appointment(message: Message) -> None:
 		)
 
 	bot.send_message(settings.ADMIN_ID, f"errors: {serializer.errors}", parse_mode="Markdown")
+
+@bot.business_message_handler(regexp="/ознайомлення", is_admin=True)
+def first_appointment(message: Message) -> None:
+	pattern = r'^/ознайомлення\s(\d{4}-\d{2}-\d{2})\s(\d{2}:\d{2})$'
+	match = re.match(pattern, message.text)
+
+	# validate command
+	if not match:
+		return bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_comand_error(),
+			parse_mode="Markdown"
+		)
+	
+	date, time = match.group(1), match.group(2)
+
+	# validate/create date
+	try:
+		schedule_obj = make_aware(datetime.fromisoformat(date + "T" + time), pytz.timezone(settings.TIME_ZONE))
+	except:
+		return bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_comand_error(),
+			parse_mode="Markdown"
+		)
+	
+	schedule = Schedule.objects.filter(date=schedule_obj).first()
+
+	if schedule and Appointment.objects.filter(date=schedule.id):
+		return bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.appointment_date_error(),
+			parse_mode="Markdown"
+		)
+	
+	bot.send_message(
+		chat_id=message.chat.id,
+		business_connection_id=message.business_connection_id,
+		text=MessageBuilder.first_appointment_create_pre(message.chat.first_name),
+		parse_mode="Markdown"
+	)
+	
+	zoom_link = create_zoom_link(schedule_obj)
+	formated_date = format_date(schedule_obj)
+
+	return bot.send_message(
+			chat_id=message.chat.id,
+			business_connection_id=message.business_connection_id,
+			text=MessageBuilder.first_appointment_create(
+				formated_date=formated_date, 
+				first_name=message.chat.first_name, 
+				zoom_link=zoom_link
+			),
+			parse_mode="Markdown"
+		)
+
 
 
 @bot.business_message_handler(regexp="/запис відмінити", is_admin=True)

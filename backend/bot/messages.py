@@ -497,3 +497,28 @@ class MessageBuilder():
             @Psycholebedenko\_bot 🤖
             """
         )
+    
+    @staticmethod
+    def first_appointment_create(first_name, formated_date, zoom_link):
+        return _(
+            f"""
+            *📝 Ознайомча консультація*
+
+            📡 Формат: *Онлайн*
+            📍 Місце проведення: [Міт у Zoom]({zoom_link})
+            🗓 Дата: *{formated_date}*
+            👤 Ім'я клієнта: *{first_name}*
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )
+    
+    @staticmethod
+    def first_appointment_create_pre(first_name):
+        return _(
+            f"""
+            *⌛️ Створюю ознайомчу консультацію для {first_name}...*
+
+            @Psycholebedenko\_bot 🤖
+            """
+        )

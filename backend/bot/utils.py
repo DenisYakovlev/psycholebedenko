@@ -11,7 +11,7 @@ def format_date(date):
 	month_name = month_names[_date.month]
 	time = _date.strftime("%H:%M")
 
-	return f"{day_name}, {_date.day} {month_name} О {time}"
+	return f"{day_name}, {_date.day} {month_name} о {time}"
 
 def format_status(status):
 	formated_status = {
