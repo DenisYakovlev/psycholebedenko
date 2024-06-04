@@ -1,0 +1,14 @@
+FROM nginx:latest
+
+COPY ./nginx.dev.conf /etc/nginx/nginx.conf
+
+RUN mkdir -p /etc/nginx/ssl
+
+RUN chmod -R 777 /etc/nginx/ssl
+
+RUN openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 \
+         -keyout /etc/nginx/ssl/RootCA.key \
+         -out /etc/nginx/ssl/RootCA.pem \
+         -subj "/C=US/CN=Example-Root-CA"
+
+RUN openssl x509 -outform pem -in /etc/nginx/ssl/RootCA.pem -out /etc/nginx/ssl/RootCA.crt
