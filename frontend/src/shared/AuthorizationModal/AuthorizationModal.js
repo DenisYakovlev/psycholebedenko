@@ -33,7 +33,10 @@ export default function AuthorizationModal({
     const handleSelect = selectedIndex => setIndex(selectedIndex)
 
     const saveUser = () => {
-        if(userData.verifications.account && userData.verifications.phone){
+        // disable phone verification for now
+        const requirePhoneVerification = false
+
+        if(userData.verifications.account && (!requirePhoneVerification || userData.verifications.phone)){
             // delay between modal hide and user update
             // without delay hide animation is skipped
 
