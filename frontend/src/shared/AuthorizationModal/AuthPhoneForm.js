@@ -109,42 +109,54 @@ export default function AuthPhoneForm({setIndex, userData, setUserData}){
     }
 
     return (
-        <Container style={{height: "380px"}} className="m-0 p-0">
-            <Container className="p-0 my-4 d-flex flex-column justify-content-center align-items-center">
+        <Container style={{height: "380px"}} className="m-0 p-0 overflow-hidden">
+            <Container className="p-0 mt-3 d-flex flex-column justify-content-center align-items-center">
                 <FontAwesomeIcon icon={faPhoneVolume} className="fs-1"/>
                 <p className="p-0 my-3 fs-2 fw-bold text-center">
                     Номер телефона
                 </p>
             </Container>
             <Container className="my-3 p-0 d-flex flex-column align-items-center justify-content-center gap-2">
-
-                <Button 
-                        onClick={handleTelegramRedirect}
-                        className="mt-3" 
-                        variant="outline-dark" 
-                        size="lg"
-                    >
-                        Відкрити чат с ботом <FontAwesomeIcon icon={faTelegram}/> 
-                    </Button>
-
                 <p className="p-0 m-0 fs-6 text-muted text-center w-75">
                     Надайте свій номер телефона телеграм боту
                 </p>
+
+                <Button 
+                    onClick={handleTelegramRedirect}
+                    className="mt-1" 
+                    variant="outline-dark" 
+                    size="lg"
+                >
+                    Відкрити чат с ботом <FontAwesomeIcon icon={faTelegram}/> 
+                </Button>
             </Container>
-            <Container className="p-0 mt-5 pt-3 d-flex flex-column justify-content-center align-items-center">
+            <Container className="p-0 mt-3 pt-3 d-flex flex-column justify-content-center align-items-center">
                 <CountdownTimer  
                     start = {userData.expireDates.start}
                     end = {userData.expireDates.end}
                 />
 
-                <Button 
-                    onClick={restartVerification} 
-                    style={{cursor: 'pointer'}}
-                    variant="white" 
-                    className="p-0 m-0 border-0 text-dark text-center hover-text"
-                >
-                    повторити
-                </Button>
+                <Container className="p-0 mt-3 d-flex flex-row justify-content-center align-items-center gap-2">
+                    <Button 
+                        onClick={restartVerification} 
+                        style={{cursor: 'pointer'}}
+                        variant="white" 
+                        className="p-0 m-0 border-0 text-dark text-center hover-text"
+                    >
+                        повторити
+                    </Button>
+
+                    <p style={{fontSize: "14px"}} className="p-0 m-0"> • </p>
+
+                    <Button 
+                        onClick={nextSlide} 
+                        style={{cursor: 'pointer'}}
+                        variant="white" 
+                        className="p-0 m-0 border-0 text-dark fw-semibold text-center hover-text"
+                    >
+                        пропустити
+                    </Button>
+                </Container>
             </Container>
         </Container>
     )
