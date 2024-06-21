@@ -52,7 +52,7 @@ export default function BotLayout(){
                 localStorage.setItem('tokens', JSON.stringify(data))
                 setUser(data)
             })
-            .catch(error => alert(error))
+            .catch(error => alert(error.toString()))
 
             setIsLoading(false)
         }

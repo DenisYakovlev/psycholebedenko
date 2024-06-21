@@ -30,7 +30,7 @@ export default function Consulting({source=""}){
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 fontFamily: ["Cousine", "Courier"],
-                // minHeight: "calc(100vh - var(--nav-height))",
+                // minHeight: "calc(100vh - var(--nav-height))", use this to fit component on signle screen size with navbar
                 minHeight: "100vh",
                 height: "fit-content"
             }} className="m-0 p-0 d-flex align-items-end justify-content-center" fluid>
