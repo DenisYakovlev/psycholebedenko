@@ -59,7 +59,7 @@ export default function DateCard({date, onChange, onSelect}){
                     {date.time}
                 </Card.Text>
 
-                <Container className="p-0 d-flex justify-content-between align-items-center">
+                <Container className="p-0 d-flex justify-content-between align-items-center" fluid>
                     <Card.Text
                         style={{color: date.schedule ? date.schedule.appointment ? "var(--bs-danger)" : "var(--bs-primary)" : "var(--bs-muted)"}} 
                         className="m-0 p-0 fs-3"

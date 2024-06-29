@@ -12,6 +12,7 @@ const statusParam = withDefault(StringParam, 'any')
 
 export default function Events(){
     const {authFetch} = useApi()
+    const [showSideCanvas, setShowSideCanvas] = useState(false)
     const [status, setStatus] = useQueryParam("status", statusParam)
     const [title, setTitle] = useQueryParam('search', StringParam)
     const [events, setEvents] = useState(null)
@@ -32,8 +33,11 @@ export default function Events(){
 
     return(
         <BasePageLayout>
-            <TwoSideLayout>
-                <TwoSideLayout.Side>
+            <TwoSideLayout
+                useOffCanvas={true}
+                showSideCanvasEvent={() => setShowSideCanvas(true)}
+            >
+                <TwoSideLayout.Side useOffCanvas={true}>
                     <LayoutSide 
                         status={status}
                         setStatus={setStatus}
@@ -41,6 +45,19 @@ export default function Events(){
                         setTitle={setTitle}
                     />
                 </TwoSideLayout.Side>
+
+                <TwoSideLayout.SideOffCanvas
+                    showSideCanvas={showSideCanvas}
+                    setShowSideCanvas={setShowSideCanvas}
+                    confirmButton
+                >
+                    <LayoutSide 
+                        status={status}
+                        setStatus={setStatus}
+                        title={title}
+                        setTitle={setTitle}
+                    />
+                </TwoSideLayout.SideOffCanvas>
 
                 <TwoSideLayout.Main>
                     <LayoutMain 

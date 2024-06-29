@@ -21,6 +21,7 @@ export default function Planning(){
     const [options, setOptions] = useState([])
     const [dateSchedule, setDateSchedule] = useState(null)
     const [selectedAppointment, setSelectedAppointment] = useState(null)
+    const [showSideCanvas, setShowSideCanvas] = useState(false)
     const [date, setDate] = useQueryParam("date", StringParam)
     const [time, setTime] = useQueryParam("time", StringParam)
     let selectedTimeCard = useRef(null)
@@ -114,14 +115,27 @@ export default function Planning(){
         dateIsFree.current = false
         setTime(null)
         setDate(_date)
+
+        // close offcanvas if it's enabled
+        showSideCanvas === true && setShowSideCanvas(false)
     }
 
     return (
         <BasePageLayout>
-            <TwoSideLayout>
-                <TwoSideLayout.Side>
+            <TwoSideLayout 
+                useOffCanvas={true}
+                showSideCanvasEvent={() => setShowSideCanvas(true)}
+            >
+                <TwoSideLayout.Side useOffCanvas={true}>
                     <SideFilters onChange={_setDate} format={formatCalendar}/>
                 </TwoSideLayout.Side>
+
+                <TwoSideLayout.SideOffCanvas 
+                    showSideCanvas={showSideCanvas} 
+                    setShowSideCanvas={setShowSideCanvas}
+                >
+                    <SideFilters onChange={_setDate} format={formatCalendar}/>
+                </TwoSideLayout.SideOffCanvas>
                 
                 <TwoSideLayout.Main>
                     <Container className="p-0" fluid>

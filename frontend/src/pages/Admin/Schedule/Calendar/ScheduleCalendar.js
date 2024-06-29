@@ -20,6 +20,7 @@ export default function ScheduleCalendar(){
     const [options, setOptions] = useState([])
     const [dateOptions, setDateOptions] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [showSideCanvas, setShowSideCanvas] = useState(false)
 
     // fetch schedule
     const fetchSchedule = async () => {
@@ -85,14 +86,27 @@ export default function ScheduleCalendar(){
     const _setDate = calendarDate => {
         const _date = formatCalendarDate(calendarDate)
         setDate(_date)
+
+        // close offcanvas if it's enabled
+        showSideCanvas === true && setShowSideCanvas(false)
     }
 
     return (
         <BasePageLayout>
-            <TwoSideLayout>
-                <TwoSideLayout.Side>
+            <TwoSideLayout
+                useOffCanvas={true}
+                showSideCanvasEvent={() => setShowSideCanvas(true)}
+            >
+                <TwoSideLayout.Side useOffCanvas={true}>
                     <SideCalendar onChange={_setDate} format={formatCalendar}/>
                 </TwoSideLayout.Side>
+
+                <TwoSideLayout.SideOffCanvas 
+                    showSideCanvas={showSideCanvas} 
+                    setShowSideCanvas={setShowSideCanvas}
+                >
+                    <SideCalendar onChange={_setDate} format={formatCalendar}/>
+                </TwoSideLayout.SideOffCanvas>
 
                 <TwoSideLayout.Main>
                     <Container className="p-0">

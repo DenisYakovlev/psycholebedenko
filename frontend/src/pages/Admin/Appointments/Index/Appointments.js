@@ -16,6 +16,7 @@ export default function Appointments(){
     // const {authFetch} = useContext(UserContext)
     const {authFetch} = useApi()
     const [users, setUsers] = useState(null)
+    const [showSideCanvas, setShowSideCanvas] = useState(false)
     const [selectedUser, setSelectedUser] = useQueryParam('user', StringParam)
     const [selectedStatus, setSelectedStatus] = useQueryParam('status', statusFilterParam)
     const [selectedState, setSelectedState] = useQueryParam('state', stateFilterParam)
@@ -52,8 +53,11 @@ export default function Appointments(){
 
     return (
         <BasePageLayout>
-            <TwoSideLayout>
-                <TwoSideLayout.Side>
+            <TwoSideLayout
+                useOffCanvas={true}
+                showSideCanvasEvent={() => setShowSideCanvas(true)}
+            >
+                <TwoSideLayout.Side useOffCanvas={true}>
                     <SideFilters 
                         users={users}
                         setUsers={setUsers}
@@ -64,6 +68,22 @@ export default function Appointments(){
                         setSelectedState={setSelectedState}
                     />
                 </TwoSideLayout.Side>
+
+                <TwoSideLayout.SideOffCanvas
+                    showSideCanvas={showSideCanvas}
+                    setShowSideCanvas={setShowSideCanvas}
+                    confirmButton
+                >
+                    <SideFilters 
+                        users={users}
+                        setUsers={setUsers}
+                        setSelectedUser={setSelectedUser}
+                        selectedStatus={selectedStatus}
+                        setSelectedStatus={setSelectedStatus}
+                        selectedState={selectedState}
+                        setSelectedState={setSelectedState}
+                    />
+                </TwoSideLayout.SideOffCanvas>
 
                 <TwoSideLayout.Main>
                     <MainAppointments 

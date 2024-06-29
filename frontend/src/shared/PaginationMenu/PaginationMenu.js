@@ -3,7 +3,7 @@ import Pagination from "react-bootstrap/Pagination"
 
 export default function PaginationMenu({paginationObj, currentPage, setPage}){
     return (
-        <Pagination className="p-3 d-flex justify-content-center gap-2" size="sm">
+        <Pagination className="p-3 pb-5 d-flex justify-content-center gap-2" size="sm">
             <Pagination.Prev
                 onClick={() => setPage(paginationObj.links.previous)} 
                 disabled={!paginationObj.links.previous}
