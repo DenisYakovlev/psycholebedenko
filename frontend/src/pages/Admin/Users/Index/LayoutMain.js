@@ -1,4 +1,4 @@
-import { BaseLayoutTitle } from "../../Components"
+import { BaseLayoutTitle, MenuHelp } from "../../Components"
 import Container from "react-bootstrap/Container"
 import UserFullCard from "./UserFullCard"
 
@@ -14,7 +14,7 @@ export default function LayoutMain({user}){
                 {user ?
                     <UserFullCard userId={user}/>
                     :
-                    <></>
+                    <MenuHelp />
                 }
             </Container>
         </Container>

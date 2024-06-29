@@ -7,7 +7,7 @@ import SideCalendar from "./SideCalendar"
 import { formatCalendarDate, reverseFormatCalendarDate, pretifyCalendarDate } from "../../../utils"
 import { backend_url } from "../../../../constants"
 import { UserContext } from "../../../../contexts"
-import { TwoSideLayout, BasePageLayout, BaseLayoutTitle } from "../../Components"
+import { TwoSideLayout, BasePageLayout, BaseLayoutTitle, MenuHelp } from "../../Components"
 import { useQueryParam, StringParam} from 'use-query-params';
 import useApi from "../../../../hooks/useApi"
 const moment = require("moment")
@@ -134,7 +134,7 @@ export default function ScheduleCalendar(){
                                 )}
                             </Row>
                             :
-                            <></>
+                            <MenuHelp />
                         }
                     </Container>
                 </TwoSideLayout.Main>

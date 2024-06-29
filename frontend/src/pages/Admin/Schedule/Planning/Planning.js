@@ -4,7 +4,7 @@ import { useState, useEffect, useContext, useRef } from "react"
 import { backend_url } from "../../../../constants"
 import { UserContext } from "../../../../contexts"
 import { formatCalendarDate, pretifyCalendarDate } from "../../../utils"
-import { BasePageLayout, BaseLayoutTitle, TwoSideLayout } from "../../Components"
+import { BasePageLayout, BaseLayoutTitle, TwoSideLayout, MenuHelp } from "../../Components"
 import { useQueryParam, StringParam } from "use-query-params"
 import LayoutMain from "./LayoutMain"
 import DateCard from "./DateCard"
@@ -172,7 +172,7 @@ export default function Planning(){
                                 </LayoutMain.Appointments>
                             </LayoutMain>
                             :
-                            <h1></h1>
+                            <MenuHelp />
                         }
                     </Container>
                 </TwoSideLayout.Main>
