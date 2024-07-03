@@ -52,8 +52,8 @@ services:
       - frontend
     volumes:
       - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
-      - /etc/letsencrypt/live/psycholebedenko.online/fullchain.pem:/etc/nginx/ssl/fullchain.pem:ro
-      - /etc/letsencrypt/live/psycholebedenko.online/privkey.pem:/etc/nginx/ssl/privkey.pem:ro
+      - /etc/letsencrypt/live/psycholebedenko.com/fullchain.pem:/etc/nginx/ssl/fullchain.pem:ro
+      - /etc/letsencrypt/live/psycholebedenko.com/privkey.pem:/etc/nginx/ssl/privkey.pem:ro
 
   telebot:
     image: backend-img

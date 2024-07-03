@@ -4,6 +4,6 @@ COPY package.json .
 RUN npm install 
 COPY . .
 ENV REACT_APP_BOT_NAME=Psycholebedenko_bot
-ENV REACT_APP_BACKEND_URL=https://api.psycholebedenko.online
-ENV REACT_APP_BACKEND_WS_URL=wss://api.psycholebedenko.online
+ENV REACT_APP_BACKEND_URL=https://api.psycholebedenko.com
+ENV REACT_APP_BACKEND_WS_URL=wss://api.psycholebedenko.com
 RUN npm run build

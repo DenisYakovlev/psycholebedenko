@@ -141,7 +141,7 @@ def SendDefaultUserPhoto(request):
 @permission_classes([])
 def SendSlowPhoto(request):
     time.sleep(5)
-    return Response({"photo": "https://psycholebedenko-backend.s3.amazonaws.com/user_photo.jpeg"}, status.HTTP_200_OK)
+    return Response({"photo": "https://psycholebedenko-bucket.s3.eu-central-1.amazonaws.com/user_photo.jpeg"}, status.HTTP_200_OK)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

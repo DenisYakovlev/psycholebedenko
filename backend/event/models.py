@@ -6,7 +6,7 @@ from user.models import TelegramUser
 
 def set_default_random_img():
     img_id = random.randint(1, 4)
-    s3bucket_url = f"https://psycholebedenko-backend.s3.amazonaws.com/event_img_{img_id}.jpeg" 
+    s3bucket_url = f"https://psycholebedenko-bucket.s3.eu-central-1.amazonaws.com/event_img_{img_id}.jpeg" 
 
     return s3bucket_url
 

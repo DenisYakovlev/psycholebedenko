@@ -35,7 +35,7 @@ ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000', 
     'http://localhost:8000', 
-    'https://api.psycholebedenko.online'
+    'https://api.psycholebedenko.com'
 ]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", os.getenv('SSL_HEADER'))

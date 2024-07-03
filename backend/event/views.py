@@ -135,10 +135,10 @@ class EventImages(APIView):
 
     def get(self, request):
         return Response({
-            "https://psycholebedenko-backend.s3.amazonaws.com/event_img_1.jpg",
-            "https://psycholebedenko-backend.s3.amazonaws.com/event_img_2.jpg",
-            "https://psycholebedenko-backend.s3.amazonaws.com/event_img_3.jpg",
-            "https://psycholebedenko-backend.s3.amazonaws.com/event_img_4.jpg"
+            "https://psycholebedenko-bucket.s3.eu-central-1.amazonaws.com/event_img_1.jpg",
+            "https://psycholebedenko-bucket.s3.eu-central-1.amazonaws.com/event_img_2.jpg",
+            "https://psycholebedenko-bucket.s3.eu-central-1.amazonaws.com/event_img_3.jpg",
+            "https://psycholebedenko-bucket.s3.eu-central-1.amazonaws.com/event_img_4.jpg"
         }, status.HTTP_200_OK)
 
 

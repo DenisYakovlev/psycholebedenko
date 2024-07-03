@@ -10,7 +10,7 @@ export default function TestResult({restart, result}){
 
     const handleRedirect = () => {
         if(result_hash){
-            window.open(`https://psycholebedenko.online/t/${result_hash}`, '_blank')
+            window.open(`https://psycholebedenko.com/t/${result_hash}`, '_blank')
         }
     }
 
@@ -73,7 +73,7 @@ export default function TestResult({restart, result}){
                     {result_hash ? (
                         <>
                             <p className="px-0 m-0 text-dark text-truncate fs-5 align-self-center">
-                                {`psycholebedenko.online/t/${result_hash}`}
+                                {`psycholebedenko.com/t/${result_hash}`}
                             </p>
 
                             <FontAwesomeIcon 

@@ -41,7 +41,7 @@ class TelegramUserManager(BaseUserManager):
 
 phone_regex = RegexValidator(regex=r"^\+?1?\d{9,15}$", message=_("Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."))
 
-DEFAULT_USER_PIC = 'https://psycholebedenko-backend.s3.amazonaws.com/user_photo.jpeg'
+DEFAULT_USER_PIC = 'https://psycholebedenko-bucket.s3.eu-central-1.amazonaws.com/user_photo.jpeg'
 
 class TelegramUser(AbstractBaseUser, PermissionsMixin):
     id = models.CharField(max_length=128, blank=False, null=False, unique=True, primary_key=True)
