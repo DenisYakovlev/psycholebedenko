@@ -19,14 +19,6 @@ export default function UserFullCard({userId}){
     const [userData, setUserData] = useState(null) 
     const {api} = useApi()
 
-    // separate user data
-    const {user, events, appointments, tests} = userData
-
-    const handleTelegramRedirect = () => {
-        const url = `https://t.me/${user.phone_number ? user.phone_number : user.username}`
-        window.open(url, "_blank")
-    }
-
     // useEffect(() => {
     //     api.auth.get(`user/info/${userId}`)
     //     .then(data => setUserData(data))
@@ -49,6 +41,14 @@ export default function UserFullCard({userId}){
 
     if(!userData){
         return <></>
+    }
+
+    // separate user data
+    const {user, events, appointments, tests} = userData
+
+    const handleTelegramRedirect = () => {
+        const url = `https://t.me/${user.phone_number ? user.phone_number : user.username}`
+        window.open(url, "_blank")
     }
 
     return (
