@@ -66,7 +66,7 @@ export default function UserFullCard({userId}){
 
                     <Button 
                         onClick={handleTelegramRedirect}
-                        disabled={!user.phone_number || !user.username}
+                        disabled={!user.username && !user.phone_number}
                         className="mt-3" 
                         variant="outline-dark" 
                         size="lg"
