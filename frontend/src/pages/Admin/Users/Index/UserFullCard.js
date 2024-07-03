@@ -19,9 +19,11 @@ export default function UserFullCard({userId}){
     const [userData, setUserData] = useState(null) 
     const {api} = useApi()
 
+    // separate user data
+    const {user, events, appointments, tests} = userData
 
     const handleTelegramRedirect = () => {
-        const url = `https://t.me/${user.phone_number}`
+        const url = `https://t.me/${user.phone_number ? user.phone_number : user.username}`
         window.open(url, "_blank")
     }
 
@@ -49,9 +51,6 @@ export default function UserFullCard({userId}){
         return <></>
     }
 
-    // separate user data
-    const {user, events, appointments, tests} = userData
-
     return (
         <CardLayout>
             <CardLayout.Body>
@@ -67,7 +66,7 @@ export default function UserFullCard({userId}){
 
                     <Button 
                         onClick={handleTelegramRedirect}
-                        disabled={!user.phone_number}
+                        disabled={!user.phone_number || !user.username}
                         className="mt-3" 
                         variant="outline-dark" 
                         size="lg"
