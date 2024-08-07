@@ -86,6 +86,10 @@ export default function App(){
                   <Route>
                     <Route index element={<Consulting source="bot"/>}/>
 
+                    {/* Use for auth check of bot app  */}
+                    {/* <Route index element={<Bot/>}/> */}
+
+
                     <Route path="appointment">
                       <Route index element={<Appointment source="bot/appointment"/>}/>
                       <Route path="create" element={<AppointmentCreate source={"/bot/appointment"}/>}/>
