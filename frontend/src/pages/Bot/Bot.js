@@ -13,12 +13,13 @@ export default function Bot(){
     }
 
     return (
-        <p className="m-0 p-0 text-break fs-6 text-dark d-flex flex-column gap-3">
+        <p className="m-0 p-0 pb-5 mb-5 text-break fs-6 text-dark d-flex flex-column gap-3">
             <h1 onClick={handleExit} className="m-0 p-0">
                 Вийти
             </h1>
             {JSON.stringify(user)}
-            {JSON.stringify(window.Telegram.WebApp)}
+            <p>----------------</p>
+            {JSON.stringify(window.Telegram.WebApp.initData)}
         </p>
     )
 }
