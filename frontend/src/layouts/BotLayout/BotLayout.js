@@ -83,7 +83,6 @@ export default function BotLayout() {
 
 
     if (window.Telegram && window.Telegram.WebApp.initData.length == 0) {
-      alert('seamlessAuthorize')
       const params = new URLSearchParams(window.location.search);
 
       if (params.get("hash") && params.get("id")) {
@@ -96,11 +95,9 @@ export default function BotLayout() {
     }
 
     if (!user) {
-      alert('authorizeUser')
       authorizeUser();
       return;
     } else {
-      alert('refresh')
       refresh();
     }
   }, []);
