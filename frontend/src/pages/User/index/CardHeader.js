@@ -2,9 +2,12 @@ import Container from "react-bootstrap/Container"
 import Button from "react-bootstrap/Button"
 import { Link } from "react-router-dom"
 import Image from "react-bootstrap/Image"
+import { backend_url } from "../../../constants"
 
 
 export default function CardHeader({user}){
+    const handleAdminConsoleRedirect = ()  => window.open(`${backend_url}/admin`, "_blank")
+
     return (
         <Container 
             className="mt-5 p-0 \
@@ -24,9 +27,12 @@ export default function CardHeader({user}){
             </Container>
 
             {user?.is_staff &&
-                <Container className="m-0 p-0 d-flex justify-content-center">
-                    <Button as={Link} to="/admin" variant="outline-dark" size="lg">
-                        АДМІНСЬКА ПАНЕЛЬ
+                <Container style={{width: "fit-content"}} className="m-0 p-0 d-flex flex-column gap-3 justify-content-center">
+                    <Button as={Link} to="/admin" variant="outline-dark" size="lg" className="px-5">
+                        СТОРІНКА ПСИХОЛОГА
+                    </Button>
+                    <Button onClick={handleAdminConsoleRedirect} variant="outline-dark" size="lg" className="px-5">
+                        АДМІНСЬКА КОНСОЛЬ
                     </Button>
                 </Container>
             }
